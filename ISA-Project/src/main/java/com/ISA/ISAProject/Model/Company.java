@@ -1,7 +1,6 @@
 package com.ISA.ISAProject.Model;
 
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;

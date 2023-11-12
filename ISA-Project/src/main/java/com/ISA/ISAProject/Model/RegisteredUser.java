@@ -10,7 +10,7 @@ public class RegisteredUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "UserId",nullable = false)
     private User user;
@@ -25,6 +25,15 @@ public class RegisteredUser {
     private long penaltyPoints;
 
     public RegisteredUser() {
+        this.penaltyPoints = 0;
+    }
+
+    public RegisteredUser(User user, String occupation, String companyInfo) {
+        this.user = user;
+        this.occupation = occupation;
+        this.companyInfo = companyInfo;
+        this.id = user.getId();
+        this.penaltyPoints= 0;
     }
 
     public Integer getId() {

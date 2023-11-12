@@ -43,10 +43,25 @@ public class User {
     @Column(name = "UserType",nullable = false)
     private TypeOfUser typeOfUser;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted",columnDefinition = "boolean default false")
     private boolean deleted;
 
     public User() {
+        this.deleted = false;
+    }
+
+    public User(Integer id, String firstName, String lastName, String email, String userName, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        Country = country;
+        City = city;
+        Number = number;
+        this.typeOfUser = typeOfUser;
+        this.deleted = deleted;
     }
 
     public Integer getId() {
