@@ -46,11 +46,14 @@ public class User {
     @Column(name = "deleted",columnDefinition = "boolean default false")
     private boolean deleted;
 
+    @Column(name = "isEnabled",columnDefinition = "boolean default false")
+    private boolean isEnabled;
+
     public User() {
         this.deleted = false;
     }
 
-    public User(Integer id, String firstName, String lastName, String email, String userName, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted) {
+    public User(Integer id, String firstName, String lastName, String email, String userName, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,6 +65,7 @@ public class User {
         Number = number;
         this.typeOfUser = typeOfUser;
         this.deleted = deleted;
+        this.isEnabled = isEnabled;
     }
 
     public Integer getId() {
@@ -150,6 +154,14 @@ public class User {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     @Override

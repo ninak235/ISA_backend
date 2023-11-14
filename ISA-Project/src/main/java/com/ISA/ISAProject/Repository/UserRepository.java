@@ -1,9 +1,8 @@
 package com.ISA.ISAProject.Repository;
 
-import com.ISA.ISAProject.Model.RegisteredUser;
 import com.ISA.ISAProject.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RegisteredUserRepository extends JpaRepository<RegisteredUser,Integer> {
-
+public interface UserRepository extends JpaRepository<User,Integer> {
+    User findByEmailIgnoreCase(String email);
 }

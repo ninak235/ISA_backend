@@ -13,6 +13,10 @@ public class UserRegistrationDto {
     private String number;
     private String occupation;
     private String companyInfo;
+
+    public UserRegistrationDto(){
+
+    }
     public UserRegistrationDto(User user,String occupation,String companyInfo){
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
