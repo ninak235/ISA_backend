@@ -35,7 +35,7 @@ public class EmailService {
             mail.setTo(email);
             mail.setFrom(env.getProperty("spring.mail.username"));
             mail.setSubject("Complete Registration!");
-            mail.setText("To confirm your account,please click here: " + "http://localhost:8080/customer/confirm-account?token=" + generateToken(userOptional.get()));
+            mail.setText("To confirm your account,please click here: " + "http://localhost:8080/api/customer/confirm-account?token=" + generateToken(userOptional.get()));
             javaMailSender.send(mail);
         }else{
             System.out.println("User not found for email: " + email);

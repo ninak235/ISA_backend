@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ public class CompanyService {
 
     @Autowired
     private CompanyRepository _companyRepository;
+    @Autowired
+    private CompanyMapper _companyMapper;
 
     @Transactional
     public List<CompanyDto> getAllCompanies(){
         List<Company> companies = _companyRepository.findAll();
-        return companies.stream()
-                .map(CompanyDto::new)
-                .collect(Collectors.toList());
+        return _companyMapper.mapCompaniesToDto(companies);
     }
 
 }
