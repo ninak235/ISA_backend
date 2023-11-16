@@ -5,7 +5,7 @@ import com.ISA.ISAProject.Model.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-public class UserRegistrationDto {
+public class CustomerDto {
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -13,8 +13,6 @@ public class UserRegistrationDto {
     @Email
     @NotEmpty
     private String email;
-    @NotEmpty
-    private String userName;
     @NotEmpty
     private String password;
     @NotEmpty
@@ -28,14 +26,14 @@ public class UserRegistrationDto {
     @NotEmpty
     private String companyInfo;
 
-    public UserRegistrationDto(){
+    public CustomerDto(){
 
     }
-    public UserRegistrationDto(User user,String occupation,String companyInfo){
+
+    public CustomerDto(User user, String occupation, String companyInfo) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
         this.lastName = user.getLastName();
-        this.userName = user.getPassword();
         this.password = user.getPassword();
         this.country = user.getPassword();
         this.city = user.getCity();
@@ -66,14 +64,6 @@ public class UserRegistrationDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {

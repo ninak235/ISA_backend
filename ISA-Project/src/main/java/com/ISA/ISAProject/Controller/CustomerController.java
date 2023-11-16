@@ -1,9 +1,9 @@
 package com.ISA.ISAProject.Controller;
 
-import com.ISA.ISAProject.Dto.UserRegistrationDto;
+import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Services.EmailService;
-import com.ISA.ISAProject.Services.RegisteredUserService;
+import com.ISA.ISAProject.Services.CustomerService;
 import com.ISA.ISAProject.Services.TokenService;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,20 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/customer")
 @Validated
-public class RegisteredUserController {
+public class CustomerController {
 
     @Autowired
-    private RegisteredUserService _userService;
+    private CustomerService _customerService;
     @Autowired
     private EmailService _emailService;
     @Autowired
     private TokenService _tokenService;
 
-    @PostMapping(value = "/registerUser", consumes = "application/json")
-    public ResponseEntity<Void> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+    @PostMapping(value = "/registerCustomer", consumes = "application/json")
+    public ResponseEntity<Void> registerCustomer(@Valid @RequestBody CustomerDto registrationDto) {
         try {
             if (_emailService.isEmailUnique(registrationDto.getEmail())) {
-                UserRegistrationDto newUser = _userService.registerUser(registrationDto);
+                CustomerDto newUser = _customerService.registerCustomer(registrationDto);
 
                 if (newUser == null) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -51,11 +51,11 @@ public class RegisteredUserController {
 
         AccountConfirmationToken token = _tokenService.getConfirmationToken(confirmationToken);
         if (token != null) {
-            User user = _userService.getByEmail(token.getUser().getEmail());
+            User user = _customerService.getByEmail(token.getUser().getEmail());
 
             if (user != null) {
                 user.setEnabled(true);
-                _userService.updateUser(user);
+                _customerService.updateUser(user);
                 return new ResponseEntity<>("Account successfully confirmed.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("User not found for the provided token.", HttpStatus.NOT_FOUND);

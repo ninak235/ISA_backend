@@ -3,7 +3,7 @@ package com.ISA.ISAProject.Model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "CompanyAdmin")
+@Entity(name = "CompanyAdmins")
 public class CompanyAdmin {
 
     @Id

@@ -1,8 +1,8 @@
 package com.ISA.ISAProject.Mapper;
 
-import com.ISA.ISAProject.Dto.UserRegistrationDto;
+import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.ISA.ISAProject.Model.RegisteredUser;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,11 @@ public class UserMapper {
     @Autowired
     public UserMapper(ModelMapper modelMapper){this.modelMapper = modelMapper;}
 
-    public RegisteredUser dtoToRegisteredUser(UserRegistrationDto dto){
+    public Customer dtoToCustomer(CustomerDto dto){
         User user = modelMapper.map(dto,User.class);
-        user.setTypeOfUser(TypeOfUser.RegisteredUser);
-        RegisteredUser registeredUser = modelMapper.map(dto, RegisteredUser.class);
-        registeredUser.setUser(user);
-        return registeredUser;
+        user.setTypeOfUser(TypeOfUser.Customer);
+        Customer customer = modelMapper.map(dto, Customer.class);
+        customer.setUser(user);
+        return customer;
     }
 }

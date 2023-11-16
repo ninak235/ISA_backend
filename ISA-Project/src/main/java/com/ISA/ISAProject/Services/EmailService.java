@@ -1,6 +1,5 @@
 package com.ISA.ISAProject.Services;
 
-import com.ISA.ISAProject.Model.RegisteredUser;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Repository.AccountConfirmationTokenRepository;
 import com.ISA.ISAProject.Repository.UserRepository;

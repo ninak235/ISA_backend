@@ -3,8 +3,8 @@ package com.ISA.ISAProject.Model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "RegisteredUsers")
-public class RegisteredUser {
+@Entity(name = "Customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,11 @@ public class RegisteredUser {
     @Column(name = "PenaltyPoints")
     private long penaltyPoints;
 
-    public RegisteredUser() {
+    public Customer() {
         this.penaltyPoints = 0;
     }
 
-    public RegisteredUser(User user, String occupation, String companyInfo) {
+    public Customer(User user, String occupation, String companyInfo) {
         this.user = user;
         this.occupation = occupation;
         this.companyInfo = companyInfo;
@@ -80,7 +80,7 @@ public class RegisteredUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RegisteredUser that = (RegisteredUser) o;
+        Customer that = (Customer) o;
         return Objects.equals(id, that.id) && Objects.equals(user, that.user);
     }
 
@@ -91,7 +91,7 @@ public class RegisteredUser {
 
     @Override
     public String toString() {
-        return "RegisteredUser{" +
+        return "Customer{" +
                 "id=" + id +
                 ", user=" + user +
                 ", occupation='" + occupation + '\'' +

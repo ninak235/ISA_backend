@@ -1,34 +1,34 @@
 package com.ISA.ISAProject.Services;
 
-import com.ISA.ISAProject.Dto.UserRegistrationDto;
+import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Mapper.UserMapper;
-import com.ISA.ISAProject.Model.RegisteredUser;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.User;
-import com.ISA.ISAProject.Repository.RegisteredUserRepository;
+import com.ISA.ISAProject.Repository.CustomerRepository;
 import com.ISA.ISAProject.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegisteredUserService {
+public class CustomerService {
 
     @Autowired
-    private RegisteredUserRepository _registeredUserRepository;
+    private CustomerRepository _customerRepository;
     @Autowired
     private final UserMapper _userMapper;
     @Autowired
     private UserRepository _userRepository;
 
 
-    public RegisteredUserService(UserMapper userMapper){
+    public CustomerService(UserMapper userMapper){
         _userMapper = userMapper;
     }
 
-    public UserRegistrationDto registerUser(UserRegistrationDto dto){
-        RegisteredUser registeredUser = _userMapper.dtoToRegisteredUser(dto);
-        _registeredUserRepository.save(registeredUser);
+    public CustomerDto registerCustomer(CustomerDto dto){
+        Customer customer = _userMapper.dtoToCustomer(dto);
+        _customerRepository.save(customer);
 
-        return new UserRegistrationDto(registeredUser.getUser(),dto.getOccupation(),dto.getCompanyInfo());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo());
     }
 
     public User getByEmail(String email){

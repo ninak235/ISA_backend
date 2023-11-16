@@ -22,11 +22,7 @@ public class User {
 
     @Column(name = "Email",unique = true,nullable = false)
     private String email;
-
     //Mozda i sliku dodati ako bude vremena
-    @Column(name = "UserName",unique = true,nullable = false)
-    private String userName;
-
     @Column(name = "Password",unique = true,nullable = false)
     private String password;
 
@@ -53,12 +49,11 @@ public class User {
         this.deleted = false;
     }
 
-    public User(Integer id, String firstName, String lastName, String email, String userName, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {
+    public User(Integer id, String firstName, String lastName, String email, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.userName = userName;
         this.password = password;
         Country = country;
         City = city;
@@ -98,14 +93,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {
@@ -184,7 +171,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", Country='" + Country + '\'' +
                 ", City='" + City + '\'' +
