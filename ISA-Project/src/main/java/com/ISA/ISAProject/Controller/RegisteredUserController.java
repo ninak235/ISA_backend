@@ -9,10 +9,14 @@ import com.ISA.ISAProject.Token.AccountConfirmationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/customer")
+@Validated
 public class RegisteredUserController {
 
     @Autowired
@@ -23,7 +27,7 @@ public class RegisteredUserController {
     private TokenService _tokenService;
 
     @PostMapping(value = "/registerUser", consumes = "application/json")
-    public ResponseEntity<UserRegistrationDto> registerUser(@RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
         try {
             if (_emailService.isEmailUnique(registrationDto.getEmail())) {
                 UserRegistrationDto newUser = _userService.registerUser(registrationDto);
@@ -33,7 +37,7 @@ public class RegisteredUserController {
                 }
 
                 _emailService.sendEmail(registrationDto.getEmail());
-                return new ResponseEntity<>(newUser, HttpStatus.OK);
+                return new ResponseEntity<>( HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

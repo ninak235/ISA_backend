@@ -2,16 +2,30 @@ package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class UserRegistrationDto {
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
+    @Email
+    @NotEmpty
     private String email;
+    @NotEmpty
     private String userName;
+    @NotEmpty
     private String password;
+    @NotEmpty
     private String country;
+    @NotEmpty
     private String city;
+    @NotEmpty
     private String number;
+    @NotEmpty
     private String occupation;
+    @NotEmpty
     private String companyInfo;
 
     public UserRegistrationDto(){
