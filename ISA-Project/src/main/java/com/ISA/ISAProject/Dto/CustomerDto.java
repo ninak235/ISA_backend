@@ -3,7 +3,9 @@ package com.ISA.ISAProject.Dto;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class CustomerDto {
     @NotEmpty
@@ -13,7 +15,7 @@ public class CustomerDto {
     @Email
     @NotEmpty
     private String email;
-    @NotEmpty
+    @Size(min = 8)
     private String password;
     @NotEmpty
     private String country;
