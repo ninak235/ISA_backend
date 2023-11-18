@@ -25,4 +25,9 @@ public class CompanyService {
         return _companyMapper.mapCompaniesToDto(companies);
     }
 
+    public List<CompanyDto> getByGradeCompanies(int grade) {
+        List<Company> companies = _companyRepository.findAll();
+        //dodati uslov !!!
+        return _companyMapper.mapCompaniesToDto(companies);
+    }
 }

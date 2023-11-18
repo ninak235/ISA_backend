@@ -28,11 +28,13 @@ public class CustomerDto {
     @NotEmpty
     private String companyInfo;
 
+    private long penaltyPoints;
+
     public CustomerDto(){
 
     }
 
-    public CustomerDto(User user, String occupation, String companyInfo) {
+    public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
         this.lastName = user.getLastName();
@@ -42,6 +44,7 @@ public class CustomerDto {
         this.number = user.getNumber();
         this.occupation = occupation;
         this.companyInfo = companyInfo;
+        this.penaltyPoints = penaltyPoints;
     }
 
     public String getFirstName() {
@@ -114,5 +117,13 @@ public class CustomerDto {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public long getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(Integer penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
     }
 }

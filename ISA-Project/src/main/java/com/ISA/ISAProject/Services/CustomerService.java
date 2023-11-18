@@ -28,7 +28,7 @@ public class CustomerService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
     }
 
     public User getByEmail(String email){
