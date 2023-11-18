@@ -37,7 +37,7 @@ public class CustomerDto {
         this.email = user.getEmail();
         this.lastName = user.getLastName();
         this.password = user.getPassword();
-        this.country = user.getPassword();
+        this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
         this.occupation = occupation;

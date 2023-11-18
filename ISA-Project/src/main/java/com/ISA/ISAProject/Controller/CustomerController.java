@@ -72,10 +72,14 @@ public class CustomerController {
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update-account")
-    public ResponseEntity<String> updateCustomer(@Valid @RequestBody CustomerDto customerDto) {
-        _customerService.updateCustomer(customerDto);
-        return new ResponseEntity<>("Account successfully updated.", HttpStatus.OK);
+    @PostMapping(value = "/update")
+    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CustomerDto customerDto) {
+        Customer customer = _customerService.updateCustomer(customerDto);
+        if (customer != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

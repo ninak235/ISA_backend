@@ -39,7 +39,7 @@ public class CustomerService {
         _userRepository.save(user);
     }
 
-    public void updateCustomer(CustomerDto customerDto) {
+    public Customer updateCustomer(CustomerDto customerDto) {
         Customer customer = _userMapper.dtoToCustomer(customerDto);
 
         User user = _userRepository.findByEmailIgnoreCase(customerDto.getEmail());
@@ -55,10 +55,12 @@ public class CustomerService {
         updatedCustomer.setCompanyInfo(customer.getCompanyInfo());
         updatedCustomer.setUser(user);
         _customerRepository.save(updatedCustomer);
+
+        return updatedCustomer;
     }
 
     public Customer getById(Integer customerId) {
-        return  _customerRepository.findById(customerId).orElse(null);
+        return _customerRepository.findById(customerId).orElse(null);
     }
 
 }
