@@ -12,6 +12,8 @@ public class CompanyDto {
     private String description;
     private String grade;
 
+    private List<EquipmentDto> equipmentSet;
+
     // Add default constructor
     public CompanyDto() {
     }
@@ -21,6 +23,10 @@ public class CompanyDto {
         this.adress = company.getAddress();
         this.description = company.getDescription();
         this.grade = company.getGrade();
+
+        this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
+                .map(EquipmentDto::new)
+                .collect(Collectors.toList()));
 
     }
 
@@ -54,6 +60,14 @@ public class CompanyDto {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public List<EquipmentDto> getEquipmentSet() {
+        return equipmentSet;
+    }
+
+    public void setEquipmentSet(List<EquipmentDto> equipmentSet) {
+        this.equipmentSet = equipmentSet;
     }
 
 }

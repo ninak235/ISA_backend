@@ -19,13 +19,22 @@ public class CompanyAdminController {
     @Autowired
     private EmailService _emailService;
 
-    @PostMapping(value = "/registerCompanyAdmin", consumes = "application/json")
-    public ResponseEntity<Void> registerCompanyAdmin(
-            //@ApiParam(value = "CompanyAdmin registration information", required = true)
-            @Valid @RequestBody CompanyAdminDto registrationDto) {
+    @PostMapping(value = "/registerCompanyAdmin")
+    public ResponseEntity<Void> registerCompanyAdmin(@Valid @RequestBody CompanyAdminDto registrationDto) {
         try {
             if (_emailService.isEmailUnique(registrationDto.getEmail())) {
+
+                System.out.println(registrationDto.getCompanyId());
+                System.out.println(registrationDto.getCity());
+                System.out.println(registrationDto.getCountry());
+                System.out.println(registrationDto.getNumber());
+                System.out.println(registrationDto.getPassword());
+                System.out.println(registrationDto.getFirstName());
+                System.out.println(registrationDto.getLastName());
+                System.out.println(registrationDto.getEmail());
+
                 CompanyAdminDto newCompanyAdmin = _companyAdminService.registerCompanyAdmin(registrationDto);
+                System.out.println(newCompanyAdmin);
 
                 if (newCompanyAdmin == null) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

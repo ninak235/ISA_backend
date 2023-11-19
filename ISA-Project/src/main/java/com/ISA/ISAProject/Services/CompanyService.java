@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.CompanyIdNameDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.Company;
@@ -8,12 +9,15 @@ import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.CompanyRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import lombok.ToString;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +41,17 @@ public class CompanyService {
 
         return new CompanyDto(comapny);
     }
+
+
+
+    public List<CompanyIdNameDto> getAllCompaniesIdName() {
+        List<Company> companies = _companyRepository.findAll();
+
+        return companies.stream()
+                .map(comp -> new CompanyIdNameDto(comp.getId(), comp.getName()))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public String toString() {

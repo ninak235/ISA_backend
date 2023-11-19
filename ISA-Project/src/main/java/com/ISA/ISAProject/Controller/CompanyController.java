@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.CompanyIdNameDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,12 @@ public class CompanyController {
     public ResponseEntity<List<CompanyDto>> getAllCompanies(){
         List<CompanyDto> allCompanies = _companyService.getAllCompanies();
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
+    }
+
+    @GetMapping("/getIdNameAll")
+    public ResponseEntity<List<CompanyIdNameDto>> getAllCompaniesIdName(){
+        List<CompanyIdNameDto> allCompaniesIdName = _companyService.getAllCompaniesIdName();
+        return new ResponseEntity<>(allCompaniesIdName, HttpStatus.OK);
     }
 
     @PostMapping(value = "/registerCompany", consumes = "application/json")
