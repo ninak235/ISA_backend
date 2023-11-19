@@ -5,7 +5,9 @@ import com.ISA.ISAProject.Enum.TypeOfUser;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Where(clause = "deleted = false")
 @Entity(name = "Equipment")
@@ -21,9 +23,14 @@ public class Equipment {
     @Column(name = "Description", nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CompanyId")
-    private Company company;
+    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
+    @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
+    private Set<Company> companySet = new HashSet<>();
+
+    /*
+    @OneToMany(mappedBy = "equipment")
+    private List<Reservation> reservations;
+    */
 
     @Column(name = "deleted")
     private boolean deleted;
@@ -66,12 +73,12 @@ public class Equipment {
         this.description = description;
     }
 
-    public Company getCompany() {
-        return company;
+    public Set<Company> getCompanySet() {
+        return companySet;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompanySet(Set<Company> companySet) {
+        this.companySet = companySet;
     }
 
     public boolean isDeleted() {
@@ -119,5 +126,12 @@ public class Equipment {
         return Objects.hash(id);
     }
 
-
+    @Override
+    public String toString() {
+        return "Equipment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

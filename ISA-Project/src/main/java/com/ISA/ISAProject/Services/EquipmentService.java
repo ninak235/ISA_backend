@@ -1,11 +1,7 @@
 package com.ISA.ISAProject.Services;
 
-import com.ISA.ISAProject.Dto.CompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
-import com.ISA.ISAProject.Enum.TypeOfEquipment;
-import com.ISA.ISAProject.Mapper.CompanyMapper;
-import com.ISA.ISAProject.Mapper.EquipmentMappper;
-import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +16,7 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository _equipmentRepository;
     @Autowired
-    private EquipmentMappper _equipmentMapper;
+    private EquipmentMapper _equipmentMapper;
 
     @Transactional
     public List<EquipmentDto> getAllEquipment() {
@@ -53,12 +49,20 @@ public class EquipmentService {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();
 
-        for(Equipment equipment: equipments){
-            if(equipment.getTypeOfEquipment().toString().equalsIgnoreCase(type)){
+        for (Equipment equipment : equipments) {
+            if (equipment.getTypeOfEquipment().toString().equalsIgnoreCase(type)) {
                 filteredEquipments.add(equipment);
             }
         }
         return _equipmentMapper.mapEquipmentsToDto(filteredEquipments);
+    }
+
+
+    @Transactional
+    public EquipmentDto createEquipment(EquipmentDto equipmentDto) {
+        // Map EquipmentDto to Equipment entity and save it
+        Equipment equipment = _equipmentRepository.save(_equipmentMapper.mapDtoToEntity(equipmentDto));
+        return new EquipmentDto(equipment);
     }
 
 }

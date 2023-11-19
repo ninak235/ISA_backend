@@ -1,5 +1,9 @@
 package com.ISA.ISAProject.Controller;
-
+import com.ISA.ISAProject.Dto.CompanyAdminDto;
+import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Customer;
 import io.swagger.annotations.ApiParam;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Services.EmailService;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 
+
 @RestController
 @RequestMapping(value = "/api/companyAdmin")
 public class CompanyAdminController {
@@ -18,6 +23,22 @@ public class CompanyAdminController {
     private CompanyAdminService _companyAdminService;
     @Autowired
     private EmailService _emailService;
+
+    /*
+    @PostMapping("/createAdmin/{companyId}")
+    public ResponseEntity<CompanyAdminDto> createCompanyAdmin(
+            @PathVariable Integer companyId,
+            @RequestBody CompanyAdminDto companyAdminDto) {
+
+        CompanyAdminDto createdAdmin = _companyAdminService.createCompanyAdmin(companyAdminDto, companyId);
+
+        if (createdAdmin != null) {
+            return new ResponseEntity<>(createdAdmin, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    */
 
     @PostMapping(value = "/registerCompanyAdmin")
     public ResponseEntity<Void> registerCompanyAdmin(@Valid @RequestBody CompanyAdminDto registrationDto) {
@@ -48,6 +69,35 @@ public class CompanyAdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /*
+    @CrossOrigin
+    @PutMapping("/updateAdmin/{adminId}/{companyId}")
+    public ResponseEntity<CompanyAdminDto> updateCompanyAdmin(
+            @PathVariable Integer adminId,
+            @PathVariable Integer companyId,
+            @RequestBody CompanyAdminDto updatedAdminDto) {
 
+        CompanyAdminDto updatedAdmin = _companyAdminService.updateCompanyAdmin(adminId, updatedAdminDto, companyId);
+
+        if (updatedAdmin != null) {
+            return new ResponseEntity<>(updatedAdmin, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    */
+
+
+    @CrossOrigin
+    @PutMapping(value = "/updateAdmin")
+    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CompanyAdminDto adminDto) {
+        CompanyAdmin admin = _companyAdminService.updateAdmin(adminDto);
+        if (admin != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
+

@@ -1,15 +1,15 @@
 package com.ISA.ISAProject.Controller;
 
-import com.ISA.ISAProject.Dto.CompanyDto;
-import com.ISA.ISAProject.Dto.CompanyIdNameDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
-import com.ISA.ISAProject.Enum.TypeOfEquipment;
-import com.ISA.ISAProject.Services.CompanyService;
 import com.ISA.ISAProject.Services.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -39,4 +39,15 @@ public class EquipmentController {
         return new ResponseEntity<>(byTypeEquipments, HttpStatus.OK);
     }
 
+    @PostMapping("/equipment")
+    public ResponseEntity<EquipmentDto> createEquipment(@RequestBody EquipmentDto equipmentDto) {
+        // Call EquipmentService to create equipment
+        EquipmentDto createdEquipment = _equipmentService.createEquipment(equipmentDto);
+
+        if (createdEquipment != null) {
+            return new ResponseEntity<>(createdEquipment, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

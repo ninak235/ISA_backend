@@ -1,5 +1,13 @@
 package com.ISA.ISAProject.Dto;
 
+
+import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Model.User;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.List;
 import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.User;
@@ -16,6 +24,7 @@ public class CompanyAdminDto {
     @Email
     @NotEmpty
     private String email;
+    @Size(min = 8)
     @NotEmpty
     private String password;
     @NotEmpty
@@ -24,20 +33,24 @@ public class CompanyAdminDto {
     private String city;
     @NotEmpty
     private String number;
+
     private Integer companyId;
+    //private CompanyDto company; spaletovo
+    //private List<ReservationDto> reservationsSet; trebace kasnije
 
     public CompanyAdminDto() {
-        // Default constructor with no arguments
+        // Default constructor for Jackson deserialization
     }
 
     public CompanyAdminDto(User user, Integer companyId) {
         this.firstName = user.getFirstName();
-        this.email = user.getEmail();
         this.lastName = user.getLastName();
+        this.email = user.getEmail();
         this.password = user.getPassword();
         this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
+        //this.company = new CompanyDto(company); spaletovo
         this.companyId = companyId;
     }
 
@@ -105,3 +118,4 @@ public class CompanyAdminDto {
         this.companyId = companyId;
     }
 }
+

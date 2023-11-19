@@ -27,7 +27,8 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
+    @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
     private Set<Equipment> equipmentSet = new HashSet<>();
 
     @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
@@ -49,6 +50,10 @@ public class Company {
         this.grade =  grade;
         this.equipmentSet = equipmentSet;
         this.companyAdminSet = companyAdminSet;
+    }
+
+    public void addEquipment(Equipment e){
+        this.equipmentSet.add(e);
     }
 
     public Integer getId() {
@@ -113,16 +118,6 @@ public class Company {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public void addEquipment(Equipment equipment) {
-        equipmentSet.add(equipment);
-        equipment.setCompany(this);
-    }
-
-    public void removeEquipment(Equipment equipment){
-        equipmentSet.remove(equipment);
-        equipment.setCompany(null);
     }
 
     public void addCompanyAdmin(CompanyAdmin companyAdmin){
