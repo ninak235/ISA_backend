@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.Company;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,16 +11,23 @@ public class CompanyDto {
     private String adress;
     private String description;
     private String grade;
+
     private List<EquipmentDto> equipmentSet;
 
-    public CompanyDto(Company company){
+    // Add default constructor
+    public CompanyDto() {
+    }
+
+    public CompanyDto(Company company) {
         this.name = company.getName();
-        this.adress = company.getAdress();
+        this.adress = company.getAddress();
         this.description = company.getDescription();
-        this.grade = company.getAdress();
+        this.grade = company.getGrade();
+
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
                 .collect(Collectors.toList()));
+
     }
 
     public String getName() {
@@ -34,8 +42,8 @@ public class CompanyDto {
         return adress;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAdress(String address){
+        this.adress = address;
     }
 
     public String getDescription() {
@@ -61,4 +69,5 @@ public class CompanyDto {
     public void setEquipmentSet(List<EquipmentDto> equipmentSet) {
         this.equipmentSet = equipmentSet;
     }
+
 }

@@ -37,7 +37,18 @@ public class Company {
     private boolean deleted;
 
     public Company(){
+        this.equipmentSet = new HashSet<>();
+        this.deleted=false;
+        this.companyAdminSet = new HashSet<>();
+    }
 
+    public Company(String name, String adress, String description, String grade, Set<Equipment> equipmentSet, Set<CompanyAdmin> companyAdminSet) {
+        this.name = name;
+        this.adress = adress;
+        this.description = description;
+        this.grade =  grade;
+        this.equipmentSet = equipmentSet;
+        this.companyAdminSet = companyAdminSet;
     }
 
     public Integer getId() {
@@ -56,8 +67,8 @@ public class Company {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return  adress;
     }
 
     public void setAdress(String adress) {
@@ -138,16 +149,6 @@ public class Company {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Company{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", adress='" + adress + '\'' +
-                ", description='" + description + '\'' +
-                ", grade='" + grade + '\'' +
-                ", equipmentSet=" + equipmentSet +
-                ", companyAdminSet=" + companyAdminSet +
-                '}';
-    }
+
+
 }

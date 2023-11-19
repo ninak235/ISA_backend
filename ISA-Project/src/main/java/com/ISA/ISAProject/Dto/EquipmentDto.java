@@ -8,6 +8,7 @@ public class EquipmentDto {
     private String name;
     private String description;
     private EquipmentStatus status;
+    public EquipmentDto(){}
 
     public EquipmentDto(Equipment equipment){
         this.id = equipment.getId();
