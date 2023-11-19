@@ -139,4 +139,8 @@ public class CompanyAdminService {
     public void updateUser(User user) {
         _userRepository.save(user);
     }
+
+    public CompanyAdmin getById(Integer adminId) {
+        return _companyAdminRepository.findById(adminId).orElse(null);
+    }
 }

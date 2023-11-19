@@ -1,9 +1,9 @@
 package com.ISA.ISAProject.Controller;
 
-import com.ISA.ISAProject.Dto.CompanyDto;
-import com.ISA.ISAProject.Dto.EquipmentDto;
-import com.ISA.ISAProject.Dto.CompanyIdNameDto;
-import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.*;
+import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,20 @@ public class CompanyController {
     public ResponseEntity<List<CompanyDto>> getAllCompanies(){
         List<CompanyDto> allCompanies = _companyService.getAllCompanies();
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{companyId}")
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Integer companyId){
+        Company company = _companyService.getById(companyId);
+        CompanyDto companyDto = new CompanyDto(company);
+        return new ResponseEntity<>(companyDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/name/{companyName}")
+    public ResponseEntity<CompanyDto> getCompanyByName(@PathVariable String companyName){
+        Company company = _companyService.getByName(companyName);
+        CompanyDto companyDto = new CompanyDto(company);
+        return new ResponseEntity<>(companyDto, HttpStatus.OK);
     }
 
     @GetMapping("/getIdNameAll")
@@ -81,7 +95,7 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    /*
     @PutMapping("/update/{companyId}")
     public ResponseEntity<CompanyDto> updateCompany(
             @PathVariable Integer companyId,
@@ -95,6 +109,19 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }
+
+     */
+
+    @CrossOrigin
+    @PutMapping(value = "/update/{oldCompanyName}")
+    public ResponseEntity<Void> updateCompany(@PathVariable String oldCompanyName, @Valid @RequestBody CompanyDto companyDto) {
+        Company company = _companyService.updateCompany(oldCompanyName, companyDto);
+        if (company != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.Company;
+import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ public class CompanyDto {
         this.adress = company.getAddress();
         this.description = company.getDescription();
         this.grade = company.getGrade();
+
+        Hibernate.initialize(company.getEquipment());
 
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
