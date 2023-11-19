@@ -1,7 +1,9 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "CompanyAdmins")
 public class CompanyAdmin {
@@ -19,6 +21,10 @@ public class CompanyAdmin {
     @JoinColumn(name = "CompanyId")
     private Company company;
 
+    /*
+    @OneToMany(mappedBy = "admin")
+    private Set<Reservation> reservationsSet = new HashSet<>();; // Use Set if uniqueness matters, and order doesn't
+    */
 
     public CompanyAdmin() {
     }

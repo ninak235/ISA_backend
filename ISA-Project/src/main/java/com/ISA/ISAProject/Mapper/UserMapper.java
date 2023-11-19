@@ -1,7 +1,9 @@
 package com.ISA.ISAProject.Mapper;
 
+import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Enum.TypeOfUser;
+import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.User;
 import org.modelmapper.ModelMapper;
@@ -22,5 +24,13 @@ public class UserMapper {
         Customer customer = modelMapper.map(dto, Customer.class);
         customer.setUser(user);
         return customer;
+    }
+
+    public CompanyAdmin dtoToAdmin(CompanyAdminDto dto){
+        User user = modelMapper.map(dto,User.class);
+        user.setTypeOfUser(TypeOfUser.CompanyAdmin);
+        CompanyAdmin companyAdmin = modelMapper.map(dto, CompanyAdmin.class);
+        companyAdmin.setUser(user);
+        return companyAdmin;
     }
 }

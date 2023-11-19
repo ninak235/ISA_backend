@@ -21,4 +21,13 @@ public class CompanyMapper {
                 .map(CompanyDto::new)
                 .collect(Collectors.toList());
     }
+
+    public Company dtoToCompany(CompanyDto companyDto) {
+        Company company = new Company();
+        company.setName(companyDto.getName());
+        company.setAdress(companyDto.getAdress());
+        company.setDescription(companyDto.getDescription());
+        company.setGrade(companyDto.getGrade());
+        return company;
+    }
 }

@@ -28,6 +28,11 @@ public class Equipment {
     @JoinColumn(name = "CompanyId")
     private Company company;
 
+    /*
+    @OneToMany(mappedBy = "equipment")
+    private List<Reservation> reservations;
+    */
+
     @Column(name = "deleted")
     private boolean deleted;
 

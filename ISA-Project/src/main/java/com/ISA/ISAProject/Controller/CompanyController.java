@@ -1,13 +1,12 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +21,45 @@ public class CompanyController {
     public ResponseEntity<List<CompanyDto>> getAllCompanies(){
         List<CompanyDto> allCompanies = _companyService.getAllCompanies();
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
+        CompanyDto createdCompany = _companyService.createCompany(companyDto);
+
+        if (createdCompany != null) {
+            return new ResponseEntity<>(createdCompany, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/addEquipment/{companyId}")
+    public ResponseEntity<CompanyDto> addEquipmentToCompany(
+            @PathVariable Integer companyId,
+            @RequestBody EquipmentDto equipmentDto) {
+
+        // Call CompanyService to add equipment to the company
+        CompanyDto updatedCompany = _companyService.addEquipmentToCompany(companyId, equipmentDto);
+
+        if (updatedCompany != null) {
+            return new ResponseEntity<>(updatedCompany, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/update/{companyId}")
+    public ResponseEntity<CompanyDto> updateCompany(
+            @PathVariable Integer companyId,
+            @RequestBody CompanyDto updatedCompanyDto) {
+
+        CompanyDto updatedCompany = _companyService.updateCompany(companyId, updatedCompanyDto);
+
+        if (updatedCompany != null) {
+            return new ResponseEntity<>(updatedCompany, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
