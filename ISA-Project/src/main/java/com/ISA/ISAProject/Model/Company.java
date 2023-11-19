@@ -27,10 +27,10 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Equipment> equipmentSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<CompanyAdmin> companyAdminSet = new HashSet<>();
 
     @Column(name = "deleted")

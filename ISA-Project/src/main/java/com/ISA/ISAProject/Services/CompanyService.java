@@ -3,8 +3,7 @@ package com.ISA.ISAProject.Services;
 import com.ISA.ISAProject.Dto.CompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.Equipment;
+import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import com.ISA.ISAProject.Dto.CompanyIdNameDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import java.util.List;
@@ -58,7 +55,12 @@ public class CompanyService {
 
     @Transactional
     public Company getById(Integer companyId){
-        return _companyRepository.getOne(companyId);
+        return _companyRepository.findById(companyId).orElse(null);
+    }
+
+    @Transactional
+    public Company getByName(String companyName){
+        return _companyRepository.findCompanyByName(companyName);
     }
     @Transactional
     public CompanyDto createCompany(CompanyDto companyDto) {
@@ -66,7 +68,7 @@ public class CompanyService {
         _companyRepository.save(newCompany);
         return new CompanyDto(newCompany);
     }
-
+    /*
     @CrossOrigin
     @Transactional
     public CompanyDto updateCompany(Integer companyId, CompanyDto updatedCompanyDto) {
@@ -91,6 +93,25 @@ public class CompanyService {
             return null;
         }
     }
+
+     */
+
+    @Transactional
+    public Company updateCompany(String oldCompanyName, CompanyDto companyDto) {
+        Company company = _companyMapper.dtoToCompany(companyDto);
+        Company updatedCompany = _companyRepository.findCompanyByName(oldCompanyName);
+
+        updatedCompany.setName(company.getName());
+        updatedCompany.setAdress(company.getAddress());
+        updatedCompany.setDescription(company.getDescription());
+        updatedCompany.setGrade(company.getGrade());
+
+
+        _companyRepository.save(updatedCompany);
+
+        return updatedCompany;
+    }
+
 
     @Transactional
     public CompanyDto addEquipmentToCompany(Integer companyId, EquipmentDto equipmentDto) {
