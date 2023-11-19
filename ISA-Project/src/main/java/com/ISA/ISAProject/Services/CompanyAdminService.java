@@ -86,8 +86,7 @@ public class CompanyAdminService {
         return new CompanyAdminDto(companyAdmin.getUser(), companyAdmin.getCompany().getId());
     }
 
-    @CrossOrigin
-    @Transactional
+    /*
     public CompanyAdminDto updateCompanyAdmin(Integer adminId, CompanyAdminDto updatedDto, Integer companyId) {
         Optional<CompanyAdmin> optionalCompanyAdmin = _companyAdminRepository.findById(adminId);
 
@@ -109,6 +108,29 @@ public class CompanyAdminService {
             return null;
         }
     }
+
+     */
+    @Transactional
+    public CompanyAdmin updateAdmin(CompanyAdminDto adminDto) {
+        CompanyAdmin admin = _userMapper.dtoToCompanyAdmin(adminDto);
+
+        User user = _userRepository.findByEmailIgnoreCase(adminDto.getEmail());
+        user.setFirstName(adminDto.getFirstName());
+        user.setLastName(adminDto.getLastName());
+        user.setPassword(adminDto.getPassword());
+        user.setCountry(adminDto.getCountry());
+        user.setCity(adminDto.getCity());
+        user.setNumber(adminDto.getNumber());
+
+        CompanyAdmin updatedAdmin = _companyAdminRepository.findByUser_Email(admin.getUser().getEmail());
+
+        updatedAdmin.setCompany(admin.getCompany());
+        updatedAdmin.setUser(user);
+        _companyAdminRepository.save(updatedAdmin);
+
+        return updatedAdmin;
+    }
+
 
     public User getByEmail(String email) {
         return _userRepository.findByEmailIgnoreCase(email);
