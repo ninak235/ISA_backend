@@ -20,7 +20,7 @@ public class ReservationDto {
 
     public ReservationDto(Reservation reservation) {
         this.id = reservation.getId();
-        this.admin = new CompanyAdminDto(reservation.getAdmin().getUser(), reservation.getAdmin().getCompany());
+        this.admin = new CompanyAdminDto(reservation.getAdmin().getUser(), reservation.getAdmin().getCompany().getId());
         this.equipment = new EquipmentDto(reservation.getEquipment());
         this.startTime = reservation.getStartTime();
         this.duration = reservation.getDuration();

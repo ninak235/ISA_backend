@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.CustomerService;
@@ -64,4 +65,22 @@ public class CustomerController {
             return new ResponseEntity<>("Invalid or expired token.", HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping(value = "/{customerId}")
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer customerId){
+        Customer customer = _customerService.getById(customerId);
+        CustomerDto customerDto = new CustomerDto(customer.getUser(), customer.getOccupation(), customer.getCompanyInfo(), customer.getPenaltyPoints());
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/update")
+    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CustomerDto customerDto) {
+        Customer customer = _customerService.updateCustomer(customerDto);
+        if (customer != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
