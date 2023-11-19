@@ -2,7 +2,7 @@ INSERT INTO Company (name, adress, description, grade, deleted)
 VALUES
     ('Company1', 'Address1', 'Description1', 'A', false),
     ('Company2', 'Address2', 'Description2', 'B', false),
-    ('Company3', 'Address3', 'Description3', 'C', false)
+    ('Company3', 'Address3', 'Description3', 'C', false),
     ('Company4', 'Address4', 'Description4', 'A', false),
     ('Company5', 'Address5', 'Description5', 'A', false),
     ('Company6', 'Address6', 'Description6', 'A', false);
