@@ -28,7 +28,7 @@ public class CustomerService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
     }
 
     public User getByEmail(String email){
@@ -38,4 +38,29 @@ public class CustomerService {
     public void updateUser(User user){
         _userRepository.save(user);
     }
+
+    public Customer updateCustomer(CustomerDto customerDto) {
+        Customer customer = _userMapper.dtoToCustomer(customerDto);
+
+        User user = _userRepository.findByEmailIgnoreCase(customerDto.getEmail());
+        user.setFirstName(customerDto.getFirstName());
+        user.setLastName(customerDto.getLastName());
+        user.setPassword(customerDto.getPassword());
+        user.setCountry(customerDto.getCountry());
+        user.setCity(customerDto.getCity());
+        user.setNumber(customerDto.getNumber());
+
+        Customer updatedCustomer = _customerRepository.findByUser_Email(customer.getUser().getEmail());
+        updatedCustomer.setOccupation(customer.getOccupation());
+        updatedCustomer.setCompanyInfo(customer.getCompanyInfo());
+        updatedCustomer.setUser(user);
+        _customerRepository.save(updatedCustomer);
+
+        return updatedCustomer;
+    }
+
+    public Customer getById(Integer customerId) {
+        return _customerRepository.findById(customerId).orElse(null);
+    }
+
 }
