@@ -16,12 +16,19 @@ public class CompanyAdmin {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CompanyId")
+    @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
-
     public CompanyAdmin() {
+
+        this.company = new Company();
     }
+
+    /*
+    public CompanyAdmin(User user) {
+        this.user = user;
+        this.id = user.getId();
+    }*/
 
     public Integer getId() {
         return id;
@@ -60,12 +67,4 @@ public class CompanyAdmin {
         return Objects.hash(id, user);
     }
 
-    @Override
-    public String toString() {
-        return "CompanyAdmin{" +
-                "id=" + id +
-                ", user=" + user +
-                ", company=" + company +
-                '}';
-    }
 }

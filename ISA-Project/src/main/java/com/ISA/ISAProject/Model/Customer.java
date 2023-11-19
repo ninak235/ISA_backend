@@ -89,14 +89,5 @@ public class Customer {
         return Objects.hash(id, user);
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", user=" + user +
-                ", occupation='" + occupation + '\'' +
-                ", companyInfo='" + companyInfo + '\'' +
-                ", penaltyPoints=" + penaltyPoints +
-                '}';
-    }
+
 }

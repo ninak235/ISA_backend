@@ -95,14 +95,5 @@ public class Equipment {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Equipment{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", company=" + company +
-                '}';
-    }
+
 }

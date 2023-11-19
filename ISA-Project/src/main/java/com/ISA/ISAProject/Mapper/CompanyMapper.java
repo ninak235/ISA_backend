@@ -1,7 +1,12 @@
 package com.ISA.ISAProject.Mapper;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,5 +25,10 @@ public class CompanyMapper {
         return companies.stream()
                 .map(CompanyDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public Company dtoToCompany(CompanyDto dto){
+        Company company = mapper.map(dto, Company.class);
+        return company;
     }
 }
