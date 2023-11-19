@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Model;
 
-import com.ISA.ISAProject.Enum.EquipmentStatus;
+import com.ISA.ISAProject.Enum.TypeOfEquipment;
+import com.ISA.ISAProject.Enum.TypeOfUser;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -20,16 +21,23 @@ public class Equipment {
     @Column(name = "Description", nullable = false)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "Status",nullable = false)
-    private EquipmentStatus status;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CompanyId")
     private Company company;
 
     @Column(name = "deleted")
     private boolean deleted;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "equipmentType",nullable = false)
+    private TypeOfEquipment typeOfEquipment;
+
+    @Column(name="grade", nullable = false)
+    private String grade;
+
+    @Column(name="price", nullable = false)
+    private Float price;
+
 
     public Equipment(){
     }
@@ -58,14 +66,6 @@ public class Equipment {
         this.description = description;
     }
 
-    public EquipmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EquipmentStatus status) {
-        this.status = status;
-    }
-
     public Company getCompany() {
         return company;
     }
@@ -80,6 +80,30 @@ public class Equipment {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public TypeOfEquipment getTypeOfEquipment() {
+        return typeOfEquipment;
+    }
+
+    public void setTypeOfEquipment(TypeOfEquipment typeOfEquipment) {
+        this.typeOfEquipment = typeOfEquipment;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     @Override
