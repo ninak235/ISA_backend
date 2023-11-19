@@ -1,7 +1,9 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "CompanyAdmins")
 public class CompanyAdmin {
@@ -16,12 +18,24 @@ public class CompanyAdmin {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CompanyId")
+    @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
+    /*
+    @OneToMany(mappedBy = "admin")
+    private Set<Reservation> reservationsSet = new HashSet<>();; // Use Set if uniqueness matters, and order doesn't
+    */
 
     public CompanyAdmin() {
+
+        this.company = new Company();
     }
+
+    /*
+    public CompanyAdmin(User user) {
+        this.user = user;
+        this.id = user.getId();
+    }*/
 
     public Integer getId() {
         return id;
@@ -60,12 +74,4 @@ public class CompanyAdmin {
         return Objects.hash(id, user);
     }
 
-    @Override
-    public String toString() {
-        return "CompanyAdmin{" +
-                "id=" + id +
-                ", user=" + user +
-                ", company=" + company +
-                '}';
-    }
 }

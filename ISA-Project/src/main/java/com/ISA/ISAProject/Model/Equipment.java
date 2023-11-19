@@ -30,6 +30,11 @@ public class Equipment {
     @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
     private Set<Company> companySet = new HashSet<>();
 
+    /*
+    @OneToMany(mappedBy = "equipment")
+    private List<Reservation> reservations;
+    */
+
     @Column(name = "deleted")
     private boolean deleted;
 
