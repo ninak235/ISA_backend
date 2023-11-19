@@ -6,10 +6,7 @@ import com.ISA.ISAProject.Services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,7 +25,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/byGrade")
-    public ResponseEntity<List<CompanyDto>> getByGrade(@RequestBody int grade){
+    public ResponseEntity<List<CompanyDto>> getByGrade(@RequestParam String grade){
         List<CompanyDto> byGradeCompanies = _companyService.getByGradeCompanies(grade);
         return new ResponseEntity<>(byGradeCompanies, HttpStatus.OK);
     }

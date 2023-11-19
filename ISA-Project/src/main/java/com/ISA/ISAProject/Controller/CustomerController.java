@@ -72,7 +72,8 @@ public class CustomerController {
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/update")
+    @CrossOrigin
+    @PutMapping(value = "/update")
     public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CustomerDto customerDto) {
         Customer customer = _customerService.updateCustomer(customerDto);
         if (customer != null) {
