@@ -94,15 +94,10 @@ public class CompanyService {
 
     @Transactional
     public CompanyDto addEquipmentToCompany(Integer companyId, EquipmentDto equipmentDto) {
-        // Get the company
         Company company = _companyRepository.findById(companyId).orElse(null);
 
         if (company != null) {
-            // Get the equipment entity (either existing or newly created)
-
             Equipment equipment = _equipmentRepository.findEquipmentByName(equipmentDto.getName());
-
-            // Add equipment to the company
             company.addEquipment(equipment);
             _companyRepository.save(company);
 
