@@ -19,6 +19,7 @@ import lombok.ToString;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,4 +59,16 @@ public class CompanyService {
         return "";
     }
 
+    @Transactional
+    public List<CompanyDto> getByGradeCompanies(String grade) {
+        List<Company> companies = _companyRepository.findAll();
+        List<Company> filteredCompanies = new ArrayList<>();
+
+        for(Company company: companies){
+            if(company.getGrade().equalsIgnoreCase(grade)){
+                filteredCompanies.add(company);
+            }
+        }
+        return _companyMapper.mapCompaniesToDto(filteredCompanies);
+    }
 }

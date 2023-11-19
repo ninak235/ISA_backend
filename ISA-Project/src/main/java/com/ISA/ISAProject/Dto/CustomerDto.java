@@ -3,7 +3,9 @@ package com.ISA.ISAProject.Dto;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class CustomerDto {
     @NotEmpty
@@ -13,7 +15,7 @@ public class CustomerDto {
     @Email
     @NotEmpty
     private String email;
-    @NotEmpty
+    @Size(min = 8)
     private String password;
     @NotEmpty
     private String country;
@@ -26,20 +28,23 @@ public class CustomerDto {
     @NotEmpty
     private String companyInfo;
 
+    private long penaltyPoints;
+
     public CustomerDto(){
 
     }
 
-    public CustomerDto(User user, String occupation, String companyInfo) {
+    public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
         this.lastName = user.getLastName();
         this.password = user.getPassword();
-        this.country = user.getPassword();
+        this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
         this.occupation = occupation;
         this.companyInfo = companyInfo;
+        this.penaltyPoints = penaltyPoints;
     }
 
     public String getFirstName() {
@@ -112,5 +117,13 @@ public class CustomerDto {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public long getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(Integer penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
     }
 }

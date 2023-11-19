@@ -48,4 +48,9 @@ public class CompanyController {
     }
 
 
+    @GetMapping(value = "/byGrade")
+    public ResponseEntity<List<CompanyDto>> getByGrade(@RequestParam String grade){
+        List<CompanyDto> byGradeCompanies = _companyService.getByGradeCompanies(grade);
+        return new ResponseEntity<>(byGradeCompanies, HttpStatus.OK);
+    }
 }
