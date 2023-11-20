@@ -10,25 +10,30 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EquipmentDto {
+public class EquipmentCompanyDto {
     private Integer id;
     private String name;
     private String description;
     private TypeOfEquipment typeOfEquipment;
     private String grade;
     private Float price;
+    private List<CompanyDto> companySet;
 
 
-    public EquipmentDto(){}
+    public EquipmentCompanyDto(){}
 
-    public EquipmentDto(Equipment equipment){
+    public EquipmentCompanyDto(Equipment equipment){
         this.id = equipment.getId();
         this.name = equipment.getName();
         this.description = equipment.getDescription();
         this.typeOfEquipment = equipment.getTypeOfEquipment();
         this.grade = equipment.getGrade();
         this.price = equipment.getPrice();
+        Hibernate.initialize(equipment.getCompanySet());
 
+        this.companySet = new ArrayList<>(equipment.getCompanySet().stream()
+                .map(CompanyDto::new)
+                .collect(Collectors.toList()));
     }
 
     public Integer getId() {
@@ -70,4 +75,11 @@ public class EquipmentDto {
         this.price = price;
     }
 
+    public List<CompanyDto> getCompanySet() {
+        return companySet;
+    }
+
+    public void setCompanySet(List<CompanyDto> companySet) {
+        this.companySet = companySet;
+    }
 }

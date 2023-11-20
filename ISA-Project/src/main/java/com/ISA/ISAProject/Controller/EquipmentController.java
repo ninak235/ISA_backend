@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Controller;
 
+import com.ISA.ISAProject.Dto.EquipmentCompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Services.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +23,20 @@ public class EquipmentController {
     private EquipmentService _equipmentService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<EquipmentDto>> getAllEquipment(){
-        List<EquipmentDto> allEquipments = _equipmentService.getAllEquipment();
+    public ResponseEntity<List<EquipmentCompanyDto>> getAllEquipment(){
+        List<EquipmentCompanyDto> allEquipments = _equipmentService.getAllEquipment();
         return new ResponseEntity<>(allEquipments, HttpStatus.OK);
     }
 
     @GetMapping(value = "/byGrade")
-    public ResponseEntity<List<EquipmentDto>> getByGrade(@RequestParam String grade){
-        List<EquipmentDto> byGradeEquipments = _equipmentService.getByGradeEquipment(grade);
+    public ResponseEntity<List<EquipmentCompanyDto>> getByGrade(@RequestParam String grade){
+        List<EquipmentCompanyDto> byGradeEquipments = _equipmentService.getByGradeEquipment(grade);
         return new ResponseEntity<>(byGradeEquipments, HttpStatus.OK);
     }
 
     @GetMapping(value = "/byType")
-    public ResponseEntity<List<EquipmentDto>> getByType(@RequestParam String typeOfEquipment){
-        List<EquipmentDto> byTypeEquipments = _equipmentService.getByTypeEquipment(typeOfEquipment);
+    public ResponseEntity<List<EquipmentCompanyDto>> getByType(@RequestParam String typeOfEquipment){
+        List<EquipmentCompanyDto> byTypeEquipments = _equipmentService.getByTypeEquipment(typeOfEquipment);
         return new ResponseEntity<>(byTypeEquipments, HttpStatus.OK);
     }
 

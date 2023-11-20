@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ public class Company {
     private String grade;
 
 
+    @JsonIgnore
     @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
 
@@ -97,6 +99,7 @@ public class Company {
     public void setGrade(String grade) {
         this.grade = grade;
     }
+
 
     public Set<Equipment> getEquipment() {
         return equipmentSet;

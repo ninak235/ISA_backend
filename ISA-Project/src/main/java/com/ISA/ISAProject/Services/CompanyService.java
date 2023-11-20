@@ -1,7 +1,6 @@
 package com.ISA.ISAProject.Services;
 
-import com.ISA.ISAProject.Dto.CompanyDto;
-import com.ISA.ISAProject.Dto.EquipmentDto;
+import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.CompanyRepository;
@@ -9,8 +8,6 @@ import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import com.ISA.ISAProject.Dto.CompanyIdNameDto;
-import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Equipment;
@@ -48,9 +45,9 @@ public class CompanyService {
     }
 
     @Transactional
-    public List<CompanyDto> getAllCompanies() {
+    public List<CompanyEquipmentDto> getAllCompanies() {
         List<Company> companies = _companyRepository.findAll();
-        return _companyMapper.mapCompaniesToDto(companies);
+        return _companyMapper.mapCompaniesEquipmentToDto(companies);
     }
 
     @Transactional
@@ -114,7 +111,7 @@ public class CompanyService {
 
 
     @Transactional
-    public CompanyDto addEquipmentToCompany(Integer companyId, EquipmentDto equipmentDto) {
+    public CompanyEquipmentDto addEquipmentToCompany(Integer companyId, EquipmentDto equipmentDto) {
         Company company = _companyRepository.findById(companyId).orElse(null);
 
         if (company != null) {
@@ -122,7 +119,7 @@ public class CompanyService {
             company.addEquipment(equipment);
             _companyRepository.save(company);
 
-            return new CompanyDto(company);
+            return new CompanyEquipmentDto(company);
         } else {
             return null;
         }
@@ -152,7 +149,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public List<CompanyDto> getByGradeCompanies(String grade) {
+    public List<CompanyEquipmentDto> getByGradeCompanies(String grade) {
         List<Company> companies = _companyRepository.findAll();
         List<Company> filteredCompanies = new ArrayList<>();
 
@@ -161,7 +158,7 @@ public class CompanyService {
                 filteredCompanies.add(company);
             }
         }
-        return _companyMapper.mapCompaniesToDto(filteredCompanies);
+        return _companyMapper.mapCompaniesEquipmentToDto(filteredCompanies);
     }
 
 }

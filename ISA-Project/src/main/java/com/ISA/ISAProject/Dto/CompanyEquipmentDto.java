@@ -7,29 +7,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CompanyDto {
+public class CompanyEquipmentDto {
     private String name;
     private String adress;
     private String description;
     private String grade;
 
-    //private List<EquipmentDto> equipmentSet;
+    private List<EquipmentDto> equipmentSet;
 
     // Add default constructor
-    public CompanyDto() {
+    public CompanyEquipmentDto() {
     }
 
-    public CompanyDto(Company company) {
+    public CompanyEquipmentDto(Company company) {
         this.name = company.getName();
         this.adress = company.getAddress();
         this.description = company.getDescription();
         this.grade = company.getGrade();
 
-    /*    Hibernate.initialize(company.getEquipment());
+      Hibernate.initialize(company.getEquipment());
 
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
-                .collect(Collectors.toList()));*/
+                .collect(Collectors.toList()));
 
     }
 
@@ -65,12 +65,11 @@ public class CompanyDto {
         this.grade = grade;
     }
 
-  /*  public List<EquipmentDto> getEquipmentSet() {
+   public List<EquipmentDto> getEquipmentSet() {
         return equipmentSet;
     }
 
     public void setEquipmentSet(List<EquipmentDto> equipmentSet) {
         this.equipmentSet = equipmentSet;
-    }*/
-
+    }
 }

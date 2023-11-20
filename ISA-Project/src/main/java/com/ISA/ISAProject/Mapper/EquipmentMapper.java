@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Mapper;
 
+import com.ISA.ISAProject.Dto.EquipmentCompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Model.Equipment;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,10 @@ public class EquipmentMapper {
         return modelMapper.map(equipment, EquipmentDto.class);
     }
 
+    public EquipmentCompanyDto mapEquipmentCompanyToDto(Equipment equipment) {
+        return modelMapper.map(equipment, EquipmentCompanyDto.class);
+    }
+
     public Equipment mapDtoToEntity(EquipmentDto equipmentDto) {
         return modelMapper.map(equipmentDto, Equipment.class);
     }
@@ -35,6 +40,12 @@ public class EquipmentMapper {
     public List<Equipment> mapDtosToEntities(List<EquipmentDto> equipmentDtos) {
         return equipmentDtos.stream()
                 .map(this::mapDtoToEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<EquipmentCompanyDto> mapEquipmentCompanysToDto(List<Equipment> equipments) {
+        return equipments.stream()
+                .map(this::mapEquipmentCompanyToDto)
                 .collect(Collectors.toList());
     }
 }
