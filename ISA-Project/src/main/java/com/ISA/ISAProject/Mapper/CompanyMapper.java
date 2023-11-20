@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Mapper;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
+import com.ISA.ISAProject.Dto.CompanyEquipmentDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.Company;
@@ -38,5 +39,11 @@ public class CompanyMapper {
     public Company dtoToCompany(CompanyDto dto){
         Company company = mapper.map(dto, Company.class);
         return company;
+    }
+
+    public List<CompanyEquipmentDto> mapCompaniesEquipmentToDto(List<Company> companies) {
+        return companies.stream()
+                .map(CompanyEquipmentDto::new)
+                .collect(Collectors.toList());
     }
 }

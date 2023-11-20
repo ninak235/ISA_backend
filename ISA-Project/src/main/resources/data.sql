@@ -10,7 +10,7 @@ VALUES
     ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana', false, 'Janic', '87654321', 'CompanyAdmin', false),
     ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar', false, 'Petrovic', '56781234', 'Customer', false);
 
-INSERT INTO Equipment (equipment_name, description, equipment_type, grade, price, deleted)
+INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
 VALUES
     ('Equipment1', 'Description1', 'Therapeutic','A', 100, false),
     ('Equipment2', 'Description2','Surgical','C', 344, false),

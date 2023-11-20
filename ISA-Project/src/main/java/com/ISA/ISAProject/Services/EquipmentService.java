@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Services;
 
+import com.ISA.ISAProject.Dto.EquipmentCompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Model.Equipment;
@@ -19,9 +20,10 @@ public class EquipmentService {
     private EquipmentMapper _equipmentMapper;
 
     @Transactional
-    public List<EquipmentDto> getAllEquipment() {
+    public List<EquipmentCompanyDto> getAllEquipment() {
         List<Equipment> equipments = _equipmentRepository.findAll();
-        return _equipmentMapper.mapEquipmentsToDto(equipments);
+        System.out.println(equipments);
+        return _equipmentMapper.mapEquipmentCompanysToDto(equipments);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class EquipmentService {
     }
 
     @Transactional
-    public List<EquipmentDto> getByGradeEquipment(String grade) {
+    public List<EquipmentCompanyDto> getByGradeEquipment(String grade) {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();
 
@@ -39,13 +41,13 @@ public class EquipmentService {
                 filteredEquipments.add(equipment);
             }
         }
-        return _equipmentMapper.mapEquipmentsToDto(filteredEquipments);
+        return _equipmentMapper.mapEquipmentCompanysToDto(filteredEquipments);
     }
 
 
 
     @Transactional
-    public List<EquipmentDto> getByTypeEquipment(String type) {
+    public List<EquipmentCompanyDto> getByTypeEquipment(String type) {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();
 
@@ -54,7 +56,7 @@ public class EquipmentService {
                 filteredEquipments.add(equipment);
             }
         }
-        return _equipmentMapper.mapEquipmentsToDto(filteredEquipments);
+        return _equipmentMapper.mapEquipmentCompanysToDto(filteredEquipments);
     }
 
 

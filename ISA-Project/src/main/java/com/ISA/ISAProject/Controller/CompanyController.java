@@ -20,22 +20,22 @@ public class CompanyController {
     private CompanyService _companyService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<CompanyDto>> getAllCompanies(){
-        List<CompanyDto> allCompanies = _companyService.getAllCompanies();
+    public ResponseEntity<List<CompanyEquipmentDto>> getAllCompanies(){
+        List<CompanyEquipmentDto> allCompanies = _companyService.getAllCompanies();
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{companyId}")
-    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Integer companyId){
+    public ResponseEntity<CompanyEquipmentDto> getCompanyById(@PathVariable Integer companyId){
         Company company = _companyService.getById(companyId);
-        CompanyDto companyDto = new CompanyDto(company);
+        CompanyEquipmentDto companyDto = new CompanyEquipmentDto(company);
         return new ResponseEntity<>(companyDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/name/{companyName}")
-    public ResponseEntity<CompanyDto> getCompanyByName(@PathVariable String companyName){
+    public ResponseEntity<CompanyEquipmentDto> getCompanyByName(@PathVariable String companyName){
         Company company = _companyService.getByName(companyName);
-        CompanyDto companyDto = new CompanyDto(company);
+        CompanyEquipmentDto companyDto = new CompanyEquipmentDto(company);
         return new ResponseEntity<>(companyDto, HttpStatus.OK);
     }
 
@@ -46,8 +46,8 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/byGrade")
-    public ResponseEntity<List<CompanyDto>> getByGrade(@RequestParam String grade){
-        List<CompanyDto> byGradeCompanies = _companyService.getByGradeCompanies(grade);
+    public ResponseEntity<List<CompanyEquipmentDto>> getByGrade(@RequestParam String grade){
+        List<CompanyEquipmentDto> byGradeCompanies = _companyService.getByGradeCompanies(grade);
         return new ResponseEntity<>(byGradeCompanies, HttpStatus.OK);
 
     }
@@ -82,12 +82,12 @@ public class CompanyController {
      */
 
     @PostMapping("/addEquipment/{companyId}")
-    public ResponseEntity<CompanyDto> addEquipmentToCompany(
+    public ResponseEntity<CompanyEquipmentDto> addEquipmentToCompany(
             @PathVariable Integer companyId,
             @RequestBody EquipmentDto equipmentDto) {
 
         // Call CompanyService to add equipment to the company
-        CompanyDto updatedCompany = _companyService.addEquipmentToCompany(companyId, equipmentDto);
+        CompanyEquipmentDto updatedCompany = _companyService.addEquipmentToCompany(companyId, equipmentDto);
 
         if (updatedCompany != null) {
             return new ResponseEntity<>(updatedCompany, HttpStatus.OK);
