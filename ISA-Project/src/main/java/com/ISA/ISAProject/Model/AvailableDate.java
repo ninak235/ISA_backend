@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Reservation {
+public class AvailableDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +15,6 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "adminId")
     private CompanyAdmin admin;
-
-    @ManyToOne
-    @JoinColumn(name = "equipmentId")
-    private Equipment equipment;
-
     @Column(name = "startTime")
     private LocalDateTime startTime;
     @Column(name = "duration")
@@ -30,13 +25,12 @@ public class Reservation {
     private boolean confirmed; // Indicates if the reservation is confirmed
 
 
-    public Reservation() {
+    public AvailableDate() {
 
     }
 
-    public Reservation(CompanyAdmin admin, Equipment equipment, LocalDateTime startTime, Duration duration) {
+    public AvailableDate(CompanyAdmin admin, LocalDateTime startTime, Duration duration) {
         this.admin = admin;
-        this.equipment = equipment;
         this.startTime = startTime;
         this.duration = duration;
         this.adminConfirmationTime = null;
@@ -57,14 +51,6 @@ public class Reservation {
 
     public void setAdmin(CompanyAdmin admin) {
         this.admin = admin;
-    }
-
-    public Equipment getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
     }
 
     public LocalDateTime getStartTime() {
@@ -106,10 +92,9 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "AvailableDate{" +
                 "id=" + id +
                 ", admin=" + admin +
-                ", equipment='" + equipment + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", duration=" + duration + '\'' +
                 ", adminConfirmationTime=" + adminConfirmationTime + '\'' +
@@ -121,7 +106,7 @@ public class Reservation {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Reservation reservation = (Reservation) o;
-        return Objects.equals(id, reservation.id);
+        AvailableDate availableDate = (AvailableDate) o;
+        return Objects.equals(id, availableDate.id);
     }
 }
