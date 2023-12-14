@@ -1,27 +1,25 @@
 package com.ISA.ISAProject.Dto;
 
-import com.ISA.ISAProject.Model.Reservation;
+import com.ISA.ISAProject.Model.AvailableDate;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class ReservationDto {
+public class AvailableDateDto {
     private Integer id;
     private CompanyAdminDto admin; // Assuming you have a CompanyDto for administrators
-    private EquipmentDto equipment;
     private LocalDateTime startTime;
     private Duration duration;
     private LocalDateTime adminConfirmationTime;
     private boolean confirmed;
 
-    public ReservationDto() {
+    public AvailableDateDto() {
         // Default constructor for Jackson deserialization
     }
 
-    public ReservationDto(Reservation reservation) {
+    public AvailableDateDto(AvailableDate reservation) {
         this.id = reservation.getId();
         this.admin = new CompanyAdminDto(reservation.getAdmin().getUser(), reservation.getAdmin().getCompany().getId());
-        this.equipment = new EquipmentDto(reservation.getEquipment());
         this.startTime = reservation.getStartTime();
         this.duration = reservation.getDuration();
         this.adminConfirmationTime = reservation.getAdminConfirmationTime();
@@ -44,14 +42,6 @@ public class ReservationDto {
 
     public void setAdmin(CompanyAdminDto admin) {
         this.admin = admin;
-    }
-
-    public EquipmentDto getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(EquipmentDto equipment) {
-        this.equipment = equipment;
     }
 
     public LocalDateTime getStartTime() {

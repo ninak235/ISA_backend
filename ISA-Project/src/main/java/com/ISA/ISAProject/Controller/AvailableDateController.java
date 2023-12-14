@@ -1,43 +1,37 @@
 package com.ISA.ISAProject.Controller;
 
-import com.ISA.ISAProject.Dto.ReservationDto;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Equipment;
-import com.ISA.ISAProject.Model.Reservation;
+import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Services.CompanyAdminService;
-import com.ISA.ISAProject.Services.CustomerService;
-import com.ISA.ISAProject.Services.ReservationService;
+import com.ISA.ISAProject.Services.AvailableDateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
-public class ReservationController {
+public class AvailableDateController {
 
     @Autowired
-    private ReservationService reservationService;
+    private AvailableDateService availableDateService;
     @Autowired
     private CompanyAdminService companyAdminService;
     //private EquipmentService equipmentService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<ReservationDto>> getAllReservations() {
-        List<ReservationDto> allReservations = reservationService.getAllReservations();
-        return new ResponseEntity<>(allReservations, HttpStatus.OK);
+    public ResponseEntity<List<AvailableDateDto>> getAllAvailableDates() {
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllReservations();
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
-    @GetMapping("/{reservationId}")
-    public ResponseEntity<ReservationDto> getReservationById(@PathVariable Integer reservationId) {
-        ReservationDto reservationDto = reservationService.getReservationById(reservationId);
+    @GetMapping("/{availableDateId}")
+    public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
+        AvailableDateDto availableDateDto = availableDateService.getReservationById(availableDateId);
 
-        if (reservationDto != null) {
-            return new ResponseEntity<>(reservationDto, HttpStatus.OK);
+        if (availableDateDto != null) {
+            return new ResponseEntity<>(availableDateDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
