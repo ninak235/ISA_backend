@@ -12,6 +12,9 @@ public class CustomerDto {
     private String firstName;
     @NotEmpty
     private String lastName;
+
+    @NotEmpty
+    private String userName;
     @Email
     @NotEmpty
     private String email;
@@ -37,6 +40,7 @@ public class CustomerDto {
     public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
+        this.userName = user.getUsername();
         this.lastName = user.getLastName();
         this.password = user.getPassword();
         this.country = user.getCountry();
@@ -125,5 +129,13 @@ public class CustomerDto {
 
     public void setPenaltyPoints(Integer penaltyPoints) {
         this.penaltyPoints = penaltyPoints;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

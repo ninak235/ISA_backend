@@ -1,31 +1,59 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.CustomerDto;
-import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Dto.JwtAuthenticationRequestDto;
+import com.ISA.ISAProject.Dto.UserTokenStateDto;
 import com.ISA.ISAProject.Model.User;
-import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.CustomerService;
+import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.TokenService;
+import com.ISA.ISAProject.Services.UserService;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
+import com.ISA.ISAProject.Token.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api/customer")
-@Validated
-public class CustomerController {
+@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+public class AuthenticationController {
 
     @Autowired
-    private CustomerService _customerService;
+    private TokenUtils tokenUtils;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Autowired
     private EmailService _emailService;
     @Autowired
+    private CustomerService _customerService;
+    @Autowired
     private TokenService _tokenService;
+
+
+    @PostMapping("/login")
+    public ResponseEntity<UserTokenStateDto> createAuthenticationToken(@RequestBody JwtAuthenticationRequestDto authenticationRequestDto, HttpServletResponse response){
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authenticationRequestDto.getUsername(), authenticationRequestDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = (User) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(user.getUsername());
+        int expiresIn = tokenUtils.getExpiredIn();
+
+        return ResponseEntity.ok(new UserTokenStateDto(jwt, expiresIn));
+    }
+
 
     @PostMapping(value = "/registerCustomer", consumes = "application/json")
     public ResponseEntity<Void> registerCustomer(@Valid @RequestBody CustomerDto registrationDto) {
@@ -63,23 +91,6 @@ public class CustomerController {
             }
         } else {
             return new ResponseEntity<>("Invalid or expired token.", HttpStatus.BAD_REQUEST);
-        }
-    }
-    @GetMapping(value = "/{customerId}")
-    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer customerId){
-        Customer customer = _customerService.getById(customerId);
-        CustomerDto customerDto = new CustomerDto(customer.getUser(), customer.getOccupation(), customer.getCompanyInfo(), customer.getPenaltyPoints());
-        return new ResponseEntity<>(customerDto, HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @PutMapping(value = "/update")
-    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CustomerDto customerDto) {
-        Customer customer = _customerService.updateCustomer(customerDto);
-        if (customer != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

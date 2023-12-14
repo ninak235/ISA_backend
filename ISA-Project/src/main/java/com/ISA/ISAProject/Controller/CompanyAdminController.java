@@ -4,7 +4,7 @@ import com.ISA.ISAProject.Dto.CompanyDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Customer;
-import io.swagger.annotations.ApiParam;
+//import io.swagger.annotations.ApiParam;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.CompanyAdminService;

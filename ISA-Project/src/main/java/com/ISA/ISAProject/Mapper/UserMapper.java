@@ -9,6 +9,7 @@ import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,7 @@ public class UserMapper {
     public UserMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
+
 
     public Customer dtoToCustomer(CustomerDto dto) {
         User user = modelMapper.map(dto, User.class);
