@@ -1,11 +1,7 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.ReservationDto;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Equipment;
-import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Services.CompanyAdminService;
-import com.ISA.ISAProject.Services.CustomerService;
 import com.ISA.ISAProject.Services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

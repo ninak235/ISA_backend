@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Token;
 
+import com.ISA.ISAProject.Model.Role;
 import com.ISA.ISAProject.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class TokenUtils {
@@ -38,15 +40,16 @@ public class TokenUtils {
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     //Generisanje jwt tokena
-    public String generateToken(String userName) {
+    public String generateToken(String userName, List<Role> roles,Integer id) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(userName)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
+                .claim("role", roles)
+                .claim("id",id)
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
-
 
         // moguce je postavljanje proizvoljnih podataka u telo JWT tokena pozivom funkcije .claim("key", value), npr. .claim("role", user.getRole())
     }

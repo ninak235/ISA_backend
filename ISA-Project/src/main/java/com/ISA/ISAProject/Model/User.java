@@ -1,10 +1,8 @@
 package com.ISA.ISAProject.Model;
 
-import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -12,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Where(clause = "deleted = false")
-@Entity(name = "Users")
+@Entity(name = "USERS")
 public class User implements UserDetails {
 
     @Id
@@ -43,9 +41,17 @@ public class User implements UserDetails {
     @Column(name = "Number",unique = true,nullable = false)
     private String Number;
 
+    /*
     @Enumerated(EnumType.STRING)
     @Column(name = "UserType",nullable = false)
     private TypeOfUser typeOfUser;
+    */
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "userRole",
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
+    private List<Role> roles;
 
     @Column(name = "deleted",columnDefinition = "boolean default false")
     private boolean deleted;
@@ -57,9 +63,10 @@ public class User implements UserDetails {
     private Timestamp lastPasswordResetDate;
     public User() {
         this.deleted = false;
+        this.roles = null;
     }
 
-    public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {
+    public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, boolean deleted,boolean isEnabled,Timestamp lastPasswordResetDate) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
@@ -69,9 +76,9 @@ public class User implements UserDetails {
         Country = country;
         City = city;
         Number = number;
-        this.typeOfUser = typeOfUser;
         this.deleted = deleted;
         this.isEnabled = isEnabled;
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
     public Integer getId() {
@@ -149,16 +156,22 @@ public class User implements UserDetails {
         Number = number;
     }
 
-    public TypeOfUser getTypeOfUser() {
-        return typeOfUser;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
-    public void setTypeOfUser(TypeOfUser typeOfUser) {
-        this.typeOfUser = typeOfUser;
+    public List<Role> getRoles() {
+        return roles;
     }
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
     }
 
     public void setDeleted(boolean deleted) {
@@ -179,19 +192,6 @@ public class User implements UserDetails {
 
     public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
-    }
-
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Konvertujte TypeOfUser u listu GrantedAuthority objekata
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(typeOfUser.name()));
-        return authorities;
-    }
-
-    @JsonIgnore
-    public String getAuthority() {
-        return typeOfUser.name();
     }
 
     @JsonIgnore

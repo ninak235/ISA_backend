@@ -1,8 +1,6 @@
 package com.ISA.ISAProject.Model;
 
 import com.ISA.ISAProject.Enum.TypeOfEquipment;
-import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

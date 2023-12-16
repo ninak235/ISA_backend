@@ -4,11 +4,11 @@ VALUES
     ('Company2', 'Address2', 'Description2', 'B', false),
     ('Company3', 'Address3', 'Description3', 'C', false);
 
-INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, user_type, deleted)
+INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
-    ('Novi Sad', 'Srbija', '069875465','zdravko@gmail.com', 'Zdravko','Debil1', false, 'Zdravkic', '12345678', 'Customer', false),
-    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','Debil2', false, 'Janic', '87654321', 'CompanyAdmin', false),
-    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar','Debil3', false, 'Petrovic', '56781234', 'Customer', false);
+    ('Novi Sad', 'Srbija', '069875465','zdravko@gmail.com', 'Zdravko','Debil1', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','Debil2', true, 'Janic', '12345678', false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar','Debil3', true, 'Petrovic', '$2a$10$q19T.hIoeaOX2/Z3Nrx4m.z6rRBBNyBxGw0agLx4NOvlCY9FZU2.m', false,'2017-10-01 21:58:58.508-07');
 
 INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
 VALUES
@@ -34,3 +34,16 @@ VALUES
     (1,1),
     (2,2),
     (2,3);
+
+INSERT INTO role (name)
+VALUES ('ROLE_CUSTOMER'),
+       ('ROLE_COMPANYADMIN'),
+       ('ROLE_ADMIN');
+
+INSERT INTO user_role (user_id , role_id)
+VALUES
+    (1,1),
+    (2,2),
+    (3,3);
+
+

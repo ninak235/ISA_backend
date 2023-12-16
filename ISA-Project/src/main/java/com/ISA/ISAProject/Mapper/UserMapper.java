@@ -3,14 +3,17 @@ package com.ISA.ISAProject.Mapper;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
-import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Model.Role;
 import com.ISA.ISAProject.Model.User;
+import com.ISA.ISAProject.Services.RoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class UserMapper {
@@ -21,11 +24,14 @@ public class UserMapper {
     public UserMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
+    @Autowired
+    private RoleService roleService;
 
 
     public Customer dtoToCustomer(CustomerDto dto) {
         User user = modelMapper.map(dto, User.class);
-        user.setTypeOfUser(TypeOfUser.Customer);
+        List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
+        user.setRoles(roles);
         Customer customer = modelMapper.map(dto, Customer.class);
         customer.setUser(user);
         return customer;
@@ -33,8 +39,8 @@ public class UserMapper {
 
     public CompanyAdmin dtoToCompanyAdmin(CompanyAdminDto dto) {
         User user = modelMapper.map(dto, User.class);
-        user.setTypeOfUser(TypeOfUser.CompanyAdmin);
-
+        List<Role> roles = roleService.findByName("ROLE_COMPANYADMIN");
+        user.setRoles(roles);
         user.setId(null);
 
         CompanyAdmin companyAdmin = modelMapper.map(user, CompanyAdmin.class);

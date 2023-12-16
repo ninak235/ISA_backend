@@ -7,7 +7,6 @@ import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Services.CustomerService;
 import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.TokenService;
-import com.ISA.ISAProject.Services.UserService;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
 import com.ISA.ISAProject.Token.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<UserTokenStateDto> createAuthenticationToken(@RequestBody JwtAuthenticationRequestDto authenticationRequestDto, HttpServletResponse response){
+    public ResponseEntity<UserTokenStateDto> createAuthenticationToken(@RequestBody JwtAuthenticationRequestDto authenticationRequestDto){
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequestDto.getUsername(), authenticationRequestDto.getPassword()));
@@ -48,9 +47,9 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
+        String jwt = tokenUtils.generateToken(user.getUsername(), user.getRoles(),user.getId());
         int expiresIn = tokenUtils.getExpiredIn();
-
+        System.out.println(jwt);
         return ResponseEntity.ok(new UserTokenStateDto(jwt, expiresIn));
     }
 
