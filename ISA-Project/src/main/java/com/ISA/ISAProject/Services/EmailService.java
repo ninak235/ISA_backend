@@ -41,6 +41,18 @@ public class EmailService {
         }
     }
 
+    @Async
+    public void confirmReservationEmail(String email)throws MailException{
+        Optional<User> userOptional = Optional.ofNullable(_userRepository.findByEmailIgnoreCase(email));
+        if(userOptional.isPresent()){
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(email);
+            mail.setFrom(env.getProperty("spring.mail.username"));
+            mail.setSubject("Confirm Reservation!");
+            mail.setText("To confirm your reservation,please click here: " + "http://localhost:8080/auth/confirm-reservation");
+        }
+    }
+
     private String generateToken(User user){
         AccountConfirmationToken confirmationToken = new AccountConfirmationToken(user);
         _tokenRepository.save(confirmationToken);
