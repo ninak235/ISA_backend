@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompanyEquipmentDto {
+    private Integer id;
     private String name;
     private String adress;
     private String description;
@@ -20,12 +21,13 @@ public class CompanyEquipmentDto {
     }
 
     public CompanyEquipmentDto(Company company) {
+        this.id = company.getId();
         this.name = company.getName();
         this.adress = company.getAddress();
         this.description = company.getDescription();
         this.grade = company.getGrade();
 
-      Hibernate.initialize(company.getEquipment());
+        Hibernate.initialize(company.getEquipment());
 
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
@@ -71,5 +73,13 @@ public class CompanyEquipmentDto {
 
     public void setEquipmentSet(List<EquipmentDto> equipmentSet) {
         this.equipmentSet = equipmentSet;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

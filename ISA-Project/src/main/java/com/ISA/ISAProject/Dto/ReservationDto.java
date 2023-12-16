@@ -1,34 +1,43 @@
 package com.ISA.ISAProject.Dto;
 
+import com.ISA.ISAProject.Enum.ReservationStatus;
+import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.Reservation;
 
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class ReservationDto {
     private Integer id;
-    private CompanyAdminDto admin; // Assuming you have a CompanyDto for administrators
-    private EquipmentDto equipment;
-    private LocalDateTime startTime;
+
+    private LocalDateTime dateTime;
+
     private Duration duration;
-    private LocalDateTime adminConfirmationTime;
-    private boolean confirmed;
 
-    public ReservationDto() {
-        // Default constructor for Jackson deserialization
-    }
+    private Integer grade;
 
-    public ReservationDto(Reservation reservation) {
+    private ReservationStatus status;
+
+    private Integer customerId;
+
+    private Integer companyAdminId;
+
+    public ReservationDto() {}
+
+    public ReservationDto(Reservation reservation){
         this.id = reservation.getId();
-        this.admin = new CompanyAdminDto(reservation.getAdmin().getUser(), reservation.getAdmin().getCompany().getId());
-        this.equipment = new EquipmentDto(reservation.getEquipment());
-        this.startTime = reservation.getStartTime();
+        this.dateTime = reservation.getDateTime();
         this.duration = reservation.getDuration();
-        this.adminConfirmationTime = reservation.getAdminConfirmationTime();
-        this.confirmed = reservation.isConfirmed();
+        this.grade = reservation.getGrade();
+        this.status = reservation.getStatus();
+        this.customerId = reservation.getCustomer().getId();
+        this.companyAdminId = reservation.getCompanyAdmin().getId();
     }
-
-    // Getters and Setters...
 
     public Integer getId() {
         return id;
@@ -38,28 +47,12 @@ public class ReservationDto {
         this.id = id;
     }
 
-    public CompanyAdminDto getAdmin() {
-        return admin;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setAdmin(CompanyAdminDto admin) {
-        this.admin = admin;
-    }
-
-    public EquipmentDto getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(EquipmentDto equipment) {
-        this.equipment = equipment;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Duration getDuration() {
@@ -70,20 +63,35 @@ public class ReservationDto {
         this.duration = duration;
     }
 
-    public LocalDateTime getAdminConfirmationTime() {
-        return adminConfirmationTime;
+    public Integer getGrade() {
+        return grade;
     }
 
-    public void setAdminConfirmationTime(LocalDateTime adminConfirmationTime) {
-        this.adminConfirmationTime = adminConfirmationTime;
+    public void setGrade(Integer grade) {
+        this.grade = grade;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public ReservationStatus getStatus() {
+        return status;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getCompanyAdminId() {
+        return companyAdminId;
+    }
+
+    public void setCompanyAdminId(Integer companyAdminId) {
+        this.companyAdminId = companyAdminId;
     }
 }
-

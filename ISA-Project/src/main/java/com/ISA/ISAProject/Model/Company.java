@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +29,11 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
+    @Column(name = "StartWorkingTime")
+    private LocalTime startWorkingTime;
+
+    @Column(name = "EndWorkingTime")
+    private LocalTime endWorkingTime;
 
     @JsonIgnore
     @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
@@ -47,11 +53,13 @@ public class Company {
         this.companyAdminSet = new HashSet<>();
     }
 
-    public Company(String name, String adress, String description, String grade, Set<Equipment> equipmentSet, Set<CompanyAdmin> companyAdminSet) {
+    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<Equipment> equipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
         this.adress = adress;
         this.description = description;
         this.grade =  grade;
+        this.startWorkingTime = startWorkingTime;
+        this.endWorkingTime = endWorkingTime;
         this.equipmentSet = equipmentSet;
         this.companyAdminSet = companyAdminSet;
     }
@@ -150,5 +158,19 @@ public class Company {
     }
 
 
+    public LocalTime getStartWorkingTime() {
+        return startWorkingTime;
+    }
 
+    public void setStartWorkingTime(LocalTime startWorkingTime) {
+        this.startWorkingTime = startWorkingTime;
+    }
+
+    public LocalTime getEndWorkingTime() {
+        return endWorkingTime;
+    }
+
+    public void setEndWorkingTime(LocalTime endWorkingTime) {
+        this.endWorkingTime = endWorkingTime;
+    }
 }
