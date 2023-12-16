@@ -27,7 +27,7 @@ public class CompanyEquipmentDto {
         this.description = company.getDescription();
         this.grade = company.getGrade();
 
-      Hibernate.initialize(company.getEquipment());
+        Hibernate.initialize(company.getEquipment());
 
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
