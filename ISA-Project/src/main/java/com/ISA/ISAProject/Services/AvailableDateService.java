@@ -21,15 +21,21 @@ public class AvailableDateService {
     private AvailableDateMapper availableDateMapper;
 
     @Transactional
-    public List<AvailableDateDto> getAllReservations() {
+    public List<AvailableDateDto> getAllAvailableDays() {
         List<AvailableDate> availableDates = availableDateRepository.findAll();
         return availableDateMapper.mapAvailableDatesToDto(availableDates);
     }
 
     @Transactional
-    public AvailableDateDto getReservationById(Integer availableDateId) {
+    public AvailableDateDto getAvailableDateById(Integer availableDateId) {
         Optional<AvailableDate> optionalAvailableDate = availableDateRepository.findById(availableDateId);
         return optionalAvailableDate.map(availableDateMapper::mapAvailableDateToDto).orElse(null);
+    }
+
+    @Transactional
+    public List<AvailableDateDto> getAllAvailableDaysByCompanyId(Integer companyId){
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
+        return availableDateMapper.mapAvailableDatesToDto(availableDates);
     }
 
     // Additional methods for updating, confirming, and other reservation-related actions

@@ -22,13 +22,13 @@ public class AvailableDateController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<AvailableDateDto>> getAllAvailableDates() {
-        List<AvailableDateDto> allAvailableDates = availableDateService.getAllReservations();
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDays();
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
     @GetMapping("/{availableDateId}")
     public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
-        AvailableDateDto availableDateDto = availableDateService.getReservationById(availableDateId);
+        AvailableDateDto availableDateDto = availableDateService.getAvailableDateById(availableDateId);
 
         if (availableDateDto != null) {
             return new ResponseEntity<>(availableDateDto, HttpStatus.OK);
@@ -36,27 +36,11 @@ public class AvailableDateController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    /*
-    @PostMapping("/create")
-    public ResponseEntity<ReservationDto> createReservation(@RequestParam Long adminId,
-                                                         @RequestParam Long equipmentId,
-                                                         @RequestParam LocalDateTime startTime,
-                                                         @RequestParam Duration duration) {
-        CompanyAdmin admin = companyAdminService.findById(adminId).orElseThrow(EntityNotFoundException::new);
-        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(EntityNotFoundException::new);
 
-        ReservationDto reservation = reservationService.createReservation(admin, equipment, startTime, duration);
-        return ResponseEntity.ok(reservation);
+    @GetMapping("/getByCompanyId/{companyId}")
+    public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
-
-
-    /*
-    @PostMapping("/confirm/{reservationId}")
-    public ResponseEntity<String> confirmReservation(@PathVariable Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(EntityNotFoundException::new);
-        reservationService.confirmReservation(reservation);
-        return ResponseEntity.ok("Reservation confirmed");
-    }
-    */
 
 }
