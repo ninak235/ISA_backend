@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api/availableDate")
 public class AvailableDateController {
 
     @Autowired
@@ -42,5 +42,13 @@ public class AvailableDateController {
         List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
+    }
+
+
 
 }

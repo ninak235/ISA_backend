@@ -24,6 +24,9 @@ public class AvailableDate {
     @Column(name = "confirmed")
     private boolean confirmed; // Indicates if the reservation is confirmed
 
+    @Column(name = "taken")
+    private boolean taken;
+
 
     public AvailableDate() {
 
@@ -35,6 +38,7 @@ public class AvailableDate {
         this.duration = duration;
         this.adminConfirmationTime = null;
         this.confirmed = false;
+        this.taken = false;
     }
 
     public Integer getId() {
@@ -83,6 +87,14 @@ public class AvailableDate {
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
+
+    public boolean getTaken(){
+        return taken;
     }
 
     @Override
