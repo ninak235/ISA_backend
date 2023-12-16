@@ -46,7 +46,9 @@ public class User {
     private boolean isEnabled;
 
     public User() {
+        this.typeOfUser = TypeOfUser.SystemAdmin;
         this.deleted = false;
+        this.isEnabled = false;
     }
 
     public User(Integer id, String firstName, String lastName, String email, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {

@@ -1,21 +1,13 @@
 package com.ISA.ISAProject.Dto;
 
-
-import com.ISA.ISAProject.Model.*;
+import com.ISA.ISAProject.Enum.TypeOfUser;
+import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
-import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.User;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-public class CompanyAdminDto {
+public class UserDto {
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -24,7 +16,6 @@ public class CompanyAdminDto {
     @NotEmpty
     private String email;
     @Size(min = 8)
-    @NotEmpty
     private String password;
     @NotEmpty
     private String country;
@@ -33,28 +24,19 @@ public class CompanyAdminDto {
     @NotEmpty
     private String number;
 
-    private Integer companyId;
-    //private CompanyDto company; spaletovo
-    //private List<ReservationDto> reservationsSet; trebace kasnije
 
-    private List<ComplaintDto> complaintSet;
 
-    public CompanyAdminDto() {
-        // Default constructor for Jackson deserialization
+    public UserDto(){
     }
 
-    public CompanyAdminDto(User user, Integer companyId) {
+    public UserDto(User user) {
         this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
         this.email = user.getEmail();
+        this.lastName = user.getLastName();
         this.password = user.getPassword();
         this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
-        //this.company = new CompanyDto(company); spaletovo
-        this.companyId = companyId;
-
-
     }
 
     public String getFirstName() {
@@ -113,12 +95,5 @@ public class CompanyAdminDto {
         this.number = number;
     }
 
-    public Integer getCompanyId() {
-        return companyId;
-    }
 
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
 }
-

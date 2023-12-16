@@ -3,6 +3,7 @@ import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Dto.CompanyDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Complaint;
 import com.ISA.ISAProject.Model.Customer;
 import io.swagger.annotations.ApiParam;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-
+import java.util.List;
 
 
 @RestController

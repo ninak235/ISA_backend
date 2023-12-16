@@ -1,4 +1,4 @@
-INSERT INTO Company (name, adress, description, grade, deleted)
+INSERT INTO company (name, adress, description, grade, deleted)
 VALUES
     ('Company1', 'Address1', 'Description1', 'A', false),
     ('Company2', 'Address2', 'Description2', 'B', false),
@@ -8,7 +8,8 @@ INSERT INTO users (city, country, number, email, first_name, is_enabled, last_na
 VALUES
     ('Novi Sad', 'Srbija', '069875465','zdravko@gmail.com', 'Zdravko', false, 'Zdravkic', '12345678', 'Customer', false),
     ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana', false, 'Janic', '87654321', 'CompanyAdmin', false),
-    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar', false, 'Petrovic', '56781234', 'Customer', false);
+    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar', false, 'Petrovic', '56781234', 'Customer', false),
+    ('Beograd', 'Srbija', '066458392', 'nina@gmmail.com', 'Nina', false, 'Knezevic', '78437483', 'SystemAdmin', false);
 
 INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
 VALUES
@@ -35,4 +36,9 @@ VALUES
     (2,2),
     (2,3);
 
-
+INSERT INTO complaints (content, replay, company_admin_id, customer_id)
+VALUES
+    ('veliki problem', '', 1, 1),
+    ('mali problem', '', 2, 3),
+    ('tezak problem', '', 2, 1),
+    ('nejasno', '', 1, 1);
