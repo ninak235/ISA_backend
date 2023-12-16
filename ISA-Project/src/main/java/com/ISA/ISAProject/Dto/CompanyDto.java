@@ -4,6 +4,7 @@ import com.ISA.ISAProject.Model.Company;
 
 
 public class CompanyDto {
+    private Integer id;
     private String name;
     private String adress;
     private String description;
@@ -16,6 +17,7 @@ public class CompanyDto {
     }
 
     public CompanyDto(Company company) {
+        this.id = company.getId();
         this.name = company.getName();
         this.adress = company.getAddress();
         this.description = company.getDescription();
@@ -59,6 +61,14 @@ public class CompanyDto {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
   /*  public List<EquipmentDto> getEquipmentSet() {

@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class CompanyAdminDto {
+
+    private Integer id;
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -34,6 +36,7 @@ public class CompanyAdminDto {
     }
 
     public CompanyAdminDto(User user, Integer companyId) {
+        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();

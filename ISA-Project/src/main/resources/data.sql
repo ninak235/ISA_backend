@@ -1,8 +1,8 @@
-INSERT INTO Company (name, adress, description, grade, deleted)
+INSERT INTO Company (name, adress, start_working_time, end_working_time, description, grade, deleted)
 VALUES
-    ('Company1', 'Address1', 'Description1', 'A', false),
-    ('Company2', 'Address2', 'Description2', 'B', false),
-    ('Company3', 'Address3', 'Description3', 'C', false);
+    ('Company1', 'Address1', '09:00:00', '17:30:00',  'Description1', 'A', false),
+    ('Company2', 'Address2', '09:00:00', '17:30:00', 'Description2', 'B', false),
+    ('Company3', 'Address3', '09:00:00', '17:30:00', 'Description3', 'C', false);
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
@@ -35,6 +35,11 @@ VALUES
     (2,2),
     (2,3);
 
+INSERT INTO available_date (admin_confirmation_date, confirmed, duration, start_time, admin_id, taken)
+VALUES
+    ('2023-12-14T10:30:00', true, 1800, '2023-12-23T08:45:00', 1, true),
+    ('2023-12-16T10:30:00', true, 1800, '2023-12-18T10:30:00', 1, false),
+    ('2023-12-14T10:30:00', true, 1800, '2023-12-20T10:30:00', 2, false);
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
        ('ROLE_COMPANYADMIN'),

@@ -1,11 +1,13 @@
 package com.ISA.ISAProject.Dto;
 
+import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class CustomerDto {
     @NotEmpty
@@ -32,6 +34,8 @@ public class CustomerDto {
     private String companyInfo;
 
     private long penaltyPoints;
+
+    private Set<Reservation> reservationSet;
 
     public CustomerDto(){
 

@@ -1,7 +1,9 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "Customers")
 public class Customer {
@@ -23,6 +25,9 @@ public class Customer {
 
     @Column(name = "PenaltyPoints")
     private long penaltyPoints;
+
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Reservation> reservationSet = new HashSet<>();
 
     public Customer() {
         this.penaltyPoints = 0;
@@ -90,4 +95,11 @@ public class Customer {
     }
 
 
+    public Set<Reservation> getReservationSet() {
+        return reservationSet;
+    }
+
+    public void setReservationSet(Set<Reservation> reservationSet) {
+        this.reservationSet = reservationSet;
+    }
 }

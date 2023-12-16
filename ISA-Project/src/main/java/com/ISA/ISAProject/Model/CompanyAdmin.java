@@ -21,6 +21,9 @@ public class CompanyAdmin {
     @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Reservation> reservationSet = new HashSet<>();
+
     /*
     @OneToMany(mappedBy = "admin")
     private Set<Reservation> reservationsSet = new HashSet<>();; // Use Set if uniqueness matters, and order doesn't
