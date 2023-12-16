@@ -41,6 +41,10 @@ public class UserMapper {
         return companyAdmin;
     }
 
+    public UserDto mapUserToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
+    }
+
     public User mapDtoToSystemAdmin(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }

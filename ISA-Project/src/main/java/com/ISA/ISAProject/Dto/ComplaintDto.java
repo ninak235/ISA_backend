@@ -29,6 +29,7 @@ public class ComplaintDto {
     }
 
     public ComplaintDto(Complaint complaint) {
+        this.id = complaint.getId();
         this.content = complaint.getContent();
         this.replay = complaint.getReplay();
         this.companyAdminId = complaint.getAdmin().getId();

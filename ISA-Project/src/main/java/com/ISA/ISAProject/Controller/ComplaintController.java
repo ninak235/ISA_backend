@@ -27,9 +27,9 @@ public class ComplaintController {
         return new ResponseEntity<>(allComplaints, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllByAdminId/{companyAdminId}")
-    public ResponseEntity<List<ComplaintDto>> getAllComplaintsByAdminId(@PathVariable Integer companyAdminId){
-        List<ComplaintDto> allComplaintsByAdminId = _complaintService.getAllComplaintsByAdminId(companyAdminId);
+    @GetMapping("/getAllByAdminId/{systemAdminId}")
+    public ResponseEntity<List<ComplaintDto>> getAllComplaintsByAdminId(@PathVariable Integer systemAdminId){
+        List<ComplaintDto> allComplaintsByAdminId = _complaintService.getAllComplaintsByAdminId(systemAdminId);
         return new ResponseEntity<>(allComplaintsByAdminId, HttpStatus.OK);
     }
 
