@@ -1,18 +1,24 @@
 package com.ISA.ISAProject.Model;
 
-import com.ISA.ISAProject.Enum.TypeOfUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Where(clause = "deleted = false")
-@Entity(name = "Users")
-public class User {
+@Entity(name = "USERS")
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "UserName", unique = true)
+    private String userName;
 
     @Column(name = "FirstName",nullable = false)
     private String firstName;
@@ -35,9 +41,17 @@ public class User {
     @Column(name = "Number",unique = true,nullable = false)
     private String Number;
 
+    /*
     @Enumerated(EnumType.STRING)
     @Column(name = "UserType",nullable = false)
     private TypeOfUser typeOfUser;
+    */
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "userRole",
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
+    private List<Role> roles;
 
     @Column(name = "deleted",columnDefinition = "boolean default false")
     private boolean deleted;
@@ -45,12 +59,16 @@ public class User {
     @Column(name = "isEnabled",columnDefinition = "boolean default false")
     private boolean isEnabled;
 
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
     public User() {
         this.deleted = false;
+        this.roles = null;
     }
 
-    public User(Integer id, String firstName, String lastName, String email, String password, String country, String city, String number, TypeOfUser typeOfUser, boolean deleted,boolean isEnabled) {
+    public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, boolean deleted,boolean isEnabled,Timestamp lastPasswordResetDate) {
         this.id = id;
+        this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -58,9 +76,9 @@ public class User {
         Country = country;
         City = city;
         Number = number;
-        this.typeOfUser = typeOfUser;
         this.deleted = deleted;
         this.isEnabled = isEnabled;
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
     public Integer getId() {
@@ -69,6 +87,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return userName;
+    }
+
+    public void setUsername(String userName) {
+        this.userName = userName;
     }
 
     public String getFirstName() {
@@ -95,11 +121,14 @@ public class User {
         this.email = email;
     }
 
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
+        Timestamp now = new Timestamp(new Date().getTime());
+        this.setLastPasswordResetDate(now);
         this.password = password;
     }
 
@@ -127,16 +156,22 @@ public class User {
         Number = number;
     }
 
-    public TypeOfUser getTypeOfUser() {
-        return typeOfUser;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
-    public void setTypeOfUser(TypeOfUser typeOfUser) {
-        this.typeOfUser = typeOfUser;
+    public List<Role> getRoles() {
+        return roles;
     }
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
     }
 
     public void setDeleted(boolean deleted) {
@@ -149,6 +184,32 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     @Override

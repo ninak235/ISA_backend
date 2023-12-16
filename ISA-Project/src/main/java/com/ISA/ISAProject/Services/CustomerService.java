@@ -7,6 +7,7 @@ import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Repository.CustomerRepository;
 import com.ISA.ISAProject.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,8 @@ public class CustomerService {
     private final UserMapper _userMapper;
     @Autowired
     private UserRepository _userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     public CustomerService(UserMapper userMapper){
@@ -25,6 +28,7 @@ public class CustomerService {
     }
 
     public CustomerDto registerCustomer(CustomerDto dto){
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 

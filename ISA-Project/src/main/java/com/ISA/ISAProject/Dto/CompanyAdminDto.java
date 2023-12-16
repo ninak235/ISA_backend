@@ -1,20 +1,11 @@
 package com.ISA.ISAProject.Dto;
 
 
-import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
-import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.User;
-
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 public class CompanyAdminDto {
 

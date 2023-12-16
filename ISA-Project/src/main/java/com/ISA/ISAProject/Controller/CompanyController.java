@@ -2,12 +2,12 @@ package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -53,6 +53,8 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/registerCompany", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<CompanyDto> registerCompany(@Valid @RequestBody CompanyDto companyDto) {
         try {
 

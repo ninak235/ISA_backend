@@ -1,6 +1,5 @@
 package com.ISA.ISAProject.Dto;
 
-import com.ISA.ISAProject.Model.Company;
 
 public class CompanyIdNameDto {
     private Integer id;

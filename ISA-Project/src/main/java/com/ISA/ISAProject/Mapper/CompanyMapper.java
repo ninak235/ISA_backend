@@ -2,12 +2,7 @@ package com.ISA.ISAProject.Mapper;
 
 import com.ISA.ISAProject.Dto.CompanyDto;
 import com.ISA.ISAProject.Dto.CompanyEquipmentDto;
-import com.ISA.ISAProject.Dto.CustomerDto;
-import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
-import com.ISA.ISAProject.Model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,11 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.Company;
-import org.hibernate.Hibernate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CompanyDto {
     private Integer id;
