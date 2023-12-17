@@ -17,11 +17,6 @@ VALUES
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
-INSERT INTO company_equipment  (company_id, equipment_id)
-VALUES
-    (1,1),
-    (2,2),
-    (2,3);
 
 INSERT INTO customers (user_id, company_info, occupation, penalty_points)
 VALUES
@@ -40,6 +35,7 @@ VALUES
     ('2023-12-14T10:30:00', true, 1800, '2023-12-23T08:45:00', 1, true),
     ('2023-12-16T10:30:00', true, 1800, '2023-12-18T10:30:00', 1, false),
     ('2023-12-14T10:30:00', true, 1800, '2023-12-20T10:30:00', 2, false);
+
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
        ('ROLE_COMPANYADMIN'),
@@ -51,4 +47,20 @@ VALUES
     (2,2),
     (3,3);
 
+INSERT INTO company_equipment (quantity, company_id, equipment_id)
+VALUES
+    (10, 1, 1),
+    (20, 1, 2),
+    (50, 2, 3),
+    (40, 3, 3),
+    (100, 3, 4);
 
+INSERT INTO reservation (date_time, duration, grade, status, customer_id, company_admin_id)
+VALUES
+    ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2);
+
+
+INSERT INTO reservation_equipment (reservation_id, company_equipment_id)
+VALUES
+    (1, 1),
+    (1, 2);

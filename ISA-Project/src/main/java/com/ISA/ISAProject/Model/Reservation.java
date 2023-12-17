@@ -5,6 +5,8 @@ import com.ISA.ISAProject.Enum.ReservationStatus;
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "reservation")
 public class Reservation {
@@ -31,6 +33,15 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "companyAdminId", nullable = true)
     private CompanyAdmin companyAdmin;
+
+    @ManyToMany
+    @JoinTable(
+            name = "reservation_equipment",
+            joinColumns = @JoinColumn(name = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_equipment_id")
+    )
+    private Set<CompanyEquipment> companyEquipments = new HashSet<>();
+
 
 
     public Reservation(Integer id, LocalDateTime dateTime, Duration duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin) {
