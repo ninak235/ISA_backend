@@ -24,8 +24,12 @@ public class ReservationMapper {
     }
 
     public ReservationDto mapReservationToDto(Reservation reservation) {
-        return modelMapper.map(reservation, ReservationDto.class);
+        ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+        reservationDto.setCustomerName(reservation.getCustomer().getUser().getFirstName());
+        reservationDto.setCustomerLastName(reservation.getCustomer().getUser().getLastName());
+        return reservationDto;
     }
+
 
     public List<ReservationDto> mapReservationsToDto(List<Reservation> reservations) {
         return reservations.stream()

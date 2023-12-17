@@ -54,7 +54,10 @@ public class UserMapper {
     }
 
     public User mapDtoToSystemAdmin(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
+        User systemAdmin = modelMapper.map(userDto, User.class);
+        List<Role> roles = roleService.findByName("ROLE_ADMIN");
+        systemAdmin.setRoles(roles);
+        return systemAdmin;
     }
 }
 

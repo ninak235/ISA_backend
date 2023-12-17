@@ -10,6 +10,7 @@ import com.ISA.ISAProject.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class UserController {
     @Autowired
     private UserService _userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/createSystemAdmin", consumes = "application/json")
     public ResponseEntity<UserDto> registerSystemAdmin(@Valid @RequestBody UserDto userDto) {
         try {
@@ -38,6 +40,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId){
         User user = _userService.getById(userId);

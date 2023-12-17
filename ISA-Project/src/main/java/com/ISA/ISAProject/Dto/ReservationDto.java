@@ -27,6 +27,9 @@ public class ReservationDto {
 
     private Integer companyAdminId;
 
+    private String customerName;
+    private String customerLastName;
+
     public ReservationDto() {}
 
     public ReservationDto(Reservation reservation){
@@ -37,6 +40,12 @@ public class ReservationDto {
         this.status = reservation.getStatus();
         this.customerId = reservation.getCustomer().getId();
         this.companyAdminId = reservation.getCompanyAdmin().getId();
+
+        Customer customer = reservation.getCustomer();
+        if (customer != null) {
+            this.customerName = customer.getUser().getFirstName();
+            this.customerLastName = customer.getUser().getLastName();
+        }
     }
 
     public Integer getId() {
@@ -93,5 +102,21 @@ public class ReservationDto {
 
     public void setCompanyAdminId(Integer companyAdminId) {
         this.companyAdminId = companyAdminId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
     }
 }

@@ -26,6 +26,12 @@ public class ReservationController {
         return new ResponseEntity<>(allReservations, HttpStatus.OK);
     }
 
+    @GetMapping("/getAllByAdminId/{companyAdminId}")
+    public ResponseEntity<List<ReservationDto>> getAllReservationsByCompanyAdminId(@PathVariable Integer companyAdminId) {
+        List<ReservationDto> allReservations = reservationService.getAllReservationsByCompanyAdminId(companyAdminId);
+        return new ResponseEntity<>(allReservations, HttpStatus.OK);
+    }
+
     @GetMapping("/{reservationId}")
     public ResponseEntity<ReservationDto> getReservationById(@PathVariable Integer reservationId) {
         ReservationDto reservationDto = reservationService.getReservationById(reservationId);

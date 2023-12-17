@@ -21,6 +21,9 @@ public class CompanyAdmin {
     @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
+    @Column(name = "UserName", unique = true)
+    private String userName;
+
     @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
 

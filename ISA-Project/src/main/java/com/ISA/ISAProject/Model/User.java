@@ -63,15 +63,8 @@ public class User implements UserDetails {
     private Timestamp lastPasswordResetDate;
     public User() {
         this.deleted = false;
-        this.isEnabled = false;
-        this.roles = new ArrayList<>();  // Ensure roles list is initialized
-
-        // Set other default values as needed
-
-        // Set the default role (in this case, "System Admin")
-        Role systemAdminRole = new Role();
-        systemAdminRole.setName("ROLE_ADMIN");
-        roles.add(systemAdminRole);
+        this.isEnabled = true;
+        this.roles =null;
     }
 
     public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, boolean deleted,boolean isEnabled,Timestamp lastPasswordResetDate) {

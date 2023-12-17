@@ -9,6 +9,7 @@ import com.ISA.ISAProject.Services.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class ComplaintController {
     @Autowired
     private ComplaintService _complaintService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
     public ResponseEntity<List<ComplaintDto>> getAllComplaints(){
         List<ComplaintDto> allComplaints = _complaintService.getAllComplaints();
@@ -33,6 +35,7 @@ public class ComplaintController {
         return new ResponseEntity<>(allComplaintsByAdminId, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @CrossOrigin
     @PutMapping(value = "/update")
     public ResponseEntity<Void> updateComplaint(@Valid @RequestBody ComplaintDto complaintDto) {

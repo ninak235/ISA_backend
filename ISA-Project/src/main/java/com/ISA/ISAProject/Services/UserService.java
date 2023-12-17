@@ -34,6 +34,7 @@ public class UserService {
     }
 
     public UserDto registerSystemAdmin(UserDto dto) {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         User systemAdmin = _userRepository.save(_userMapper.mapDtoToSystemAdmin(dto));
         return new UserDto(systemAdmin);
     }

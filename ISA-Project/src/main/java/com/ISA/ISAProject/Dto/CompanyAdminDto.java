@@ -16,6 +16,8 @@ public class CompanyAdminDto {
     private String firstName;
     @NotEmpty
     private String lastName;
+    @NotEmpty
+    private String userName;
     @Email
     @NotEmpty
     private String email;
@@ -43,6 +45,7 @@ public class CompanyAdminDto {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.userName = user.getUsername();
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.country = user.getCountry();
@@ -124,6 +127,14 @@ public class CompanyAdminDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }
 

@@ -11,6 +11,8 @@ public class UserDto {
     private String firstName;
     @NotEmpty
     private String lastName;
+    @NotEmpty
+    private String userName;
     @Email
     @NotEmpty
     private String email;
@@ -31,6 +33,7 @@ public class UserDto {
     public UserDto(User user) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
+        this.userName = user.getUsername();
         this.lastName = user.getLastName();
         this.password = user.getPassword();
         this.country = user.getCountry();
@@ -94,5 +97,11 @@ public class UserDto {
         this.number = number;
     }
 
+    public String getUserName() {
+        return userName;
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

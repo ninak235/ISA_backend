@@ -7,7 +7,7 @@ VALUES
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
     ('Novi Sad', 'Srbija', '069875465','zdravko@gmail.com', 'Zdravko','Debil1', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
-    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','Debil2', true, 'Janic', '12345678', false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','Debil2', true, 'Janic', '$2a$10$8KVCmoOqnSDGY9H3KnOp5OeCJNE1gqu1VPdh0p2/vm5OjNnMw5aXa', false,'2017-10-01 21:58:58.508-07'),
     ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar','Debil3', true, 'Petrovic', '$2a$10$q19T.hIoeaOX2/Z3Nrx4m.z6rRBBNyBxGw0agLx4NOvlCY9FZU2.m', false,'2017-10-01 21:58:58.508-07');
 
 INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
@@ -27,8 +27,7 @@ VALUES
 INSERT INTO company_admins  (company_id, user_id)
 VALUES
     (1,1),
-    (2,2),
-    (2,3);
+    (2,2);
 
 INSERT INTO complaints (content, replay, company_admin_id, customer_id)
 VALUES
@@ -58,13 +57,14 @@ INSERT INTO company_equipment (quantity, company_id, equipment_id)
 VALUES
     (10, 1, 1),
     (20, 1, 2),
-    (50, 2, 3),
-    (40, 3, 3),
-    (100, 3, 4);
+    (50, 2, 3);
 
 INSERT INTO reservation (date_time, duration, grade, status, customer_id, company_admin_id)
 VALUES
-    ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2);
+    ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2),
+    ('2023-10-10T17:00:00', 2000, 5, 0, 1, 2),
+    ('2023-07-07T08:00:00', 1000, 5, 0, 1, 2),
+    ('2023-12-17T12:00:00', 2500, 5, 0, 1, 2);
 
 
 INSERT INTO reservation_equipment (reservation_id, company_equipment_id)
