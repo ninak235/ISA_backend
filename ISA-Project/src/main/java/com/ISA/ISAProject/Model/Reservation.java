@@ -18,7 +18,7 @@ public class Reservation {
     private LocalDateTime dateTime;
 
     @Column(name = "duration")
-    private Duration duration;
+    private Integer duration;
 
     @Column(name="grade")
     private Integer grade;
@@ -38,13 +38,13 @@ public class Reservation {
     @JoinTable(
             name = "reservation_equipment",
             joinColumns = @JoinColumn(name = "reservation_id"),
-            inverseJoinColumns = @JoinColumn(name = "company_equipment_id")
+            inverseJoinColumns = @JoinColumn(name = "equipment_id")
     )
-    private Set<CompanyEquipment> companyEquipments = new HashSet<>();
+    private Set<Equipment> reservationEquipments = new HashSet<>();
 
 
 
-    public Reservation(Integer id, LocalDateTime dateTime, Duration duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
+    public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
         this.id = id;
         this.dateTime = dateTime;
         this.duration = duration;
@@ -55,8 +55,21 @@ public class Reservation {
         //this.companyEquipments = new HashSet<>();//companyEquipments;
     }
 
+    public Reservation(Reservation reservation){
+        this.id = reservation.getId();
+        this.dateTime = reservation.getDateTime();
+        this.duration = reservation.getDuration();
+        this.grade = reservation.getGrade();
+        this.status = reservation.getStatus();
+        this.customer = reservation.getCustomer();
+        this.companyAdmin = reservation.getCompanyAdmin();
+        this.reservationEquipments = reservation.getReservationEquipments();
+    }
+
+
+
     public Reservation() {
-        companyEquipments = new HashSet<>();
+        reservationEquipments = new HashSet<>();
     }
 
     public Integer getId() {
@@ -75,11 +88,11 @@ public class Reservation {
         this.dateTime = dateTime;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -115,11 +128,11 @@ public class Reservation {
         this.companyAdmin = companyAdmin;
     }
 
-    public Set<CompanyEquipment> getCompanyEquipments() {
-        return companyEquipments;
+    public Set<Equipment> getReservationEquipments() {
+        return reservationEquipments;
     }
 
-    public void setCompanyEquipments(Set<CompanyEquipment> companyEquipments) {
-        this.companyEquipments = companyEquipments;
+    public void setReservationEquipments(Set<Equipment> equipments) {
+        this.reservationEquipments = equipments;
     }
 }

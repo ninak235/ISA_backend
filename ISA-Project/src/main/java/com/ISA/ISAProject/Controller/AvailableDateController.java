@@ -1,6 +1,10 @@
 package com.ISA.ISAProject.Controller;
 
 
+import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.ReservationDto;
+import com.ISA.ISAProject.Model.AvailableDate;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyAdminService;
 import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Services.AvailableDateService;
@@ -10,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -53,6 +58,25 @@ public class AvailableDateController {
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
+    @PostMapping("/new")
+    public ResponseEntity<AvailableDateDto> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
+        AvailableDateDto createdDate = availableDateService.createAvailableDate(availableDateDto);
 
+        if (createdDate != null) {
+            return new ResponseEntity<>(createdDate, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @CrossOrigin
+    @PutMapping(value = "/update")
+    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody AvailableDateDto availableDateDto) {
+        AvailableDate availableDate = availableDateService.update(availableDateDto);
+        if (availableDate != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

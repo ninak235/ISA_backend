@@ -60,7 +60,7 @@ VALUES
     ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2);
 
 
-INSERT INTO reservation_equipment (reservation_id, company_equipment_id)
+INSERT INTO reservation_equipment (reservation_id, equipment_id)
 VALUES
     (1, 1),
     (1, 2);

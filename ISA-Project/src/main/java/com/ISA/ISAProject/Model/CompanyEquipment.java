@@ -12,19 +12,19 @@ public class CompanyEquipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
 
     @Column(nullable = false)
     private Integer quantity;
-
+    /*
     @ManyToMany(mappedBy = "companyEquipments")
-    private Set<Reservation> reservations = new HashSet<>();
+    private Set<Reservation> reservations = new HashSet<>();*/
 
     public CompanyEquipment(Integer id, Company company, Equipment equipment, Integer quantity) {
         this.id = id;

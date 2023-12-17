@@ -1,7 +1,9 @@
 package com.ISA.ISAProject.Mapper;
 
 import com.ISA.ISAProject.Dto.AvailableDateDto;
+import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Model.AvailableDate;
+import com.ISA.ISAProject.Model.Equipment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,5 +28,9 @@ public class AvailableDateMapper {
         return availableDates.stream()
                 .map(this::mapAvailableDateToDto)
                 .collect(Collectors.toList());
+    }
+
+    public AvailableDate mapDtoToEntity(AvailableDateDto availableDateDto) {
+        return modelMapper.map(availableDateDto, AvailableDate.class);
     }
 }

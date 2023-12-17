@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ReservationDto {
@@ -20,7 +21,7 @@ public class ReservationDto {
 
     private LocalDateTime dateTime;
 
-    private Duration duration;
+    private Integer duration;
 
     private Integer grade;
 
@@ -30,7 +31,7 @@ public class ReservationDto {
 
     private Integer companyAdminId;
 
-    private Set<ComEqDto> companyEquipments;
+    private List<EquipmentDto> reservationEquipments;
 
     public ReservationDto() {}
 
@@ -60,11 +61,11 @@ public class ReservationDto {
         this.dateTime = dateTime;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -100,11 +101,11 @@ public class ReservationDto {
         this.companyAdminId = companyAdminId;
     }
 
-    public Set<ComEqDto> getCompanyEquipments() {
-        return companyEquipments;
+    public List<EquipmentDto> getReservationEquipments() {
+        return reservationEquipments;
     }
 
-    public void setCompanyEquipments(Set<ComEqDto> companyEquipments) {
-        this.companyEquipments = companyEquipments;
+    public void setReservationEquipments(List<EquipmentDto> reservationEquipments) {
+        this.reservationEquipments = reservationEquipments;
     }
 }

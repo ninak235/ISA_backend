@@ -39,7 +39,6 @@ public class ReservationController {
 
         @PostMapping("/new")
         public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
-            // Call EquipmentService to create equipment
             ReservationDto createdReservation = reservationService.createReservation(reservationDto);
 
         if (createdReservation != null) {

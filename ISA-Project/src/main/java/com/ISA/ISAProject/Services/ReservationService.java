@@ -26,7 +26,7 @@ public class ReservationService {
     @Autowired
     private CompanyAdminService companyAdminService;
     @Autowired
-    private CompanyEquipmentRepository companyEquipmentRepository;
+    private EquipmentRepository equipmentRepository;
 
     @Transactional
     public List<ReservationDto> getAllReservations() {
@@ -44,15 +44,17 @@ public class ReservationService {
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
         CompanyAdmin companyAdmin = companyAdminService.getById(reservationDto.getCompanyAdminId());
-        Set<CompanyEquipment> companyEquipments = new HashSet<>();
-        for (ComEqDto comEq: reservationDto.getCompanyEquipments()) {
-            companyEquipments.add(companyEquipmentRepository.getById(comEq.getId()));
-        }
+        System.out.println("---------1------------------: "+ reservationDto.getReservationEquipments().size());
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
-        reservation.setCompanyEquipments(companyEquipments);
+
+
+        System.out.println("---------2------------------: "+ reservation.getReservationEquipments().size());
+
         reservation.setCompanyAdmin(companyAdmin);
         reservation.setCustomer(customer);
-        reservationRepository.save(reservation);
-        return new ReservationDto(reservation);
+
+        Reservation reservation1 = new Reservation(reservation);
+        reservationRepository.save(reservation1);
+        return new ReservationDto(reservation1);
     }
 }
