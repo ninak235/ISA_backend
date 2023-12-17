@@ -7,6 +7,7 @@ import com.ISA.ISAProject.Services.AvailableDateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class AvailableDateController {
     }
 
     @GetMapping("/{availableDateId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
         AvailableDateDto availableDateDto = availableDateService.getAvailableDateById(availableDateId);
 
@@ -39,6 +41,7 @@ public class AvailableDateController {
     }
 
     @GetMapping("/getByCompanyId/{companyId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
         List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);

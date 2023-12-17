@@ -116,7 +116,7 @@ public class CompanyService {
 
         if (company != null) {
             Equipment equipment = _equipmentRepository.findEquipmentByName(equipmentDto.getName());
-            company.addEquipment(equipment);
+            //company.addEquipment(equipment);
             _companyRepository.save(company);
 
             return new CompanyEquipmentDto(company);

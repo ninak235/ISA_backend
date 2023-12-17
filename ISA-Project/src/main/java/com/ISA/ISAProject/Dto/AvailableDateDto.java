@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class AvailableDateDto {
     private Integer id;
-    private CompanyAdminDto admin; // Assuming you have a CompanyDto for administrators
+    private Integer adminId;
     private LocalDateTime startTime;
     private Duration duration;
     private LocalDateTime adminConfirmationTime;
@@ -19,7 +19,7 @@ public class AvailableDateDto {
 
     public AvailableDateDto(AvailableDate reservation) {
         this.id = reservation.getId();
-        this.admin = new CompanyAdminDto(reservation.getAdmin().getUser(), reservation.getAdmin().getCompany().getId());
+        this.adminId = reservation.getAdmin().getId();
         this.startTime = reservation.getStartTime();
         this.duration = reservation.getDuration();
         this.adminConfirmationTime = reservation.getAdminConfirmationTime();
@@ -35,15 +35,6 @@ public class AvailableDateDto {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public CompanyAdminDto getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(CompanyAdminDto admin) {
-        this.admin = admin;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -74,6 +65,14 @@ public class AvailableDateDto {
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public Integer getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 }
 

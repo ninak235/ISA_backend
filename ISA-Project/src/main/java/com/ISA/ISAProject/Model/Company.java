@@ -35,11 +35,8 @@ public class Company {
     @Column(name = "EndWorkingTime")
     private LocalTime endWorkingTime;
 
-    @JsonIgnore
-    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
-
-    private Set<Equipment> equipmentSet = new HashSet<>();
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
     @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<CompanyAdmin> companyAdminSet = new HashSet<>();
@@ -48,25 +45,22 @@ public class Company {
     private boolean deleted;
 
     public Company(){
-        this.equipmentSet = new HashSet<>();
+        this.companyEquipmentSet = new HashSet<>();
         this.deleted=false;
         this.companyAdminSet = new HashSet<>();
     }
 
-    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<Equipment> equipmentSet, Set<CompanyAdmin> companyAdminSet) {
+    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
         this.adress = adress;
         this.description = description;
         this.grade =  grade;
         this.startWorkingTime = startWorkingTime;
         this.endWorkingTime = endWorkingTime;
-        this.equipmentSet = equipmentSet;
+        this.companyEquipmentSet = companyEquipmentSet;
         this.companyAdminSet = companyAdminSet;
     }
 
-    public void addEquipment(Equipment e){
-        this.equipmentSet.add(e);
-    }
 
     public Integer getId() {
         return id;
@@ -109,12 +103,17 @@ public class Company {
     }
 
 
-    public Set<Equipment> getEquipment() {
-        return equipmentSet;
+    @Transient
+    public Set<Equipment> getEquipmentList() {
+        Set<Equipment> equipmentList = new HashSet<>();
+        for (CompanyEquipment companyEquipment : companyEquipmentSet) {
+            equipmentList.add(companyEquipment.getEquipment());
+        }
+        return equipmentList;
     }
 
-    public void setEquipment(Set<Equipment> equipment) {
-        this.equipmentSet = equipment;
+    public void setEquipment(Set<CompanyEquipment> equipment) {
+        this.companyEquipmentSet = equipment;
     }
 
     public Set<CompanyAdmin> getCompanyAdmin() {

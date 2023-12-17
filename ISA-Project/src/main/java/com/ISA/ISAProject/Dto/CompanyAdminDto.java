@@ -111,5 +111,13 @@ public class CompanyAdminDto {
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
 
