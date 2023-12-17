@@ -44,7 +44,7 @@ public class Reservation {
 
 
 
-    public Reservation(Integer id, LocalDateTime dateTime, Duration duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin) {
+    public Reservation(Integer id, LocalDateTime dateTime, Duration duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
         this.id = id;
         this.dateTime = dateTime;
         this.duration = duration;
@@ -52,10 +52,11 @@ public class Reservation {
         this.status = status;
         this.customer = customer;
         this.companyAdmin = companyAdmin;
+        //this.companyEquipments = new HashSet<>();//companyEquipments;
     }
 
     public Reservation() {
-
+        companyEquipments = new HashSet<>();
     }
 
     public Integer getId() {
@@ -112,5 +113,13 @@ public class Reservation {
 
     public void setCompanyAdmin(CompanyAdmin companyAdmin) {
         this.companyAdmin = companyAdmin;
+    }
+
+    public Set<CompanyEquipment> getCompanyEquipments() {
+        return companyEquipments;
+    }
+
+    public void setCompanyEquipments(Set<CompanyEquipment> companyEquipments) {
+        this.companyEquipments = companyEquipments;
     }
 }

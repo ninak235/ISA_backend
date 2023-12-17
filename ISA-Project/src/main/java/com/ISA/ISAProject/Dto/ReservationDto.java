@@ -2,6 +2,7 @@ package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Enum.ReservationStatus;
 import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.CompanyEquipment;
 import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Model.Reservation;
 
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ReservationDto {
     private Integer id;
@@ -26,6 +29,8 @@ public class ReservationDto {
     private Integer customerId;
 
     private Integer companyAdminId;
+
+    private Set<ComEqDto> companyEquipments;
 
     public ReservationDto() {}
 
@@ -93,5 +98,13 @@ public class ReservationDto {
 
     public void setCompanyAdminId(Integer companyAdminId) {
         this.companyAdminId = companyAdminId;
+    }
+
+    public Set<ComEqDto> getCompanyEquipments() {
+        return companyEquipments;
+    }
+
+    public void setCompanyEquipments(Set<ComEqDto> companyEquipments) {
+        this.companyEquipments = companyEquipments;
     }
 }
