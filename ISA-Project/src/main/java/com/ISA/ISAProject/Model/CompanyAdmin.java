@@ -22,6 +22,9 @@ public class CompanyAdmin {
     private Company company;
 
     @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Reservation> reservationSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Complaint> complaintSet = new HashSet<>();
 
     /*
@@ -32,8 +35,6 @@ public class CompanyAdmin {
     public CompanyAdmin() {
         this.company = new Company();
         this.complaintSet = new HashSet<>();
-
-
     }
 
     /*

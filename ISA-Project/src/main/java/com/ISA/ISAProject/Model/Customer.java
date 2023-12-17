@@ -28,6 +28,8 @@ public class Customer {
 
     @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Complaint> complaintSet = new HashSet<>();
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Reservation> reservationSet = new HashSet<>();
 
     public Customer() {
         this.penaltyPoints = 0;
@@ -105,4 +107,11 @@ public class Customer {
     }
 
 
+    public Set<Reservation> getReservationSet() {
+        return reservationSet;
+    }
+
+    public void setReservationSet(Set<Reservation> reservationSet) {
+        this.reservationSet = reservationSet;
+    }
 }

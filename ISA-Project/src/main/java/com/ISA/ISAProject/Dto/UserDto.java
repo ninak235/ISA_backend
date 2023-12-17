@@ -1,6 +1,5 @@
 package com.ISA.ISAProject.Dto;
 
-import com.ISA.ISAProject.Enum.TypeOfUser;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
