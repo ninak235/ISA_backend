@@ -61,10 +61,10 @@ VALUES
 
 INSERT INTO reservation (date_time, duration, grade, status, customer_id, company_admin_id)
 VALUES
-    ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2),
+    ('2023-12-17T10:00:00', 1000, 5, 0, 1, 2),
     ('2023-10-10T17:00:00', 2000, 5, 0, 1, 2),
     ('2023-07-07T08:00:00', 1000, 5, 0, 1, 2),
-    ('2023-12-17T12:00:00', 2500, 5, 0, 1, 2);
+    ('2023-12-17T12:00:00', 2000, 5, 0, 1, 2);
 
 
 INSERT INTO reservation_equipment (reservation_id, company_equipment_id)
