@@ -94,4 +94,5 @@ public class ReservationDto {
     public void setCompanyAdminId(Integer companyAdminId) {
         this.companyAdminId = companyAdminId;
     }
+
 }

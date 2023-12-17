@@ -42,4 +42,8 @@ public class ReservationService {
         reservationRepository.save(reservation);
         return new ReservationDto(reservation);
     }
+
+    public void updateReservation(Reservation reservation){
+        reservationRepository.save(reservation);
+    }
 }
