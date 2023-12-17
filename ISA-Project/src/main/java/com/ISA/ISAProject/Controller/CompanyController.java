@@ -124,6 +124,17 @@ public class CompanyController {
         }
     }
 
+    @CrossOrigin
+    @PutMapping(value = "/update/equipment/{oldCompanyName}")
+    public ResponseEntity<Void> updateCompanyEquipment(@PathVariable String oldCompanyName, @Valid @RequestBody CompanyEquipmentDto companyEquipmentDto) {
+        Company company = _companyService.updateCompanyEquipment(oldCompanyName, companyEquipmentDto);
+        if (company != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
 }

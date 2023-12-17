@@ -2,6 +2,7 @@ package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
+import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
@@ -40,8 +41,12 @@ public class CompanyService {
     @Autowired
     private CompanyMapper _companyMapper;
 
-    public CompanyService(CompanyMapper companyMapper){
+    @Autowired
+    private EquipmentMapper _equipmentMapper;
+
+    public CompanyService(CompanyMapper companyMapper, EquipmentMapper equipmentMapper){
         _companyMapper = companyMapper;
+        _equipmentMapper = equipmentMapper;
     }
 
     @Transactional
@@ -105,6 +110,31 @@ public class CompanyService {
 
 
         _companyRepository.save(updatedCompany);
+
+        return updatedCompany;
+    }
+
+    @Transactional
+    public Company updateCompanyEquipment(String companyName, CompanyEquipmentDto companyEquipmentDto) {
+        Company updatedCompany = _companyRepository.findCompanyByName(companyName);
+
+
+            // Update equipment
+        Set<Equipment> newEquipmentSet = _equipmentMapper.mapDtosToEntities(companyEquipmentDto.getEquipmentSet());
+        Set<Equipment> existingEquipmentSet = updatedCompany.getEquipment();
+
+            // Remove equipment that is no longer present in the updated DTO
+        existingEquipmentSet.removeIf(existingEquipment -> !newEquipmentSet.contains(existingEquipment));
+
+            // Add new equipment
+        for (Equipment newEquipment : newEquipmentSet) {
+            if (!existingEquipmentSet.contains(newEquipment)) {
+                existingEquipmentSet.add(newEquipment);
+            }
+        }
+
+        _companyRepository.save(updatedCompany);
+
 
         return updatedCompany;
     }

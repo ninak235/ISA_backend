@@ -56,6 +56,7 @@ public class CompanyAdmin {
     public Company getCompany() {
         return company;
     }
+    public Integer getCompanyId() { return company.getId(); }
 
     public void setCompany(Company company) {
         this.company = company;

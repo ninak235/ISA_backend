@@ -30,7 +30,7 @@ public class Company {
 
 
     @JsonIgnore
-    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
 
     private Set<Equipment> equipmentSet = new HashSet<>();

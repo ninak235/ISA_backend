@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,11 +38,12 @@ public class EquipmentMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<Equipment> mapDtosToEntities(List<EquipmentDto> equipmentDtos) {
+    public Set<Equipment> mapDtosToEntities(List<EquipmentDto> equipmentDtos) {
         return equipmentDtos.stream()
                 .map(this::mapDtoToEntity)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
+
 
     public List<EquipmentCompanyDto> mapEquipmentCompanysToDto(List<Equipment> equipments) {
         return equipments.stream()
