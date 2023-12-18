@@ -26,19 +26,23 @@ public class Customer {
     @Column(name = "PenaltyPoints")
     private long penaltyPoints;
 
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Complaint> complaintSet = new HashSet<>();
     @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
 
     public Customer() {
         this.penaltyPoints = 0;
+        this.complaintSet = new HashSet<>();
     }
 
-    public Customer(User user, String occupation, String companyInfo) {
+    public Customer(User user, String occupation, String companyInfo, Set<Complaint> complaintSet) {
         this.user = user;
         this.occupation = occupation;
         this.companyInfo = companyInfo;
         this.id = user.getId();
         this.penaltyPoints= 0;
+        this.complaintSet = complaintSet;
     }
 
     public Integer getId() {
@@ -79,6 +83,14 @@ public class Customer {
 
     public void setPenaltyPoints(long penaltyPoints) {
         this.penaltyPoints = penaltyPoints;
+    }
+
+    public Set<Complaint> getComplaintSet() {
+        return complaintSet;
+    }
+
+    public void setComplaintSet(Set<Complaint> complaintSet) {
+        this.complaintSet = complaintSet;
     }
 
     @Override

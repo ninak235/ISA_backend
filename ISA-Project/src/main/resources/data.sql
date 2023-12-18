@@ -40,6 +40,13 @@ VALUES
     (2,3),
     (3,4);
 
+INSERT INTO complaints (content, replay, company_admin_id, customer_id)
+VALUES
+    ('veliki problem', '', 2, 1),
+    ('mali problem', '', 2, 1),
+    ('tezak problem', '', 2, 1),
+    ('nejasno', '', 2, 1);
+
 INSERT INTO available_date (admin_confirmation_date, confirmed, duration, start_time, admin_id, taken)
 VALUES
     ('2023-12-21T10:30:00', true, 1800, '2023-12-23T08:45:00', 5, true),
@@ -68,13 +75,14 @@ INSERT INTO company_equipment (quantity, company_id, equipment_id)
 VALUES
     (10, 1, 1),
     (20, 1, 2),
-    (50, 2, 3),
-    (40, 3, 3),
-    (100, 3, 4);
+    (50, 2, 3);
 
 INSERT INTO reservation (date_time, duration, grade, status, customer_id, company_admin_id)
 VALUES
-    ('2023-12-17T10:00:00', 1800, 5, 0, 1, 2);
+    ('2023-12-17T10:00:00', 1, 5, 0, 1, 2),
+    ('2023-10-10T17:00:00', 2, 5, 0, 1, 2),
+    ('2023-07-07T08:00:00', 3, 5, 0, 1, 2),
+    ('2023-12-17T12:00:00', 5, 5, 0, 1, 2);
 
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id)

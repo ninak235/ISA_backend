@@ -35,6 +35,12 @@ public class ReservationService {
     }
 
     @Transactional
+    public List<ReservationDto> getAllReservationsByCompanyAdminId(Integer companyAdminId) {
+        List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdminId);
+        return reservationMapper.mapReservationsToDto(reservations);
+    }
+
+    @Transactional
     public ReservationDto getReservationById(Integer reservationId) {
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         return optionalReservation.map(reservationMapper::mapReservationToDto).orElse(null);

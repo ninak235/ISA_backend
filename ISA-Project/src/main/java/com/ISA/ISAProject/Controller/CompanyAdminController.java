@@ -1,6 +1,10 @@
 package com.ISA.ISAProject.Controller;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.Complaint;
+import com.ISA.ISAProject.Model.Customer;
+import io.swagger.annotations.ApiParam;
+import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Services.EmailService;
 import com.ISA.ISAProject.Services.CompanyAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-
+import java.util.List;
 
 
 @RestController
@@ -86,6 +90,7 @@ public class CompanyAdminController {
     }
     */
     @GetMapping(value = "/{adminId}")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<CompanyAdminDto> getAdminById(@PathVariable Integer adminId){
         CompanyAdmin admin = _companyAdminService.getById(adminId);
         CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
