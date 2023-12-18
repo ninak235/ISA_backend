@@ -13,7 +13,7 @@ public class AvailableDateDto {
     private LocalDateTime startTime;
     private Duration duration;
     private LocalDateTime adminConfirmationTime;
-    private boolean confirmed;
+    private boolean taken;
 
     public AvailableDateDto() {
         // Default constructor for Jackson deserialization
@@ -25,7 +25,7 @@ public class AvailableDateDto {
         this.startTime = reservation.getStartTime();
         this.duration = reservation.getDuration();
         this.adminConfirmationTime = reservation.getAdminConfirmationTime();
-        this.confirmed = reservation.isConfirmed();
+        this.taken = reservation.isConfirmed();
     }
 
     // Getters and Setters...
@@ -62,12 +62,14 @@ public class AvailableDateDto {
     }
 
     public boolean isConfirmed() {
-        return confirmed;
+        return taken;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setTaken(boolean taken) {
+        this.taken = taken;
     }
+
+    public boolean getTaken(){return taken; }
 
     public Integer getAdminId() {
         return adminId;

@@ -1,9 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Enum.ReservationStatus;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
-import com.ISA.ISAProject.Model.Reservation;
+import com.ISA.ISAProject.Model.*;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -11,13 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ReservationDto {
     private Integer id;
 
     private LocalDateTime dateTime;
 
-    private Duration duration;
+    private Integer duration;
 
     private Integer grade;
 
@@ -30,7 +33,12 @@ public class ReservationDto {
     private String customerName;
     private String customerLastName;
 
-    public ReservationDto() {}
+    private List<EquipmentDto> reservationEquipments;
+
+    public ReservationDto() {
+        reservationEquipments = new ArrayList<>();
+    }
+
 
     public ReservationDto(Reservation reservation){
         this.id = reservation.getId();
@@ -46,6 +54,17 @@ public class ReservationDto {
             this.customerName = customer.getUser().getFirstName();
             this.customerLastName = customer.getUser().getLastName();
         }
+        this.reservationEquipments  = new ArrayList<>();
+        for (Equipment equipment : reservation.getReservationEquipments()) {
+            EquipmentDto equipmentDto = new EquipmentDto();
+            equipmentDto.setId(equipment.getId());
+             equipmentDto.setDescription(equipment.getDescription());
+             equipmentDto.setGrade(equipment.getGrade());
+             equipmentDto.setName(equipment.getName());
+             equipmentDto.setPrice(equipment.getPrice());
+            reservationEquipments.add(equipmentDto);
+        }
+
     }
 
     public Integer getId() {
@@ -64,11 +83,11 @@ public class ReservationDto {
         this.dateTime = dateTime;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -118,5 +137,13 @@ public class ReservationDto {
 
     public void setCustomerLastName(String customerLastName) {
         this.customerLastName = customerLastName;
+    }
+    public List<EquipmentDto> getReservationEquipments() {
+        return reservationEquipments;
+    }
+
+    public void setReservationEquipments(List<EquipmentDto> reservationEquipments) {
+        this.reservationEquipments = reservationEquipments;
+
     }
 }

@@ -42,6 +42,8 @@ public class Equipment {
     @Column(name="price", nullable = false)
     private Float price;
 
+    @ManyToMany(mappedBy = "reservationEquipments")
+    private Set<Reservation> equipmentReservations = new HashSet<>();
 
     public Equipment(){
     }
@@ -141,5 +143,13 @@ public class Equipment {
 
     public void setCompanyEquipmentSet(Set<CompanyEquipment> companyEquipmentSet) {
         this.companyEquipmentSet = companyEquipmentSet;
+    }
+
+    public Set<Reservation> getEquipmentReservations() {
+        return equipmentReservations;
+    }
+
+    public void setEquipmentReservations(Set<Reservation> equipmentReservations) {
+        this.equipmentReservations = equipmentReservations;
     }
 }

@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class ReservationMapper {
     private final ModelMapper modelMapper;
-
 
     @Autowired
     public ReservationMapper(ModelMapper modelMapper) {
@@ -38,6 +38,14 @@ public class ReservationMapper {
     }
 
     public Reservation mapDtoToEntity(ReservationDto reservationDto) {
-        return modelMapper.map(reservationDto, Reservation.class);
+        Reservation reservation = modelMapper.map(reservationDto, Reservation.class);
+        Set<Equipment> reservationEquipments = reservationDto.getReservationEquipments().stream()
+                .map(equipmentDto -> modelMapper.map(equipmentDto, Equipment.class))
+                .collect(Collectors.toSet());
+
+        reservation.setReservationEquipments(reservationEquipments);
+        return reservation;
     }
+
+
 }

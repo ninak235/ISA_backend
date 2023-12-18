@@ -1,6 +1,10 @@
 package com.ISA.ISAProject.Controller;
 
 
+import com.ISA.ISAProject.Model.AvailableDate;
+import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.ReservationDto;
+import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyAdminService;
 import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Services.AvailableDateService;
@@ -10,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +34,6 @@ public class AvailableDateController {
     }
 
     @GetMapping("/{availableDateId}")
-    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
         AvailableDateDto availableDateDto = availableDateService.getAvailableDateById(availableDateId);
 
@@ -41,18 +45,52 @@ public class AvailableDateController {
     }
 
     @GetMapping("/getByCompanyId/{companyId}")
-    //@PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
         List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
         List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getExtraByCompanyIdAndAdminId/{companyName}/{companyAdminId}/{selectedDate}")
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyIdAndAdminId(@PathVariable  String companyName, @PathVariable  Integer companyAdminId, @PathVariable String selectedDate){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyIdAndAdminId(companyName,companyAdminId, selectedDate);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
+    }
 
+//    @PostMapping("/create")
+//    public ResponseEntity<AvailableDate> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
+//         Implement the logic to create a new available date
+//        AvailableDate createdDate = availableDateService.createAvailableDate(availableDateDto);
+//        return ResponseEntity.ok(createdDate);
+//    }
 
+    @PostMapping("/new")
+    public ResponseEntity<AvailableDateDto> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
+        AvailableDateDto createdDate = availableDateService.createAvailableDate(availableDateDto);
+
+        if (createdDate != null) {
+            return new ResponseEntity<>(createdDate, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/update")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Void> updateCustomer(@Valid @RequestBody AvailableDateDto availableDateDto) {
+        AvailableDate availableDate = availableDateService.update(availableDateDto);
+        if (availableDate != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
