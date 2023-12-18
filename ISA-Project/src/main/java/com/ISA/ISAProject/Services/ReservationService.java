@@ -41,6 +41,12 @@ public class ReservationService {
     }
 
     @Transactional
+    public List<ReservationDto> getReservationsByUserId(Integer userId) {
+        List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
+        return reservationMapper.mapReservationsToDto(userReservations);
+    }
+
+    @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 

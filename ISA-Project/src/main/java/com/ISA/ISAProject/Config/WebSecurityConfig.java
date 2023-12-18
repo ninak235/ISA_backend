@@ -77,10 +77,7 @@ public class WebSecurityConfig {
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
-                .antMatchers("/api/company/**").permitAll()
-                .antMatchers("/api/availableDate/getAll").permitAll()
-                .antMatchers("/api/reservations/**").permitAll()
-                .antMatchers("/api/availableDate/*").permitAll()
+               .antMatchers("/api/company/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
                 .antMatchers("/api/equipment/**").permitAll()
                 .antMatchers(("/api/availableDate/**")).permitAll()

@@ -7,6 +7,7 @@ import com.ISA.ISAProject.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,20 @@ public class ReservationController {
             }
         }
 
+    @GetMapping("/byUserId/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<ReservationDto>> getReservationByUserId(@PathVariable Integer userId) {
+        List<ReservationDto> reservationsDto = reservationService.getReservationsByUserId(userId);
+
+        if (reservationsDto != null) {
+            return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
         @PostMapping("/new")
+        @PreAuthorize("hasRole('CUSTOMER')")
         public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
             ReservationDto createdReservation = reservationService.createReservation(reservationDto);
 
