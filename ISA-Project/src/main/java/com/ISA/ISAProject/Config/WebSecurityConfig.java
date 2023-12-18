@@ -79,19 +79,19 @@ public class WebSecurityConfig {
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
-                .antMatchers("/api/company/**").permitAll()
-                .antMatchers("/api/availableDate/getAll").permitAll()
+                .antMatchers("/company/**").permitAll()
+                .antMatchers("/availableDate/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .antMatchers("/api/complaint/getAll").permitAll()
-                .antMatchers("/api/complaint/update").permitAll()
-                .antMatchers("/api/reservations/**").permitAll()
+                .antMatchers("/complaint/getAll").permitAll()
+                .antMatchers("/complaint/update").permitAll()
+                .antMatchers("/reservations/**").permitAll()
                 .antMatchers("/updateSystemAdmin").hasAuthority("ROLE_ADMIN")
-                //.antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/company/getAll").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/company/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
-                .antMatchers("/api/equipment/**").permitAll()
-                .antMatchers(("/api/availableDate/**")).permitAll()
-                //.antMatchers("/api/company/registerCompany").permitAll()
+                .antMatchers("/equipment/**").permitAll()
+                .antMatchers(("/availableDate/**")).permitAll()
+                .antMatchers("/api/company/registerCompany").permitAll()
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
                 // koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
                 // samo korisnik koji ima rolu 'ADMIN', navodimo na sledeci nacin:

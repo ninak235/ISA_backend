@@ -26,7 +26,7 @@ public class Reservation {
     @Column(name="status")
     private ReservationStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId", nullable = true)
     private Customer customer;
 

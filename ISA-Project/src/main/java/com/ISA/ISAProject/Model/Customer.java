@@ -26,9 +26,9 @@ public class Customer {
     @Column(name = "PenaltyPoints")
     private long penaltyPoints;
 
-    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Complaint> complaintSet = new HashSet<>();
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
 
     public Customer() {

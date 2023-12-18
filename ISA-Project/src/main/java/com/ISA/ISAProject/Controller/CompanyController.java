@@ -34,7 +34,6 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/name/{companyName}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CompanyEquipmentDto> getCompanyByName(@PathVariable String companyName){
         Company company = _companyService.getByName(companyName);
         CompanyEquipmentDto companyDto = new CompanyEquipmentDto(company);
