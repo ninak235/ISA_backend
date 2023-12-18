@@ -79,6 +79,8 @@ public class WebSecurityConfig {
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/api/company/getAll").permitAll()
                 .antMatchers("/api/availableDate/getAll").permitAll()
+                .antMatchers("/api/reservations/**").permitAll()
+                .antMatchers("/api/availableDate/*").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
                 //.antMatchers("/api/company/registerCompany").permitAll()
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici

@@ -2,12 +2,14 @@ package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Dto.JwtAuthenticationRequestDto;
+import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Dto.UserTokenStateDto;
+import com.ISA.ISAProject.Enum.ReservationStatus;
+import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
-import com.ISA.ISAProject.Services.CustomerService;
-import com.ISA.ISAProject.Services.EmailService;
-import com.ISA.ISAProject.Services.TokenService;
+import com.ISA.ISAProject.Services.*;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
+import com.ISA.ISAProject.Token.ReservationConfirmationToken;
 import com.ISA.ISAProject.Token.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,6 +40,10 @@ public class AuthenticationController {
     private CustomerService _customerService;
     @Autowired
     private TokenService _tokenService;
+    @Autowired
+    private ReservationService _reservationService;
+    @Autowired
+    private UserService _userService;
 
 
     @PostMapping("/login")
@@ -87,6 +95,39 @@ public class AuthenticationController {
                 return new ResponseEntity<>("Account successfully confirmed.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("User not found for the provided token.", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("Invalid or expired token.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/create-reservation")
+    public ResponseEntity<Void> reservationConfirmation(){
+        ReservationDto manuallyCreatedDto = new ReservationDto();
+        manuallyCreatedDto.setDateTime(LocalDateTime.now());
+        manuallyCreatedDto.setDuration(2);
+        manuallyCreatedDto.setGrade(5);
+        manuallyCreatedDto.setStatus(ReservationStatus.Pending);
+        manuallyCreatedDto.setCustomerId(1); // Postavite odgovarajući ID kupca
+        manuallyCreatedDto.setCompanyAdminId(2); // Postavite odgovarajući ID admina kompanije
+
+        ReservationDto savedDto = _reservationService.createReservation(manuallyCreatedDto);
+        _emailService.sendReservationEmail(savedDto,_userService.findById(savedDto.getCustomerId()).getEmail());
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/confirm-reservation")
+    public ResponseEntity<String>confirmReservation(@RequestParam("token") String reservationToken){
+
+        ReservationConfirmationToken token = _tokenService.getReservationToken(reservationToken);
+        if(token != null){
+            Reservation reservation = token.getReservation();
+            if(reservation != null){
+                reservation.setStatus(ReservationStatus.Confirmed);
+                _reservationService.updateReservation(reservation);
+                return new ResponseEntity<>("Reservation successfully confirmed.", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("Reservation not found for the provided token.", HttpStatus.NOT_FOUND);
             }
         } else {
             return new ResponseEntity<>("Invalid or expired token.", HttpStatus.BAD_REQUEST);

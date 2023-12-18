@@ -1,21 +1,19 @@
 package com.ISA.ISAProject.Services;
 
+import com.ISA.ISAProject.Dto.ComEqDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Mapper.ReservationMapper;
-import com.ISA.ISAProject.Model.AvailableDate;
-import com.ISA.ISAProject.Model.Customer;
-import com.ISA.ISAProject.Model.Equipment;
-import com.ISA.ISAProject.Model.Reservation;
+import com.ISA.ISAProject.Model.*;
+import com.ISA.ISAProject.Repository.CompanyEquipmentRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import com.ISA.ISAProject.Repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReservationService {
@@ -23,6 +21,12 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
     @Autowired
     private ReservationMapper reservationMapper;
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private CompanyAdminService companyAdminService;
+
 
     @Transactional
     public List<ReservationDto> getAllReservations() {
@@ -38,8 +42,20 @@ public class ReservationService {
 
     @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
+        Customer customer = customerService.getById(reservationDto.getCustomerId());
+
+        CompanyAdmin companyAdmin = companyAdminService.getById(reservationDto.getCompanyAdminId());
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+
+        reservation.setCompanyAdmin(companyAdmin);
+        reservation.setCustomer(customer);
+
+        //Reservation reservation1 = new Reservation(reservation);
+        Reservation reservation1 = reservationRepository.save(reservation);
+        return new ReservationDto(reservation1);
+    }
+
+    public void updateReservation(Reservation reservation){
         reservationRepository.save(reservation);
-        return new ReservationDto(reservation);
     }
 }
