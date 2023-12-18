@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Services;
 
+import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
@@ -21,7 +22,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,7 +60,7 @@ public class EmailService {
         }
     }
 
-    @Async
+    @Transactional
     public void sendReservationEmail(ReservationDto reserv, String email)throws MailException{
         Optional<Reservation> reservationOptional = _reservationRepository.findById(reserv.getId());
         if(reservationOptional.isPresent()){
@@ -104,14 +107,27 @@ public class EmailService {
     }
 
     private String createReservationInfoString(ReservationDto reservationDto) {
-        // Implementirajte logiku za konvertovanje ReservationDto u string prema potrebama
-        // Ovde koristite podatke koje želite uključiti u QR kod
-        return "Reservation ID: " + reservationDto.getId() +
-                ", DateTime: " + reservationDto.getDateTime() +
-                ", Duration: " + reservationDto.getDuration() +
-                ", Grade: " + reservationDto.getGrade() +
-                ", Status: " + reservationDto.getStatus() +
-                ", Customer ID: " + reservationDto.getCustomerId() +
-                ", Company Admin ID: " + reservationDto.getCompanyAdminId();
+
+        StringBuilder reservationInfo = new StringBuilder();
+        reservationInfo.append("Reservation ID: ").append(reservationDto.getId())
+                .append(", DateTime: ").append(reservationDto.getDateTime())
+                .append(", Duration: ").append(reservationDto.getDuration())
+                .append(", Grade: ").append(reservationDto.getGrade())
+                .append(", Status: ").append(reservationDto.getStatus())
+                .append(", Customer ID: ").append(reservationDto.getCustomerId())
+                .append(", Company Admin ID: ").append(reservationDto.getCompanyAdminId());
+
+        List<EquipmentDto> reservationEquipments = reservationDto.getReservationEquipments();
+            reservationInfo.append(", Reservation Equipments: ");
+            for (EquipmentDto equipment : reservationEquipments) {
+                reservationInfo.append("[ID: ").append(equipment.getId())
+                        .append(", Name: ").append(equipment.getName())
+                        .append(", Description: ").append(equipment.getDescription())
+                        .append(", Grade: ").append(equipment.getGrade())
+                        .append(", Price: ").append(equipment.getPrice()).append("]");
+            }
+
+        return reservationInfo.toString();
     }
+
 }

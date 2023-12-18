@@ -34,7 +34,7 @@ public class Reservation {
     @JoinColumn(name = "companyAdminId", nullable = true)
     private CompanyAdmin companyAdmin;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "reservation_equipment",
             joinColumns = @JoinColumn(name = "reservation_id"),

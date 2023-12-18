@@ -1,10 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Enum.ReservationStatus;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.CompanyEquipment;
-import com.ISA.ISAProject.Model.Customer;
-import com.ISA.ISAProject.Model.Reservation;
+import com.ISA.ISAProject.Model.*;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -12,9 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ReservationDto {
     private Integer id;
@@ -33,7 +32,9 @@ public class ReservationDto {
 
     private List<EquipmentDto> reservationEquipments;
 
-    public ReservationDto() {}
+    public ReservationDto() {
+        reservationEquipments = new ArrayList<>();
+    }
 
     public ReservationDto(Reservation reservation){
         this.id = reservation.getId();
@@ -43,6 +44,17 @@ public class ReservationDto {
         this.status = reservation.getStatus();
         this.customerId = reservation.getCustomer().getId();
         this.companyAdminId = reservation.getCompanyAdmin().getId();
+        this.reservationEquipments  = new ArrayList<>();
+        for (Equipment equipment : reservation.getReservationEquipments()) {
+            EquipmentDto equipmentDto = new EquipmentDto();
+            equipmentDto.setId(equipment.getId());
+             equipmentDto.setDescription(equipment.getDescription());
+             equipmentDto.setGrade(equipment.getGrade());
+             equipmentDto.setName(equipment.getName());
+             equipmentDto.setPrice(equipment.getPrice());
+            reservationEquipments.add(equipmentDto);
+        }
+
     }
 
     public Integer getId() {

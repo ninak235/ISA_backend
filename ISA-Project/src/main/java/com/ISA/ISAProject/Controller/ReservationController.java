@@ -3,9 +3,7 @@ package com.ISA.ISAProject.Controller;
 import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Dto.ReservationDto;
-import com.ISA.ISAProject.Services.AvailableDateService;
-import com.ISA.ISAProject.Services.CompanyAdminService;
-import com.ISA.ISAProject.Services.ReservationService;
+import com.ISA.ISAProject.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +17,10 @@ public class ReservationController {
 
         @Autowired
         private ReservationService reservationService;
+        @Autowired
+        private EmailService emailService;
+        @Autowired
+        private UserService userService;
 
         @GetMapping("/getAll")
         public ResponseEntity<List<ReservationDto>> getAllReservations() {
@@ -42,6 +44,7 @@ public class ReservationController {
             ReservationDto createdReservation = reservationService.createReservation(reservationDto);
 
         if (createdReservation != null) {
+            emailService.sendReservationEmail(createdReservation, userService.findById(reservationDto.getCustomerId()).getEmail());
             return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

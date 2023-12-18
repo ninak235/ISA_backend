@@ -105,7 +105,7 @@ public class AuthenticationController {
     public ResponseEntity<Void> reservationConfirmation(){
         ReservationDto manuallyCreatedDto = new ReservationDto();
         manuallyCreatedDto.setDateTime(LocalDateTime.now());
-        manuallyCreatedDto.setDuration(Duration.ofHours(2));
+        manuallyCreatedDto.setDuration(2);
         manuallyCreatedDto.setGrade(5);
         manuallyCreatedDto.setStatus(ReservationStatus.Pending);
         manuallyCreatedDto.setCustomerId(1); // Postavite odgovarajući ID kupca

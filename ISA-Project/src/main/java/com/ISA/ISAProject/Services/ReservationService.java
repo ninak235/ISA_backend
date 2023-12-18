@@ -23,10 +23,10 @@ public class ReservationService {
     private ReservationMapper reservationMapper;
     @Autowired
     private CustomerService customerService;
+
     @Autowired
     private CompanyAdminService companyAdminService;
-    @Autowired
-    private EquipmentRepository equipmentRepository;
+
 
     @Transactional
     public List<ReservationDto> getAllReservations() {
@@ -43,18 +43,15 @@ public class ReservationService {
     @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
+
         CompanyAdmin companyAdmin = companyAdminService.getById(reservationDto.getCompanyAdminId());
-        System.out.println("---------1------------------: "+ reservationDto.getReservationEquipments().size());
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
-
-
-        System.out.println("---------2------------------: "+ reservation.getReservationEquipments().size());
 
         reservation.setCompanyAdmin(companyAdmin);
         reservation.setCustomer(customer);
 
-        Reservation reservation1 = new Reservation(reservation);
-        reservationRepository.save(reservation1);
+        //Reservation reservation1 = new Reservation(reservation);
+        Reservation reservation1 = reservationRepository.save(reservation);
         return new ReservationDto(reservation1);
     }
 
