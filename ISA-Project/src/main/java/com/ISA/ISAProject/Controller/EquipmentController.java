@@ -40,7 +40,8 @@ public class EquipmentController {
         return new ResponseEntity<>(byTypeEquipments, HttpStatus.OK);
     }
 
-    @PostMapping("/equipment")
+    @CrossOrigin
+    @PostMapping
     public ResponseEntity<EquipmentDto> createEquipment(@RequestBody EquipmentDto equipmentDto) {
         // Call EquipmentService to create equipment
         EquipmentDto createdEquipment = _equipmentService.createEquipment(equipmentDto);

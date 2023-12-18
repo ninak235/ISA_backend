@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AvailableDateService {
@@ -53,6 +54,16 @@ public class AvailableDateService {
     }
 
     @Transactional
+    public List<AvailableDateDto> getAllAvailableDaysByCompanyAndAdminId(Integer companyId, Integer companyAdminId){
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
+        availableDates = availableDates.stream()
+                .filter(date -> date.getAdmin().getId().equals(companyAdminId))
+                .collect(Collectors.toList());
+
+        return availableDateMapper.mapAvailableDatesToDto(availableDates);
+    }
+
+    @Transactional
     public List<AvailableDateDto> getExtraAvailableDaysByCompanyId(Integer companyId, String selectedDate) {
         Instant instant = parseSelectedDate(selectedDate);
         if (instant != null) {
@@ -61,6 +72,23 @@ public class AvailableDateService {
                 List<LocalDateTime> allDateTimes = generateAllDateTimes(instant, company);
 
                 List<AvailableDate> newDates = generateAvailableDates(allDateTimes, company);
+
+                return availableDateMapper.mapAvailableDatesToDto(newDates);
+            }
+        }
+
+        return null;
+    }
+
+    @Transactional
+    public List<AvailableDateDto> getExtraAvailableDaysByCompanyIdAndAdminId(String companyName, Integer companyAdminId, String selectedDate) {
+        Instant instant = parseSelectedDate(selectedDate);
+        if (instant != null) {
+            Company company = companyRepository.findCompanyByName(companyName);
+            if (company != null) {
+                List<LocalDateTime> allDateTimes = generateAllDateTimes(instant, company);
+
+                List<AvailableDate> newDates = generateAvailableDatesForAdmin(allDateTimes, company, companyAdminId);
 
                 return availableDateMapper.mapAvailableDatesToDto(newDates);
             }
@@ -100,6 +128,19 @@ public class AvailableDateService {
             CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
             AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
             newDates.add(availableDate);
+        }
+        return newDates;
+    }
+
+    private List<AvailableDate> generateAvailableDatesForAdmin(List<LocalDateTime> allDateTimes, Company company, Integer companyAdminId) {
+        List<AvailableDate> newDates = new ArrayList<>();
+        for (LocalDateTime dateTime : allDateTimes) {
+            CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
+
+            if(availableCompanyAdmin != null && availableCompanyAdmin.getId().equals(companyAdminId)){
+                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
+                newDates.add(availableDate);
+            }
         }
         return newDates;
     }

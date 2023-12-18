@@ -1,9 +1,9 @@
 package com.ISA.ISAProject.Controller;
 
 
+import com.ISA.ISAProject.Model.AvailableDate;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Dto.ReservationDto;
-import com.ISA.ISAProject.Model.AvailableDate;
 import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyAdminService;
 import com.ISA.ISAProject.Dto.AvailableDateDto;
@@ -57,6 +57,19 @@ public class AvailableDateController {
         List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/getExtraByCompanyIdAndAdminId/{companyName}/{companyAdminId}/{selectedDate}")
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyIdAndAdminId(@PathVariable  String companyName, @PathVariable  Integer companyAdminId, @PathVariable String selectedDate){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyIdAndAdminId(companyName,companyAdminId, selectedDate);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
+    }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<AvailableDate> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
+//         Implement the logic to create a new available date
+//        AvailableDate createdDate = availableDateService.createAvailableDate(availableDateDto);
+//        return ResponseEntity.ok(createdDate);
+//    }
 
     @PostMapping("/new")
     public ResponseEntity<AvailableDateDto> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
