@@ -1,5 +1,7 @@
 package com.ISA.ISAProject.Model;
 
+import io.swagger.models.auth.In;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,23 +11,23 @@ import java.util.Set;
 public class CompanyEquipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
 
     @Column(nullable = false)
     private Integer quantity;
-
+    /*
     @ManyToMany(mappedBy = "companyEquipments")
-    private Set<Reservation> reservations = new HashSet<>();
+    private Set<Reservation> reservations = new HashSet<>();*/
 
-    public CompanyEquipment(Long id, Company company, Equipment equipment, Integer quantity) {
+    public CompanyEquipment(Integer id, Company company, Equipment equipment, Integer quantity) {
         this.id = id;
         this.company = company;
         this.equipment = equipment;
@@ -36,11 +38,11 @@ public class CompanyEquipment {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

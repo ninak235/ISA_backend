@@ -79,6 +79,8 @@ public class WebSecurityConfig {
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/api/company/**").permitAll()
                 .antMatchers("/api/availableDate/getAll").permitAll()
+                .antMatchers("/api/reservations/**").permitAll()
+                .antMatchers("/api/availableDate/*").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
                 .antMatchers("/api/equipment/**").permitAll()
                 .antMatchers(("/api/availableDate/**")).permitAll()

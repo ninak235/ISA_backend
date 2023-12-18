@@ -1,10 +1,9 @@
 package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.AvailableDateDto;
+import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Mapper.AvailableDateMapper;
-import com.ISA.ISAProject.Model.AvailableDate;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
+import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.AvailableDateRepository;
 import com.ISA.ISAProject.Repository.CompanyAdminRepository;
 import com.ISA.ISAProject.Repository.CompanyRepository;
@@ -172,7 +171,17 @@ public class AvailableDateService {
         return null;
     }
 
+    @Transactional
+    public AvailableDateDto createAvailableDate(AvailableDateDto availableDateDto) {
+        AvailableDate availableDate = availableDateRepository.save(availableDateMapper.mapDtoToEntity((availableDateDto)));
+        return new AvailableDateDto(availableDate);
+    }
 
-
-
+    @Transactional
+    public AvailableDate update(AvailableDateDto availableDateDto) {
+        AvailableDate availableDate = availableDateRepository.findById(availableDateDto.getId()).orElse(null);
+        availableDate.setTaken(availableDateDto.getTaken());
+        availableDateRepository.save(availableDate);
+        return availableDate;
+    }
 }
