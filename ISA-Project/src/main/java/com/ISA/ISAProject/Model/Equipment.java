@@ -1,8 +1,6 @@
 package com.ISA.ISAProject.Model;
 
 import com.ISA.ISAProject.Enum.TypeOfEquipment;
-import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -23,10 +21,8 @@ public class Equipment {
 
     @Column(name = "Description", nullable = false)
     private String description;
-
-    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
-    @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
-    private Set<Company> companySet = new HashSet<>();
+    @OneToMany(mappedBy = "equipment", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
     /*
     @OneToMany(mappedBy = "equipment")
@@ -74,13 +70,6 @@ public class Equipment {
         this.description = description;
     }
 
-    public Set<Company> getCompanySet() {
-        return companySet;
-    }
-
-    public void setCompanySet(Set<Company> companySet) {
-        this.companySet = companySet;
-    }
 
     public boolean isDeleted() {
         return deleted;
@@ -133,11 +122,24 @@ public class Equipment {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", companySet=" + companySet +
                 ", deleted=" + deleted +
                 ", typeOfEquipment=" + typeOfEquipment +
                 ", grade='" + grade + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    @Transient
+    public Set<Company> getCompanyList() {
+        Set<Company> companyList = new HashSet<>();
+        for (CompanyEquipment companyEquipment : companyEquipmentSet) {
+            companyList.add(companyEquipment.getCompany());
+        }
+        return companyList;
+    }
+
+
+    public void setCompanyEquipmentSet(Set<CompanyEquipment> companyEquipmentSet) {
+        this.companyEquipmentSet = companyEquipmentSet;
     }
 }

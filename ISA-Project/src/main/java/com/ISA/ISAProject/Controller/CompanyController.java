@@ -2,12 +2,12 @@ package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.CompanyService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -53,6 +53,8 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/registerCompany", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<CompanyDto> registerCompany(@Valid @RequestBody CompanyDto companyDto) {
         try {
 
@@ -81,20 +83,22 @@ public class CompanyController {
 
      */
 
-    @PostMapping("/addEquipment/{companyId}")
+    @PostMapping("/add-equipment/{companyName}/{equipmentId}")
     public ResponseEntity<CompanyEquipmentDto> addEquipmentToCompany(
-            @PathVariable Integer companyId,
-            @RequestBody EquipmentDto equipmentDto) {
+            @PathVariable String companyName,
+            @PathVariable Integer equipmentId) {
 
         // Call CompanyService to add equipment to the company
-        CompanyEquipmentDto updatedCompany = _companyService.addEquipmentToCompany(companyId, equipmentDto);
+        Company updatedCompany = _companyService.addEquipmentToCompany(companyName, equipmentId);
 
         if (updatedCompany != null) {
-            return new ResponseEntity<>(updatedCompany, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
     /*
     @PutMapping("/update/{companyId}")
     public ResponseEntity<CompanyDto> updateCompany(
@@ -123,16 +127,25 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @CrossOrigin
+    @PutMapping(value = "/update/equipment/change/{oldCompanyName}")
+    public ResponseEntity<Void> changeCompanyEquipment(
+            @PathVariable String oldCompanyName,
+            @RequestParam(name = "oldId") Integer oldId,
+            @RequestParam(name = "newId") Integer newId,
+            @Valid @RequestBody Company updatedCompany) {
+        _companyService.changeCompanyEquipment(oldCompanyName, oldId, newId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @CrossOrigin
-    @PutMapping(value = "/update/equipment/{oldCompanyName}")
-    public ResponseEntity<Void> updateCompanyEquipment(@PathVariable String oldCompanyName, @Valid @RequestBody CompanyEquipmentDto companyEquipmentDto) {
-        Company company = _companyService.updateCompanyEquipment(oldCompanyName, companyEquipmentDto);
-        if (company != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping(value = "/update/equipment/delete/{oldCompanyName}")
+    public ResponseEntity<Void> deleteCompanyEquipment(
+            @PathVariable String oldCompanyName,
+            @RequestParam(name = "oldId") Integer oldId,
+            @Valid @RequestBody Company updatedCompany) {
+        _companyService.deleteCompanyEquipment(oldCompanyName, oldId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

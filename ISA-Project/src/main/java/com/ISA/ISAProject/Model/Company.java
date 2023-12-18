@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,37 +29,40 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
+    @Column(name = "StartWorkingTime")
+    private LocalTime startWorkingTime;
 
-    @JsonIgnore
-    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JoinTable(name = "CompanyEquipment", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
+    @Column(name = "EndWorkingTime")
+    private LocalTime endWorkingTime;
 
-    private Set<Equipment> equipmentSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
     @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<CompanyAdmin> companyAdminSet = new HashSet<>();
+
 
     @Column(name = "deleted")
     private boolean deleted;
 
     public Company(){
-        this.equipmentSet = new HashSet<>();
+        this.companyEquipmentSet = new HashSet<>();
         this.deleted=false;
         this.companyAdminSet = new HashSet<>();
     }
 
-    public Company(String name, String adress, String description, String grade, Set<Equipment> equipmentSet, Set<CompanyAdmin> companyAdminSet) {
+    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
         this.adress = adress;
         this.description = description;
         this.grade =  grade;
-        this.equipmentSet = equipmentSet;
+        this.startWorkingTime = startWorkingTime;
+        this.endWorkingTime = endWorkingTime;
+        this.companyEquipmentSet = companyEquipmentSet;
         this.companyAdminSet = companyAdminSet;
     }
 
-    public void addEquipment(Equipment e){
-        this.equipmentSet.add(e);
-    }
 
     public Integer getId() {
         return id;
@@ -101,13 +105,23 @@ public class Company {
     }
 
 
-    public Set<Equipment> getEquipment() {
-        return equipmentSet;
+    @Transient
+    public Set<Equipment> getEquipmentList() {
+        Set<Equipment> equipmentList = new HashSet<>();
+        for (CompanyEquipment companyEquipment : companyEquipmentSet) {
+            equipmentList.add(companyEquipment.getEquipment());
+        }
+        return equipmentList;
     }
 
-    public void setEquipment(Set<Equipment> equipment) {
-        this.equipmentSet = equipment;
+    public Set<CompanyEquipment> getCompanyEquipmentSet(){
+        return companyEquipmentSet;
     }
+
+    public void setEquipment(Set<CompanyEquipment> equipment) {
+        this.companyEquipmentSet = equipment;
+    }
+
 
     public Set<CompanyAdmin> getCompanyAdmin() {
         return companyAdminSet;
@@ -150,5 +164,19 @@ public class Company {
     }
 
 
+    public LocalTime getStartWorkingTime() {
+        return startWorkingTime;
+    }
 
+    public void setStartWorkingTime(LocalTime startWorkingTime) {
+        this.startWorkingTime = startWorkingTime;
+    }
+
+    public LocalTime getEndWorkingTime() {
+        return endWorkingTime;
+    }
+
+    public void setEndWorkingTime(LocalTime endWorkingTime) {
+        this.endWorkingTime = endWorkingTime;
+    }
 }

@@ -29,9 +29,9 @@ public class EquipmentCompanyDto {
         this.typeOfEquipment = equipment.getTypeOfEquipment();
         this.grade = equipment.getGrade();
         this.price = equipment.getPrice();
-        Hibernate.initialize(equipment.getCompanySet());
+        Hibernate.initialize(equipment.getCompanyList());
 
-        this.companySet = new ArrayList<>(equipment.getCompanySet().stream()
+        this.companySet = new ArrayList<>(equipment.getCompanyList().stream()
                 .map(CompanyDto::new)
                 .collect(Collectors.toList()));
     }

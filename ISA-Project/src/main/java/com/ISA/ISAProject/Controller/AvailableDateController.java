@@ -1,17 +1,20 @@
 package com.ISA.ISAProject.Controller;
 
-import com.ISA.ISAProject.Dto.AvailableDateDto;
+
+import com.ISA.ISAProject.Model.AvailableDate;
 import com.ISA.ISAProject.Services.CompanyAdminService;
+import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Services.AvailableDateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api/availableDate")
 public class AvailableDateController {
 
     @Autowired
@@ -22,13 +25,14 @@ public class AvailableDateController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<AvailableDateDto>> getAllAvailableDates() {
-        List<AvailableDateDto> allAvailableDates = availableDateService.getAllReservations();
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDays();
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
     @GetMapping("/{availableDateId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
-        AvailableDateDto availableDateDto = availableDateService.getReservationById(availableDateId);
+        AvailableDateDto availableDateDto = availableDateService.getAvailableDateById(availableDateId);
 
         if (availableDateDto != null) {
             return new ResponseEntity<>(availableDateDto, HttpStatus.OK);
@@ -36,27 +40,33 @@ public class AvailableDateController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    /*
-    @PostMapping("/create")
-    public ResponseEntity<ReservationDto> createReservation(@RequestParam Long adminId,
-                                                         @RequestParam Long equipmentId,
-                                                         @RequestParam LocalDateTime startTime,
-                                                         @RequestParam Duration duration) {
-        CompanyAdmin admin = companyAdminService.findById(adminId).orElseThrow(EntityNotFoundException::new);
-        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(EntityNotFoundException::new);
 
-        ReservationDto reservation = reservationService.createReservation(admin, equipment, startTime, duration);
-        return ResponseEntity.ok(reservation);
+    @GetMapping("/getByCompanyId/{companyId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
-
-    /*
-    @PostMapping("/confirm/{reservationId}")
-    public ResponseEntity<String> confirmReservation(@PathVariable Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(EntityNotFoundException::new);
-        reservationService.confirmReservation(reservation);
-        return ResponseEntity.ok("Reservation confirmed");
+    @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
-    */
+
+    @GetMapping(value = "/getExtraByCompanyIdAndAdminId/{companyName}/{companyAdminId}/{selectedDate}")
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyIdAndAdminId(@PathVariable  String companyName, @PathVariable  Integer companyAdminId, @PathVariable String selectedDate){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyIdAndAdminId(companyName,companyAdminId, selectedDate);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
+    }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<AvailableDate> createAvailableDate(@RequestBody AvailableDateDto availableDateDto) {
+//         Implement the logic to create a new available date
+//        AvailableDate createdDate = availableDateService.createAvailableDate(availableDateDto);
+//        return ResponseEntity.ok(createdDate);
+//    }
+
+
 
 }

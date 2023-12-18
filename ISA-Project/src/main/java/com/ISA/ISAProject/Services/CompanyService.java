@@ -4,8 +4,10 @@ import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Model.*;
+import com.ISA.ISAProject.Repository.CompanyEquipmentRepository;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,10 +16,11 @@ import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import lombok.ToString;
+//import lombok.ToString;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -36,6 +39,10 @@ public class CompanyService {
     private CompanyRepository _companyRepository;
 
     @Autowired
+    private CompanyEquipmentRepository _companyEquipmentRepository;
+
+
+    @Autowired
     private EquipmentRepository _equipmentRepository;
 
     @Autowired
@@ -48,6 +55,7 @@ public class CompanyService {
         _companyMapper = companyMapper;
         _equipmentMapper = equipmentMapper;
     }
+
 
     @Transactional
     public List<CompanyEquipmentDto> getAllCompanies() {
@@ -115,45 +123,125 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company updateCompanyEquipment(String companyName, CompanyEquipmentDto companyEquipmentDto) {
-        Company updatedCompany = _companyRepository.findCompanyByName(companyName);
+    public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId) {
+        System.out.println("Updating company equipment for company: " + companyName);
 
+        // Find the company by name
+        Company existingCompany = _companyRepository.findCompanyByName(companyName);
 
-            // Update equipment
-        Set<Equipment> newEquipmentSet = _equipmentMapper.mapDtosToEntities(companyEquipmentDto.getEquipmentSet());
-        Set<Equipment> existingEquipmentSet = updatedCompany.getEquipment();
+        // Find the specific CompanyEquipment based on companyId and oldId
+        Optional<CompanyEquipment> optionalCompanyEquipment = existingCompany.getCompanyEquipmentSet().stream()
+                .filter(equipment -> equipment.getEquipment().getId().equals(oldId))
+                .findFirst();
 
-            // Remove equipment that is no longer present in the updated DTO
-        existingEquipmentSet.removeIf(existingEquipment -> !newEquipmentSet.contains(existingEquipment));
+        if (optionalCompanyEquipment.isPresent()) {
+            CompanyEquipment companyEquipment = optionalCompanyEquipment.get();
 
-            // Add new equipment
-        for (Equipment newEquipment : newEquipmentSet) {
-            if (!existingEquipmentSet.contains(newEquipment)) {
-                existingEquipmentSet.add(newEquipment);
+            // Fetch the Equipment entity with newId from the database
+            Optional<Equipment> optionalNewEquipment = _equipmentRepository.findById(newId);
+
+            if (optionalNewEquipment.isPresent()) {
+                Equipment newEquipment = optionalNewEquipment.get();
+
+                // Set the new equipment for the found CompanyEquipment
+                companyEquipment.setEquipment(newEquipment);
+
+                // Save the updated company
+                _companyRepository.save(existingCompany);
+
+                System.out.println("Updated Company: " + existingCompany);
+                System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
+            } else {
+                // Handle the case where the equipment with newId is not found
+                System.out.println("Equipment with newId not found");
             }
+        } else {
+            // Handle the case where the CompanyEquipment with oldId is not found
+            System.out.println("CompanyEquipment with oldId not found");
         }
 
-        _companyRepository.save(updatedCompany);
-
-
-        return updatedCompany;
+        return existingCompany;
     }
+
+    @Transactional
+    public Company deleteCompanyEquipment(String companyName, Integer oldId) {
+        System.out.println("Deleting company equipment for company: " + companyName);
+
+        // Find the company by name
+        Company existingCompany = _companyRepository.findCompanyByName(companyName);
+        System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
+
+        // Find the specific CompanyEquipment based on companyId and oldId
+        Optional<CompanyEquipment> optionalCompanyEquipment = existingCompany.getCompanyEquipmentSet().stream()
+                .filter(equipment -> equipment.getEquipment().getId().equals(oldId))
+                .findFirst();
+
+        if (optionalCompanyEquipment.isPresent()) {
+            CompanyEquipment companyEquipment = optionalCompanyEquipment.get();
+
+            // Remove the CompanyEquipment from the company's set
+            existingCompany.getCompanyEquipmentSet().remove(companyEquipment);
+            _companyEquipmentRepository.deleteByCompanyIdAndEquipmentId(existingCompany.getId(), oldId);
+
+            // Save the updated company
+            _companyRepository.save(existingCompany);
+
+            System.out.println("Updated Company: " + existingCompany);
+            System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
+        } else {
+            // Handle the case where the CompanyEquipment with oldId is not found
+            System.out.println("CompanyEquipment with oldId not found");
+        }
+
+        return existingCompany;
+    }
+
 
 
     @Transactional
-    public CompanyEquipmentDto addEquipmentToCompany(Integer companyId, EquipmentDto equipmentDto) {
-        Company company = _companyRepository.findById(companyId).orElse(null);
+    public Company addEquipmentToCompany(String companyName, Integer equipmentId) {
+        System.out.println("Adding equipment to company: " + companyName);
 
-        if (company != null) {
-            Equipment equipment = _equipmentRepository.findEquipmentByName(equipmentDto.getName());
-            company.addEquipment(equipment);
-            _companyRepository.save(company);
+        // Find the company by name
+        Company existingCompany = _companyRepository.findCompanyByName(companyName);
 
-            return new CompanyEquipmentDto(company);
+        // Fetch the Equipment entity with equipmentId from the database
+        Optional<Equipment> optionalEquipment = _equipmentRepository.findById(equipmentId);
+
+        if (optionalEquipment.isPresent()) {
+            Equipment equipmentToAdd = optionalEquipment.get();
+
+            // Check if the company already has this equipment
+            boolean alreadyHasEquipment = existingCompany.getCompanyEquipmentSet().stream()
+                    .anyMatch(companyEquipment -> companyEquipment.getEquipment().getId().equals(equipmentId));
+
+            if (!alreadyHasEquipment) {
+                // Create a new CompanyEquipment entity
+                CompanyEquipment newCompanyEquipment = new CompanyEquipment();
+                newCompanyEquipment.setQuantity(1); // You can set the quantity as needed
+                newCompanyEquipment.setEquipment(equipmentToAdd);
+                newCompanyEquipment.setCompany(existingCompany);
+
+                // Add the new CompanyEquipment to the company's set
+                existingCompany.getCompanyEquipmentSet().add(newCompanyEquipment);
+
+                // Save the updated company
+                _companyRepository.save(existingCompany);
+
+                System.out.println("Updated Company: " + existingCompany);
+                System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
+            } else {
+                // Handle the case where the company already has this equipment
+                System.out.println("Company already has this equipment");
+            }
         } else {
-            return null;
+            // Handle the case where the equipment with equipmentId is not found
+            System.out.println("Equipment with equipmentId not found");
         }
+
+        return existingCompany;
     }
+
 
     public CompanyDto registerCompany(CompanyDto dto){
         Company comapny = _companyMapper.dtoToCompany(dto);

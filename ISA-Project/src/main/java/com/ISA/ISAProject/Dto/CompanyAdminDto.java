@@ -1,22 +1,15 @@
 package com.ISA.ISAProject.Dto;
 
 
-import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
-import com.ISA.ISAProject.Enum.TypeOfUser;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.User;
-
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 public class CompanyAdminDto {
+
+    private Integer id;
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -43,6 +36,7 @@ public class CompanyAdminDto {
     }
 
     public CompanyAdminDto(User user, Integer companyId) {
+        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -116,6 +110,14 @@ public class CompanyAdminDto {
 
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
 
