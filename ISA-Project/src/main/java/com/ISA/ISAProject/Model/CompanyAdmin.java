@@ -17,17 +17,17 @@ public class CompanyAdmin {
     @JoinColumn(name = "UserId",nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
     @Column(name = "UserName", unique = true)
     private String userName;
 
-    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Complaint> complaintSet = new HashSet<>();
 
     /*

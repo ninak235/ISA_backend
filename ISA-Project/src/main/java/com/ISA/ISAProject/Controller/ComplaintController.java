@@ -22,22 +22,23 @@ public class ComplaintController {
     @Autowired
     private ComplaintService _complaintService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDto>> getAllComplaints(){
         List<ComplaintDto> allComplaints = _complaintService.getAllComplaints();
         return new ResponseEntity<>(allComplaints, HttpStatus.OK);
     }
 
     @GetMapping("/getAllByAdminId/{systemAdminId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDto>> getAllComplaintsByAdminId(@PathVariable Integer systemAdminId){
         List<ComplaintDto> allComplaintsByAdminId = _complaintService.getAllComplaintsByAdminId(systemAdminId);
         return new ResponseEntity<>(allComplaintsByAdminId, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @CrossOrigin
     @PutMapping(value = "/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateComplaint(@Valid @RequestBody ComplaintDto complaintDto) {
         Complaint complaint = _complaintService.updateComplaint(complaintDto);
         if (complaint != null) {

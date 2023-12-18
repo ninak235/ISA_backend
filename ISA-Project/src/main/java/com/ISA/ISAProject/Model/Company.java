@@ -35,10 +35,10 @@ public class Company {
     @Column(name = "EndWorkingTime")
     private LocalTime endWorkingTime;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<CompanyAdmin> companyAdminSet = new HashSet<>();
 
     @Column(name = "deleted")

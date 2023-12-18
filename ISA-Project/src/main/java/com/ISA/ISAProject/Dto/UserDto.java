@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class UserDto {
+    private Integer id;
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -26,11 +27,11 @@ public class UserDto {
     private String number;
 
 
-
     public UserDto(){
     }
 
     public UserDto(User user) {
+        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
         this.userName = user.getUsername();
@@ -39,6 +40,14 @@ public class UserDto {
         this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -104,4 +113,6 @@ public class UserDto {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+
 }

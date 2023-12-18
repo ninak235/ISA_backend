@@ -21,7 +21,7 @@ public class Equipment {
 
     @Column(name = "Description", nullable = false)
     private String description;
-    @OneToMany(mappedBy = "equipment", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "equipment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
     /*

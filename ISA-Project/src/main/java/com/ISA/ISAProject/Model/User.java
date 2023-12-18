@@ -61,13 +61,17 @@ public class User implements UserDetails {
 
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
+
+    @Column(name = "firstLogin",columnDefinition = "boolean default false")
+    private boolean firstLogin;
     public User() {
         this.deleted = false;
         this.isEnabled = true;
+        this.firstLogin = false;
         this.roles =null;
     }
 
-    public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, boolean deleted,boolean isEnabled,Timestamp lastPasswordResetDate) {
+    public User(Integer id,String userName, String firstName, String lastName, String email, String password, String country, String city, String number, boolean deleted,boolean isEnabled, boolean firstLogin, Timestamp lastPasswordResetDate) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
@@ -79,6 +83,7 @@ public class User implements UserDetails {
         Number = number;
         this.deleted = deleted;
         this.isEnabled = isEnabled;
+        this.firstLogin = firstLogin;
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
@@ -185,6 +190,14 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 
     public Timestamp getLastPasswordResetDate() {

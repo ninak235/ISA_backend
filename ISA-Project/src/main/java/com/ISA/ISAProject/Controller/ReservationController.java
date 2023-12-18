@@ -9,6 +9,7 @@ import com.ISA.ISAProject.Services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,18 +22,21 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<List<ReservationDto>> getAllReservations() {
         List<ReservationDto> allReservations = reservationService.getAllReservations();
         return new ResponseEntity<>(allReservations, HttpStatus.OK);
     }
 
     @GetMapping("/getAllByAdminId/{companyAdminId}")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<List<ReservationDto>> getAllReservationsByCompanyAdminId(@PathVariable Integer companyAdminId) {
         List<ReservationDto> allReservations = reservationService.getAllReservationsByCompanyAdminId(companyAdminId);
         return new ResponseEntity<>(allReservations, HttpStatus.OK);
     }
 
     @GetMapping("/{reservationId}")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationDto> getReservationById(@PathVariable Integer reservationId) {
         ReservationDto reservationDto = reservationService.getReservationById(reservationId);
 
