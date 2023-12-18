@@ -35,11 +35,13 @@ public class Company {
     @Column(name = "EndWorkingTime")
     private LocalTime endWorkingTime;
 
+
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
     @OneToMany(mappedBy = "company",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<CompanyAdmin> companyAdminSet = new HashSet<>();
+
 
     @Column(name = "deleted")
     private boolean deleted;
@@ -112,9 +114,14 @@ public class Company {
         return equipmentList;
     }
 
+    public Set<CompanyEquipment> getCompanyEquipmentSet(){
+        return companyEquipmentSet;
+    }
+
     public void setEquipment(Set<CompanyEquipment> equipment) {
         this.companyEquipmentSet = equipment;
     }
+
 
     public Set<CompanyAdmin> getCompanyAdmin() {
         return companyAdminSet;

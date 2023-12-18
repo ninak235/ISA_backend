@@ -16,6 +16,8 @@ public class CompanyEquipmentDto {
 
     private List<EquipmentDto> equipmentSet;
 
+    private List<CompanyAdminBasicDto> adminsSet;
+
     // Add default constructor
     public CompanyEquipmentDto() {
     }
@@ -27,11 +29,18 @@ public class CompanyEquipmentDto {
         this.description = company.getDescription();
         this.grade = company.getGrade();
 
-        Hibernate.initialize(company.getEquipmentList());
+
+      Hibernate.initialize(company.getCompanyAdmin());
+      Hibernate.initialize(company.getEquipmentList());
 
         this.equipmentSet = new ArrayList<>(company.getEquipmentList().stream()
                 .map(EquipmentDto::new)
                 .collect(Collectors.toList()));
+
+        this.adminsSet = new ArrayList<>(company.getCompanyAdmin().stream()
+                .map(companyAdmin -> new CompanyAdminBasicDto(companyAdmin.getUser()))
+                .collect(Collectors.toList()));
+
 
     }
 
@@ -75,6 +84,16 @@ public class CompanyEquipmentDto {
         this.equipmentSet = equipmentSet;
     }
 
+
+    public List<CompanyAdminBasicDto> getAdminsSet() {
+        return adminsSet;
+    }
+
+    public void setAdminsSet(List<CompanyAdminBasicDto> adminsSet) {
+        this.adminsSet = adminsSet;
+    }
+
+
     public Integer getId() {
         return id;
     }
@@ -82,4 +101,5 @@ public class CompanyEquipmentDto {
     public void setId(Integer id) {
         this.id = id;
     }
+
 }
