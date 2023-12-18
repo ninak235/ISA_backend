@@ -6,9 +6,18 @@ VALUES
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
-    ('Novi Sad', 'Srbija', '069875465','zarkokn@gmail.com', 'Zdravko','Debil1', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
-    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','Debil2', true, 'Janic', '12345678', false,'2017-10-01 21:58:58.508-07'),
-    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar','Debil3', true, 'Petrovic', '$2a$10$q19T.hIoeaOX2/Z3Nrx4m.z6rRBBNyBxGw0agLx4NOvlCY9FZU2.m', false,'2017-10-01 21:58:58.508-07');
+    ('Novi Sad', 'Srbija', '069875465','zarkokn@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
+    -- CUSTOMER: 11111111
+    ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','AdminCompany1', true, 'Janic', '$2a$12$P9VeoGInlK53ACrgEuwl5O2iLay0ZLHkzj3q71bv/mXmw3uThJZ8i', false,'2017-10-01 21:58:58.508-07'),
+    -- COMPANY ADMIN: 22222222
+    ('Novi Sad', 'Srbija', '068543654','petar@gmail.com', 'Petar','AdminCompany2', true, 'Petrovic', '$2a$10$q19T.hIoeaOX2/Z3Nrx4m.z6rRBBNyBxGw0agLx4NOvlCY9FZU2.m', false,'2017-10-01 21:58:58.508-07'),
+   -- COMPANY ADMIN: 12345678
+    ('Novi Sad', 'Srbija', '068543655','visnja@gmail.com', 'Visnja','AdminCompany3', true, 'Peric', '$2a$12$S0xGqYF5BxDu92ma6Agvpe.eSKBnlqdoDMBm9Px4oerbChd1WRasG', false,'2017-10-01 21:58:58.508-07'),
+   -- COMPANY ADMIN: 87654321
+    ('Novi Sad', 'Srbija', '068543656','sara@gmail.com', 'Sara','AdminCompany4', true, 'Vasic', '$2a$12$tBX2tuZGHtZfOa9G8tplTOxamnVD2z5AcqgwmmVhKVpgp3id45sOW', false,'2017-10-01 21:58:58.508-07'),
+   -- COMPANY ADMIN: 33333333
+    ('Novi Sad', 'Srbija', '068543657','jovan@gmail.com', 'Jovan','Admin', true, 'Jovanovic', '$2a$12$dvmV8QbN1FS1qa9alu6HOeKBjfZ/Ls9ez7mzp7n60hE11AKB6BW3u', false,'2017-10-01 21:58:58.508-07');
+    -- ADMIN: 12341234
 
 INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
 VALUES
@@ -26,15 +35,20 @@ VALUES
 
 INSERT INTO company_admins  (company_id, user_id)
 VALUES
-    (1,1),
+    (1,5),
     (2,2),
-    (2,3);
+    (2,3),
+    (3,4);
 
 INSERT INTO available_date (admin_confirmation_date, confirmed, duration, start_time, admin_id, taken)
 VALUES
-    ('2023-12-14T10:30:00', true, 1800, '2023-12-23T08:45:00', 1, true),
-    ('2023-12-16T10:30:00', true, 1800, '2023-12-18T10:30:00', 1, false),
-    ('2023-12-14T10:30:00', true, 1800, '2023-12-20T10:30:00', 2, false);
+    ('2023-12-21T10:30:00', true, 1800, '2023-12-23T08:45:00', 5, true),
+    ('2023-12-22T10:30:00', true, 1800, '2023-12-24T10:30:00', 5, false),
+    ('2023-12-21T10:30:00', true, 1800, '2023-12-21T10:30:00', 2, false),
+    ('2023-12-22T10:30:00', true, 1800, '2023-12-25T08:45:00', 2, true),
+    ('2023-12-21T10:30:00', true, 1800, '2023-12-15T10:30:00', 3, false),
+    ('2023-12-22T10:30:00', true, 1800, '2023-12-27T10:30:00', 3, false),
+    ('2023-12-22T10:30:00', true, 1800, '2023-12-28T10:00:00', 4, false);
 
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
@@ -45,7 +59,10 @@ INSERT INTO user_role (user_id , role_id)
 VALUES
     (1,1),
     (2,2),
-    (3,3);
+    (3,2),
+    (4,2),
+    (5,2),
+    (6,3);
 
 INSERT INTO company_equipment (quantity, company_id, equipment_id)
 VALUES
