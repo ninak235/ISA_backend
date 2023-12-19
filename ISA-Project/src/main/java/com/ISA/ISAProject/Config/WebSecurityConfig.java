@@ -79,13 +79,16 @@ public class WebSecurityConfig {
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
+                .antMatchers("/company/add-equipment/").hasAuthority("ROLE_COMPANYADMIN")
+                .antMatchers("/company/update/equipment/change/**").hasAuthority("ROLE_COMPANYADMIN")
+                .antMatchers("/company/update/equipment/delete/**").hasAuthority("ROLE_COMPANYADMIN")
                 .antMatchers("/company/**").permitAll()
                 .antMatchers("/availableDate/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .antMatchers("/complaint/getAll").permitAll()
                 .antMatchers("/complaint/update").permitAll()
                 .antMatchers("/reservations/**").permitAll()
-                .antMatchers("/updateSystemAdmin").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/updateSystemAdmin").hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPANYADMIN")
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/company/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER

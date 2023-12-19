@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Services;
 import com.ISA.ISAProject.Dto.EquipmentCompanyDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
+import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class EquipmentService {
     private EquipmentRepository _equipmentRepository;
     @Autowired
     private EquipmentMapper _equipmentMapper;
+    @Autowired
+    private CompanyService _companyService;
+    @Autowired ReservationService _reservationService;
 
     @Transactional
     public List<EquipmentCompanyDto> getAllEquipment() {
@@ -66,5 +70,21 @@ public class EquipmentService {
         Equipment equipment = _equipmentRepository.save(_equipmentMapper.mapDtoToEntity(equipmentDto));
         return new EquipmentDto(equipment);
     }
+
+    @Transactional
+    public boolean checkIfEquipmentIsReserved(Integer equipmentId, Integer companyId) {
+        Equipment equipment = _equipmentRepository.findEquipmentById(equipmentId);
+        Company company = _companyService.getById(companyId);
+
+        if (equipment != null && !equipment.isDeleted()) {
+            // Check if the equipment is part of any reservation managed by the company's admin
+            return _reservationService.isEquipmentReservedByAdmin(equipment, company);
+        } else {
+            // Equipment not found or deleted
+            return false;
+        }
+    }
+
+
 
 }

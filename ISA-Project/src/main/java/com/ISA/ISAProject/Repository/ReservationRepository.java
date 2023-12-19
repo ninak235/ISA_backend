@@ -14,4 +14,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByCompanyAdminId(@Param("companyAdminId") Integer companyAdminId);
 
     List<Reservation> findAllByCustomer_Id(Integer userId);
+
+    List<Reservation> findByCompanyAdminIdIn(List<Integer> adminIds);
 }

@@ -53,6 +53,26 @@ public class ReservationService {
     }
 
     @Transactional
+    public boolean isEquipmentReservedByAdmin(Equipment equipment, Company company) {
+        List<CompanyAdmin> companyAdmins = new ArrayList<>(company.getCompanyAdmin());
+
+        for (CompanyAdmin companyAdmin : companyAdmins) {
+            List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdmin.getId());
+
+            for (Reservation reservation : reservations) {
+                if (reservation.getReservationEquipments().contains(equipment)) {
+                    // Equipment is reserved by this admin
+                    return true;
+                }
+            }
+        }
+
+        // Equipment is not reserved by any admin
+        return false;
+    }
+
+
+    @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 

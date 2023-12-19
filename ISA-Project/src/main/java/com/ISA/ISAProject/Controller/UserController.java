@@ -45,7 +45,7 @@ public class UserController {
 
     @CrossOrigin
     @PutMapping(value = "/updateSystemAdmin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COMPANYADMIN')")
     public ResponseEntity<Void> updateSystemAdmin(@Valid @RequestBody UserDto userDto) {
         if (userDto.getId() == null) {
             // Handle the case where the ID is null (e.g., return a bad request response)
