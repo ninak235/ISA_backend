@@ -1,10 +1,10 @@
 package com.ISA.ISAProject.Mapper;
 
-import com.ISA.ISAProject.Dto.CompanyAdminDto;
-import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Model.Role;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Services.RoleService;
@@ -47,6 +47,17 @@ public class UserMapper {
         companyAdmin.getCompany().setId(dto.getCompanyId());
 
         return companyAdmin;
+    }
+
+    public UserDto mapUserToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    public User mapDtoToSystemAdmin(UserDto userDto) {
+        User systemAdmin = modelMapper.map(userDto, User.class);
+        List<Role> roles = roleService.findByName("ROLE_ADMIN");
+        systemAdmin.setRoles(roles);
+        return systemAdmin;
     }
 }
 

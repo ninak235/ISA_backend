@@ -35,10 +35,42 @@ public class ReservationService {
     }
 
     @Transactional
+    public List<ReservationDto> getAllReservationsByCompanyAdminId(Integer companyAdminId) {
+        List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdminId);
+        return reservationMapper.mapReservationsToDto(reservations);
+    }
+
+    @Transactional
     public ReservationDto getReservationById(Integer reservationId) {
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         return optionalReservation.map(reservationMapper::mapReservationToDto).orElse(null);
     }
+
+    @Transactional
+    public List<ReservationDto> getReservationsByUserId(Integer userId) {
+        List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
+        return reservationMapper.mapReservationsToDto(userReservations);
+    }
+
+    @Transactional
+    public boolean isEquipmentReservedByAdmin(Equipment equipment, Company company) {
+        List<CompanyAdmin> companyAdmins = new ArrayList<>(company.getCompanyAdmin());
+
+        for (CompanyAdmin companyAdmin : companyAdmins) {
+            List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdmin.getId());
+
+            for (Reservation reservation : reservations) {
+                if (reservation.getReservationEquipments().contains(equipment)) {
+                    // Equipment is reserved by this admin
+                    return true;
+                }
+            }
+        }
+
+        // Equipment is not reserved by any admin
+        return false;
+    }
+
 
     @Transactional
     public ReservationDto createReservation(ReservationDto reservationDto) {

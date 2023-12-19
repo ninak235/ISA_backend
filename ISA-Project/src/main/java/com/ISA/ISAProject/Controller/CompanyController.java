@@ -26,6 +26,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/{companyId}")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<CompanyEquipmentDto> getCompanyById(@PathVariable Integer companyId){
         Company company = _companyService.getById(companyId);
         CompanyEquipmentDto companyDto = new CompanyEquipmentDto(company);
@@ -40,6 +41,7 @@ public class CompanyController {
     }
 
     @GetMapping("/getIdNameAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CompanyIdNameDto>> getAllCompaniesIdName(){
         List<CompanyIdNameDto> allCompaniesIdName = _companyService.getAllCompaniesIdName();
         return new ResponseEntity<>(allCompaniesIdName, HttpStatus.OK);

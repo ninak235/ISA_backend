@@ -34,7 +34,6 @@ public class AvailableDateController {
     }
 
     @GetMapping("/{availableDateId}")
-    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<AvailableDateDto> getAvailableDateById(@PathVariable Integer availableDateId) {
         AvailableDateDto availableDateDto = availableDateService.getAvailableDateById(availableDateId);
 
@@ -46,7 +45,7 @@ public class AvailableDateController {
     }
 
     @GetMapping("/getByCompanyId/{companyId}")
-    //@PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
         List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
@@ -60,6 +59,7 @@ public class AvailableDateController {
     }
 
     @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
         List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
@@ -91,6 +91,7 @@ public class AvailableDateController {
 
     @CrossOrigin
     @PutMapping(value = "/update")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Void> updateCustomer(@Valid @RequestBody AvailableDateDto availableDateDto) {
         AvailableDate availableDate = availableDateService.update(availableDateDto);
         if (availableDate != null) {

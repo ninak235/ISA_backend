@@ -1,9 +1,11 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.AvailableDate;
+import com.ISA.ISAProject.Model.Complaint;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AvailableDateDto {
     private Integer id;

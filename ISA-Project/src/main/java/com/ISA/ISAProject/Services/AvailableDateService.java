@@ -50,7 +50,15 @@ public class AvailableDateService {
     @Transactional
     public List<AvailableDateDto> getAllAvailableDaysByCompanyId(Integer companyId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
-        return availableDateMapper.mapAvailableDatesToDto(availableDates);
+        List<AvailableDate> futureAvailableDates = new ArrayList<>();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        for (AvailableDate date: availableDates) {
+            if (date.getStartTime().isAfter(currentDateTime)) {
+                futureAvailableDates.add(date);
+            }
+        }
+        return availableDateMapper.mapAvailableDatesToDto(futureAvailableDates);
     }
 
     @Transactional
@@ -160,7 +168,7 @@ public class AvailableDateService {
     private CompanyAdmin getAvailableCompanyAdmin(LocalDateTime dateTime, int companyId) {
 
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
-        List<CompanyAdmin> allCompanyAdmins = companyAdminRepository.findAll();
+        List<CompanyAdmin> allCompanyAdmins = companyAdminRepository.findAllByCompany_Id(companyId);
         List<Integer> busyUserIds = new ArrayList<>();
         for (AvailableDate availableDate: availableDates){
             LocalDateTime startTime = availableDate.getStartTime();
@@ -170,7 +178,7 @@ public class AvailableDateService {
                 Duration thirtyMinutes = Duration.ofMinutes(30);
                 LocalDateTime sum = startTime.plus(thirtyMinutes);
                 if (dateTime.compareTo(startTime) >= 0 && dateTime.compareTo(sum) <= 0) {//|| sum2.compareTo(startTime) >= 0) {
-                    System.out.println(startTime);
+
                     busyUserIds.add(availableDate.getAdmin().getId());
                 }
             }

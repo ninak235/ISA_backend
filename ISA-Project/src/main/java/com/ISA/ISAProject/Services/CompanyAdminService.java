@@ -2,13 +2,13 @@ package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.UserDto;
 import com.ISA.ISAProject.Mapper.CompanyAdminMapper;
 import com.ISA.ISAProject.Mapper.UserMapper;
-import com.ISA.ISAProject.Model.Company;
-import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.CompanyAdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -18,7 +18,6 @@ import java.util.Optional;
 import com.ISA.ISAProject.Mapper.UserMapper;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.CompanyAdmin;
-import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Repository.CompanyAdminRepository;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.UserRepository;
@@ -46,6 +45,9 @@ public class CompanyAdminService {
 
     @Autowired
     private final CompanyService _companyService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public CompanyAdminService(UserMapper userMapper, CompanyAdminMapper companyAdminMapper, CompanyService companyService) {
         _userMapper = userMapper;
@@ -77,8 +79,10 @@ public class CompanyAdminService {
     */
 
     public CompanyAdminDto registerCompanyAdmin(CompanyAdminDto dto) {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         CompanyAdmin companyAdmin = _userMapper.dtoToCompanyAdmin(dto);
         Company company = _companyRepository.getOne(companyAdmin.getCompany().getId());
+
         //Hibernate.initialize(company.getCompanyAdmin()); // Initialize the collection
         companyAdmin.setCompany(company);
         _companyAdminRepository.save(companyAdmin);

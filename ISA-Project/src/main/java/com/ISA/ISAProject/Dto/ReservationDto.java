@@ -30,11 +30,15 @@ public class ReservationDto {
 
     private Integer companyAdminId;
 
+    private String customerName;
+    private String customerLastName;
+
     private List<EquipmentDto> reservationEquipments;
 
     public ReservationDto() {
         reservationEquipments = new ArrayList<>();
     }
+
 
     public ReservationDto(Reservation reservation){
         this.id = reservation.getId();
@@ -44,6 +48,12 @@ public class ReservationDto {
         this.status = reservation.getStatus();
         this.customerId = reservation.getCustomer().getId();
         this.companyAdminId = reservation.getCompanyAdmin().getId();
+
+        Customer customer = reservation.getCustomer();
+        if (customer != null) {
+            this.customerName = customer.getUser().getFirstName();
+            this.customerLastName = customer.getUser().getLastName();
+        }
         this.reservationEquipments  = new ArrayList<>();
         for (Equipment equipment : reservation.getReservationEquipments()) {
             EquipmentDto equipmentDto = new EquipmentDto();
@@ -113,11 +123,27 @@ public class ReservationDto {
         this.companyAdminId = companyAdminId;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
     public List<EquipmentDto> getReservationEquipments() {
         return reservationEquipments;
     }
 
     public void setReservationEquipments(List<EquipmentDto> reservationEquipments) {
         this.reservationEquipments = reservationEquipments;
+
     }
 }

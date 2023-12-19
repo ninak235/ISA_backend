@@ -21,8 +21,14 @@ public class CompanyAdmin {
     @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
+    @Column(name = "UserName", unique = true)
+    private String userName;
+
     @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Complaint> complaintSet = new HashSet<>();
 
     /*
     @OneToMany(mappedBy = "admin")
@@ -30,8 +36,8 @@ public class CompanyAdmin {
     */
 
     public CompanyAdmin() {
-
         this.company = new Company();
+        this.complaintSet = new HashSet<>();
     }
 
     /*
@@ -63,6 +69,14 @@ public class CompanyAdmin {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Set<Complaint> getComplaintSet() {
+        return complaintSet;
+    }
+
+    public void setComplaintSet(Set<Complaint> complaintSet) {
+        this.complaintSet = complaintSet;
     }
 
     @Override
