@@ -54,6 +54,12 @@ public class AvailableDateService {
     }
 
     @Transactional
+    public List<AvailableDateDto> getAllAvailableDaysByAdminId(Integer adminId){
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(adminId);
+        return availableDateMapper.mapAvailableDatesToDto(availableDates);
+    }
+
+    @Transactional
     public List<AvailableDateDto> getAllAvailableDaysByCompanyAndAdminId(Integer companyId, Integer companyAdminId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
         availableDates = availableDates.stream()
@@ -134,16 +140,22 @@ public class AvailableDateService {
 
     private List<AvailableDate> generateAvailableDatesForAdmin(List<LocalDateTime> allDateTimes, Company company, Integer companyAdminId) {
         List<AvailableDate> newDates = new ArrayList<>();
-        for (LocalDateTime dateTime : allDateTimes) {
-            CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
-
-            if(availableCompanyAdmin != null && availableCompanyAdmin.getId().equals(companyAdminId)){
-                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
-                newDates.add(availableDate);
+        Optional<CompanyAdmin> tempAdmin = companyAdminRepository.findById(companyAdminId);
+        if(tempAdmin != null){
+            CompanyAdmin admin = tempAdmin.get();
+            for (LocalDateTime dateTime : allDateTimes) {
+                //CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
+                if(!isAdminBusy(dateTime, companyAdminId)){
+                    AvailableDate availableDate = new AvailableDate(admin, dateTime, Duration.ofMinutes(30));
+                    newDates.add(availableDate);
+                    System.out.println("New date added: " + availableDate);
+                }
             }
         }
+
         return newDates;
     }
+
 
     private CompanyAdmin getAvailableCompanyAdmin(LocalDateTime dateTime, int companyId) {
 
@@ -169,6 +181,25 @@ public class AvailableDateService {
             }
         }
         return null;
+    }
+
+    private Boolean isAdminBusy(LocalDateTime dateTime, int adminId) {
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(adminId);
+        Optional<CompanyAdmin> optAdmin = companyAdminRepository.findById(adminId);
+        Duration thirtyMinutes = Duration.ofMinutes(30);
+        if(optAdmin != null){
+            CompanyAdmin admin = optAdmin.get();
+            for(AvailableDate date: availableDates){
+                LocalDateTime startTime = date.getStartTime();
+                LocalDateTime sum = startTime.plus(thirtyMinutes);
+                if(dateTime.compareTo(startTime) >= 0 && dateTime.compareTo(sum) <= 0){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+
     }
 
     @Transactional

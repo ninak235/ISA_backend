@@ -52,6 +52,13 @@ public class AvailableDateController {
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
+    @GetMapping("/getByAdminId/{adminId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<AvailableDateDto>> getByAdminId(@PathVariable  Integer adminId){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByAdminId(adminId);
+        return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
     public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
         List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);

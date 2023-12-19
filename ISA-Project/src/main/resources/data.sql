@@ -32,9 +32,9 @@ VALUES
 
 INSERT INTO available_date (admin_confirmation_date, confirmed, duration, start_time, admin_id, taken)
 VALUES
-    ('2023-12-14T10:30:00', true, 1800, '2023-12-23T08:45:00', 1, true),
-    ('2023-12-16T10:30:00', true, 1800, '2023-12-18T10:30:00', 1, false),
-    ('2023-12-14T10:30:00', true, 1800, '2023-12-20T10:30:00', 2, false);
+    ('2023-12-14T10:30:00', true, 1800000000000, '2023-12-23T08:45:00', 1, true),
+    ('2023-12-16T10:30:00', true, 1800000000000, '2023-12-18T10:30:00', 1, false),
+    ('2023-12-14T10:30:00', true, 1800000000000, '2023-12-20T10:30:00', 2, false);
 
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
