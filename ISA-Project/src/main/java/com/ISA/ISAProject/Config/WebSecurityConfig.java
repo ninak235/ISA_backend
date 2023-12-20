@@ -89,7 +89,7 @@ public class WebSecurityConfig {
                 .antMatchers("/complaint/update").permitAll()
                 .antMatchers("/reservations/**").permitAll()
                 .antMatchers("/updateSystemAdmin").hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPANYADMIN")
-                .antMatchers("/user/**").permitAll()
+                .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/company/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
                 .antMatchers("/equipment/**").permitAll()

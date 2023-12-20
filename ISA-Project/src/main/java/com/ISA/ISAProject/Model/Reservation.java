@@ -30,7 +30,7 @@ public class Reservation {
     @JoinColumn(name = "customerId", nullable = true)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "companyAdminId", nullable = true)
     private CompanyAdmin companyAdmin;
 

@@ -25,6 +25,7 @@ public class UserDto {
     private String city;
     @NotEmpty
     private String number;
+    private boolean firstLogin;
 
 
     public UserDto(){
@@ -40,6 +41,7 @@ public class UserDto {
         this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
+        this.firstLogin = user.getFirstLogin();
     }
 
     public Integer getId() {
@@ -115,4 +117,11 @@ public class UserDto {
     }
 
 
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
+    }
 }

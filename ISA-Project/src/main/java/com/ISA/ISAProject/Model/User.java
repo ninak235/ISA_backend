@@ -192,7 +192,7 @@ public class User implements UserDetails {
         isEnabled = enabled;
     }
 
-    public boolean isFirstLogin() {
+    public boolean getFirstLogin() {
         return firstLogin;
     }
 
