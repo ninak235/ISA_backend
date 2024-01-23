@@ -2,17 +2,19 @@ package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.ComEqDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
+import com.ISA.ISAProject.Dto.ReservationCancelationDTO;
 import com.ISA.ISAProject.Dto.ReservationDto;
+import com.ISA.ISAProject.Enum.ReservationStatus;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Mapper.ReservationMapper;
 import com.ISA.ISAProject.Model.*;
-import com.ISA.ISAProject.Repository.CompanyEquipmentRepository;
-import com.ISA.ISAProject.Repository.EquipmentRepository;
-import com.ISA.ISAProject.Repository.ReservationRepository;
+import com.ISA.ISAProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -23,7 +25,10 @@ public class ReservationService {
     private ReservationMapper reservationMapper;
     @Autowired
     private CustomerService customerService;
-
+    @Autowired
+    private AvailableDateRepository availableDateRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
     @Autowired
     private CompanyAdminService companyAdminService;
 
@@ -89,5 +94,32 @@ public class ReservationService {
 
     public void updateReservation(Reservation reservation){
         reservationRepository.save(reservation);
+    }
+
+    public ReservationCancelationDTO cancelReservation(ReservationDto reservationDto){
+
+        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+        reservation.setStatus(ReservationStatus.Cancelled);
+        updateReservation(reservation);
+
+        Customer customer = customerService.getById(reservationDto.getCustomerId());
+        if(reservation.getDateTime().isBefore(LocalDateTime.now().plusHours(24))){
+            customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
+        }
+        else{
+            customer.setPenaltyPoints(customer.getPenaltyPoints()+1);
+        }
+        customerRepository.save(customer);
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
+        AvailableDate canceledDate = availableDates.stream()
+                .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
+                .findFirst()
+                .orElse(null);
+
+        canceledDate.setTaken(false);
+        availableDateRepository.save(canceledDate);
+
+        ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
+        return cancelationDTO;
     }
 }

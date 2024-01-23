@@ -7,6 +7,7 @@ import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.AvailableDateRepository;
 import com.ISA.ISAProject.Repository.CompanyAdminRepository;
 import com.ISA.ISAProject.Repository.CompanyRepository;
+import com.ISA.ISAProject.Repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
@@ -34,6 +35,8 @@ public class AvailableDateService {
     private CompanyRepository companyRepository;
     @Autowired
     private CompanyAdminRepository companyAdminRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
 
     @Transactional
     public List<AvailableDateDto> getAllAvailableDays() {
@@ -48,7 +51,7 @@ public class AvailableDateService {
     }
 
     @Transactional
-    public List<AvailableDateDto> getAllAvailableDaysByCompanyId(Integer companyId){
+    public List<AvailableDateDto> getAllAvailableDaysByCompanyId(Integer companyId,Integer userId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
         List<AvailableDate> futureAvailableDates = new ArrayList<>();
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -58,7 +61,35 @@ public class AvailableDateService {
                 futureAvailableDates.add(date);
             }
         }
+
+        List<AvailableDate> filteredAvailableDates = filterForCustomerCancelation(userId, companyId, futureAvailableDates);
+        if (filteredAvailableDates != null) {
+            futureAvailableDates = filteredAvailableDates;
+        }
+        /*
+        List<Reservation> customerReservations = reservationRepository.findAllByCustomer_Id(userId);
+        if(customerReservations != null){
+            futureAvailableDates = futureAvailableDates.stream()
+                    .filter(date -> customerReservations.stream()
+                            .noneMatch(reservation -> reservation.getDateTime().isEqual(date.getStartTime()) &&
+                                    reservation.getCompanyAdmin().getCompany().getId().equals(companyId)))
+                    .collect(Collectors.toList());
+        }
+        */
         return availableDateMapper.mapAvailableDatesToDto(futureAvailableDates);
+    }
+
+    private List<AvailableDate>  filterForCustomerCancelation(Integer userId,Integer companyId, List<AvailableDate> futureAvailableDates){
+        List<Reservation> customerReservations = reservationRepository.findAllByCustomer_Id(userId);
+        if(customerReservations != null){
+            futureAvailableDates = futureAvailableDates.stream()
+                    .filter(date -> customerReservations.stream()
+                            .noneMatch(reservation -> reservation.getDateTime().isEqual(date.getStartTime()) &&
+                                    reservation.getCompanyAdmin().getCompany().getId().equals(companyId)))
+                    .collect(Collectors.toList());
+            return futureAvailableDates;
+        }
+        return null;
     }
 
     @Transactional
@@ -78,14 +109,14 @@ public class AvailableDateService {
     }
 
     @Transactional
-    public List<AvailableDateDto> getExtraAvailableDaysByCompanyId(Integer companyId, String selectedDate) {
+    public List<AvailableDateDto> getExtraAvailableDaysByCompanyId(Integer companyId, String selectedDate,Integer userId) {
         Instant instant = parseSelectedDate(selectedDate);
         if (instant != null) {
             Company company = companyRepository.findById(companyId).orElse(null);
             if (company != null) {
                 List<LocalDateTime> allDateTimes = generateAllDateTimes(instant, company);
 
-                List<AvailableDate> newDates = generateAvailableDates(allDateTimes, company);
+                List<AvailableDate> newDates = generateAvailableDates(allDateTimes, company,userId);
 
                 return availableDateMapper.mapAvailableDatesToDto(newDates);
             }
@@ -136,7 +167,7 @@ public class AvailableDateService {
         return allDateTimes;
     }
 
-    private List<AvailableDate> generateAvailableDates(List<LocalDateTime> allDateTimes, Company company) {
+    private List<AvailableDate> generateAvailableDates(List<LocalDateTime> allDateTimes, Company company,Integer userId) {
         List<AvailableDate> newDates = new ArrayList<>();
         for (LocalDateTime dateTime : allDateTimes) {
             if (getAvailableCompanyAdmin(dateTime, company.getId()) != null){
@@ -146,7 +177,8 @@ public class AvailableDateService {
                 newDates.add(availableDate);
             }
         }
-        return newDates;
+        List<AvailableDate> filteredList = filterForCustomerCancelation(userId,company.getId(),newDates);
+        return filteredList;
     }
 
     private List<AvailableDate> generateAvailableDatesForAdmin(List<LocalDateTime> allDateTimes, Company company, Integer companyAdminId) {
