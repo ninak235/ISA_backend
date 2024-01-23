@@ -39,6 +39,17 @@ public class EquipmentController {
         List<EquipmentCompanyDto> byTypeEquipments = _equipmentService.getByTypeEquipment(typeOfEquipment);
         return new ResponseEntity<>(byTypeEquipments, HttpStatus.OK);
     }
+    @CrossOrigin
+    @GetMapping("/checkIfReserved/{equipmentId}/{companyId}")
+    public ResponseEntity<Boolean> checkIfEquipmentIsReserved(
+            @PathVariable Integer equipmentId,
+            @PathVariable Integer companyId) {
+
+        // Call your service method to check if equipment is reserved
+        boolean isReserved = _equipmentService.checkIfEquipmentIsReserved(equipmentId, companyId);
+
+        return new ResponseEntity<>(isReserved, HttpStatus.OK);
+    }
 
     @CrossOrigin
     @PostMapping
@@ -52,4 +63,5 @@ public class EquipmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 }

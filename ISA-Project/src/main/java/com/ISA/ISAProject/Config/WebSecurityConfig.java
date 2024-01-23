@@ -7,12 +7,14 @@ import com.ISA.ISAProject.security.auth.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -77,12 +79,29 @@ public class WebSecurityConfig {
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
-               .antMatchers("/api/company/getAll").permitAll()
+                .antMatchers("/company/add-equipment/").hasAuthority("ROLE_COMPANYADMIN")
+                .antMatchers("/company/update/equipment/change/**").hasAuthority("ROLE_COMPANYADMIN")
+                .antMatchers("/company/update/equipment/delete/**").hasAuthority("ROLE_COMPANYADMIN")
+                .antMatchers("/company/**").permitAll()
+                .antMatchers("/availableDate/getAll").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .antMatchers("/complaint/getAll").permitAll()
+                .antMatchers("/complaint/update").permitAll()
+                .antMatchers("/reservations/**").permitAll()
+                .antMatchers("/updateSystemAdmin").hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPANYADMIN")
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/company/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
+<<<<<<< HEAD
                 .antMatchers("/api/equipment/**").permitAll()
                 .antMatchers(("/api/availableDate/**")).permitAll()
                 .antMatchers(("/api/user/**")).permitAll()
                 //.antMatchers("/api/company/registerCompany").permitAll()
+=======
+                .antMatchers("/equipment/**").permitAll()
+                .antMatchers(("/availableDate/**")).permitAll()
+                .antMatchers("/api/company/registerCompany").permitAll()
+>>>>>>> 856f59d3bb71e1ee3cbc91f51c18855c25459567
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
                 // koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
                 // samo korisnik koji ima rolu 'ADMIN', navodimo na sledeci nacin:
@@ -104,5 +123,5 @@ public class WebSecurityConfig {
 
         return http.build();
     }
-
 }
+

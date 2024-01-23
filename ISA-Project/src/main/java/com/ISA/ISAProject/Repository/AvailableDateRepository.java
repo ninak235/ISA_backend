@@ -9,4 +9,6 @@ public interface AvailableDateRepository extends JpaRepository<AvailableDate,Int
 
     List<AvailableDate> findAvailableDatesByAdmin_Company_Id(Integer companyId);
 
+    List<AvailableDate> findAvailableDateByAdmin_Id(Integer adminId);
+
 }
