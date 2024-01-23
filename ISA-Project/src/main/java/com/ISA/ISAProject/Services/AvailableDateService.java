@@ -139,9 +139,12 @@ public class AvailableDateService {
     private List<AvailableDate> generateAvailableDates(List<LocalDateTime> allDateTimes, Company company) {
         List<AvailableDate> newDates = new ArrayList<>();
         for (LocalDateTime dateTime : allDateTimes) {
-            CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
-            AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
-            newDates.add(availableDate);
+            if (getAvailableCompanyAdmin(dateTime, company.getId()) != null){
+
+                CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
+                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
+                newDates.add(availableDate);
+            }
         }
         return newDates;
     }

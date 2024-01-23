@@ -60,6 +60,7 @@ public class EmailService {
         }
     }
 
+    @Async
     @Transactional
     public void sendReservationEmail(ReservationDto reserv, String email)throws MailException{
         Optional<Reservation> reservationOptional = _reservationRepository.findById(reserv.getId());
