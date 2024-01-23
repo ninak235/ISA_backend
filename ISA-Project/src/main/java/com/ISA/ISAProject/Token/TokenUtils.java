@@ -177,7 +177,8 @@ public class TokenUtils {
         // Token je validan kada:
         return (username != null // korisnicko ime nije null
                 && username.equals(userDetails.getUsername())); // korisnicko ime iz tokena se podudara sa korisnickom imenom koje pise u bazi
-                //&& !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate() )); // nakon kreiranja tokena korisnik nije menjao svoju lozinku
+ //              && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate() )); // nakon kreiranja tokena korisnik nije menjao svoju lozinku
+
     }
 
     //Da li je lozinka korisnika promenjen anakon izdavanja tokena
