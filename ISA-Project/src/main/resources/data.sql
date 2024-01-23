@@ -26,11 +26,17 @@ VALUES
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
-
-INSERT INTO customers (user_id, company_info, occupation, penalty_points)
+INSERT INTO loyality_program (name_category, required_points, discount)
 VALUES
-    (1,'Company1', 'Medical', 4),
-    (3, 'Company2', 'Dental', 3);
+    ('Gold', 100, 40),
+    ('Silver', 65, 20),
+    ('Bronze', 45, 5);
+
+INSERT INTO customers (user_id, company_info, occupation, penalty_points, loyality_program_id)
+VALUES
+    (1,'Company1', 'Medical', 4, 1),
+    (3, 'Company2', 'Dental', 3, 2);
+
 
 
 INSERT INTO company_admins  (company_id, user_id)
