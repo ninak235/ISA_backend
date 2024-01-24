@@ -51,7 +51,7 @@ public class ReservationController {
         }
 
     @GetMapping("/byUserId/{userId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<ReservationDto>> getFutureReservationByUserId(@PathVariable Integer userId) {
         List<ReservationDto> reservationsDto = reservationService.getFutureReservationsByUserId(userId);
 
@@ -63,7 +63,7 @@ public class ReservationController {
     }
 
     @GetMapping("/pastByUserId/{userId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<ReservationDto>> getPastReservationsByUserId(@PathVariable Integer userId) {
         List<ReservationDto> reservationsDto = reservationService.getPastReservationsByUserId(userId);
 
