@@ -30,7 +30,7 @@ INSERT INTO loyality_program (name_category, required_points, discount)
 VALUES
     ('Gold', 100, 40),
     ('Silver', 65, 20),
-    ('Bronze', 45, 5);
+    ('Regular', 45, 5);
 
 INSERT INTO customers (user_id, company_info, occupation, penalty_points, loyality_program_id)
 VALUES
