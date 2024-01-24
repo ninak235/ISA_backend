@@ -52,8 +52,20 @@ public class ReservationController {
 
     @GetMapping("/byUserId/{userId}")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<List<ReservationDto>> getReservationByUserId(@PathVariable Integer userId) {
-        List<ReservationDto> reservationsDto = reservationService.getReservationsByUserId(userId);
+    public ResponseEntity<List<ReservationDto>> getFutureReservationByUserId(@PathVariable Integer userId) {
+        List<ReservationDto> reservationsDto = reservationService.getFutureReservationsByUserId(userId);
+
+        if (reservationsDto != null) {
+            return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/pastByUserId/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<ReservationDto>> getPastReservationsByUserId(@PathVariable Integer userId) {
+        List<ReservationDto> reservationsDto = reservationService.getPastReservationsByUserId(userId);
 
         if (reservationsDto != null) {
             return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
