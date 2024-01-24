@@ -3,7 +3,6 @@ package com.ISA.ISAProject.Dto;
 import com.ISA.ISAProject.Model.AvailableDate;
 import com.ISA.ISAProject.Model.Complaint;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,8 +10,7 @@ public class AvailableDateDto {
     private Integer id;
     private Integer adminId;
     private LocalDateTime startTime;
-    private Duration duration;
-    private LocalDateTime adminConfirmationTime;
+    private Integer duration;
     private boolean taken;
 
     public AvailableDateDto() {
@@ -24,8 +22,7 @@ public class AvailableDateDto {
         this.adminId = reservation.getAdmin().getId();
         this.startTime = reservation.getStartTime();
         this.duration = reservation.getDuration();
-        this.adminConfirmationTime = reservation.getAdminConfirmationTime();
-        this.taken = reservation.isConfirmed();
+        this.taken = reservation.getTaken();
     }
 
     // Getters and Setters...
@@ -45,24 +42,12 @@ public class AvailableDateDto {
         this.startTime = startTime;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
-    }
-
-    public LocalDateTime getAdminConfirmationTime() {
-        return adminConfirmationTime;
-    }
-
-    public void setAdminConfirmationTime(LocalDateTime adminConfirmationTime) {
-        this.adminConfirmationTime = adminConfirmationTime;
-    }
-
-    public boolean isConfirmed() {
-        return taken;
     }
 
     public void setTaken(boolean taken) {
