@@ -47,15 +47,15 @@ VALUES
     ('tezak problem', '', 2, 1),
     ('nejasno', '', 2, 1);
 
-INSERT INTO available_date (admin_confirmation_date, confirmed, duration, start_time, admin_id, taken)
+INSERT INTO available_date (duration, start_time, admin_id, taken)
 VALUES
-    ('2024-2-21T10:30:00', true, 1800000000000, '2024-2-23T08:45:00', 5, true),
-    ('2024-2-22T10:30:00', true, 1800000000000, '2024-2-24T10:30:00', 5, false),
-    ('2024-2-21T10:30:00', true, 1800000000000, '2024-2-21T10:30:00', 2, false),
-    ('2024-2-22T10:30:00', true, 1800000000000, '2024-2-25T08:45:00', 2, true),
-    ('2024-2-21T10:30:00', true, 1800000000000, '2024-2-15T12:00:00', 3, false),
-    ('2024-2-22T10:30:00', true, 1800000000000, '2024-2-27T10:30:00', 3, false),
-    ('2024-2-22T10:30:00', true, 1800000000000, '2024-2-28T10:00:00', 4, false);
+    (2, '2024-2-23T08:45:00', 5, true),
+    (3, '2024-2-24T10:30:00', 5, false),
+    (3, '2024-2-21T10:30:00', 2, false),
+    (4, '2024-2-25T08:45:00', 2, true),
+    (3, '2024-2-15T12:00:00', 3, false),
+    (1, '2024-2-27T10:30:00', 3, false),
+    (3, '2024-2-28T10:00:00', 4, false);
 
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
