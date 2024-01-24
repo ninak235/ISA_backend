@@ -173,7 +173,7 @@ public class AvailableDateService {
             if (getAvailableCompanyAdmin(dateTime, company.getId()) != null){
 
                 CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
-                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, Duration.ofMinutes(30));
+                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, 3);
                 newDates.add(availableDate);
             }
         }
@@ -189,7 +189,7 @@ public class AvailableDateService {
             for (LocalDateTime dateTime : allDateTimes) {
                 //CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
                 if(!isAdminBusy(dateTime, companyAdminId)){
-                    AvailableDate availableDate = new AvailableDate(admin, dateTime, Duration.ofMinutes(30));
+                    AvailableDate availableDate = new AvailableDate(admin, dateTime, 3);
                     newDates.add(availableDate);
                     System.out.println("New date added: " + availableDate);
                 }
@@ -210,8 +210,7 @@ public class AvailableDateService {
             LocalDate date1 = dateTime.toLocalDate();
             LocalDate date2 = startTime.toLocalDate();
             if( availableDate.getTaken() == true && date1.equals(date2) ) {
-                Duration thirtyMinutes = Duration.ofMinutes(30);
-                LocalDateTime sum = startTime.plus(thirtyMinutes);
+                LocalDateTime sum = startTime.plusHours(3);
                 if (dateTime.compareTo(startTime) >= 0 && dateTime.compareTo(sum) <= 0) {//|| sum2.compareTo(startTime) >= 0) {
 
                     busyUserIds.add(availableDate.getAdmin().getId());
@@ -229,12 +228,11 @@ public class AvailableDateService {
     private Boolean isAdminBusy(LocalDateTime dateTime, int adminId) {
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(adminId);
         Optional<CompanyAdmin> optAdmin = companyAdminRepository.findById(adminId);
-        Duration thirtyMinutes = Duration.ofMinutes(30);
         if(optAdmin != null){
             CompanyAdmin admin = optAdmin.get();
             for(AvailableDate date: availableDates){
                 LocalDateTime startTime = date.getStartTime();
-                LocalDateTime sum = startTime.plus(thirtyMinutes);
+                LocalDateTime sum = startTime.plusHours(3);
                 if(dateTime.compareTo(startTime) >= 0 && dateTime.compareTo(sum) <= 0){
                     return true;
                 }

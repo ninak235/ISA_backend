@@ -18,11 +18,7 @@ public class AvailableDate {
     @Column(name = "startTime")
     private LocalDateTime startTime;
     @Column(name = "duration")
-    private Duration duration;
-    @Column(name = "adminConfirmationDate")
-    private LocalDateTime adminConfirmationTime; // When the admin confirmed the reservation
-    @Column(name = "confirmed")
-    private boolean confirmed; // Indicates if the reservation is confirmed
+    private Integer duration;
 
     @Column(name = "taken")
     private boolean taken;
@@ -32,12 +28,10 @@ public class AvailableDate {
 
     }
 
-    public AvailableDate(CompanyAdmin admin, LocalDateTime startTime, Duration duration) {
+    public AvailableDate(CompanyAdmin admin, LocalDateTime startTime, Integer duration) {
         this.admin = admin;
         this.startTime = startTime;
         this.duration = duration;
-        this.adminConfirmationTime = null;
-        this.confirmed = false;
         this.taken = false;
     }
 
@@ -65,28 +59,12 @@ public class AvailableDate {
         this.startTime = startTime;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
-    }
-
-    public LocalDateTime getAdminConfirmationTime() {
-        return adminConfirmationTime;
-    }
-
-    public void setAdminConfirmationTime(LocalDateTime adminConfirmationTime) {
-        this.adminConfirmationTime = adminConfirmationTime;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
     }
 
     public void setTaken(boolean taken) {
@@ -109,8 +87,6 @@ public class AvailableDate {
                 ", admin=" + admin +
                 ", startTime='" + startTime + '\'' +
                 ", duration=" + duration + '\'' +
-                ", adminConfirmationTime=" + adminConfirmationTime + '\'' +
-                ", confirmed=" + confirmed +
                 '}';
     }
 
