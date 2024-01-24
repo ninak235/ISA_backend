@@ -57,11 +57,13 @@ public class CustomerService {
         Customer updatedCustomer = _customerRepository.findByUser_Email(customer.getUser().getEmail());
         updatedCustomer.setOccupation(customer.getOccupation());
         updatedCustomer.setCompanyInfo(customer.getCompanyInfo());
+        updatedCustomer.setPenaltyPoints(customer.getPenaltyPoints());
         updatedCustomer.setUser(user);
         _customerRepository.save(updatedCustomer);
 
         return updatedCustomer;
     }
+
 
     public Customer getById(Integer customerId) {
         return _customerRepository.findById(customerId).orElse(null);

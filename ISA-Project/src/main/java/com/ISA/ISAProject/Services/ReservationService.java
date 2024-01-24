@@ -1,12 +1,10 @@
 package com.ISA.ISAProject.Services;
 
-import com.ISA.ISAProject.Dto.ComEqDto;
-import com.ISA.ISAProject.Dto.EquipmentDto;
-import com.ISA.ISAProject.Dto.ReservationCancelationDTO;
-import com.ISA.ISAProject.Dto.ReservationDto;
+import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Enum.ReservationStatus;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Mapper.ReservationMapper;
+import com.ISA.ISAProject.Mapper.UserMapper;
 import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +66,23 @@ public class ReservationService {
     @Transactional
     public List<ReservationDto> getPastReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
+        Customer customer = customerService.getById(userId);
 
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         List<Reservation> pastReservations = userReservations.stream()
                 .filter(reservation -> reservation.getDateTime().isBefore(currentDateTime)  || reservation.getDateTime().isEqual(currentDateTime))
                 .collect(Collectors.toList());
+
+        for (Reservation pastRes: pastReservations
+             ) {
+            if(pastRes.getStatus().equals(ReservationStatus.Pending)){
+                pastRes.setStatus(ReservationStatus.Cancelled);
+                updateReservation(pastRes);
+                customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
+                customerRepository.save(customer);
+            }
+        }
 
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
