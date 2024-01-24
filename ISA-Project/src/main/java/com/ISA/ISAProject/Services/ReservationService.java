@@ -57,7 +57,7 @@ public class ReservationService {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         List<Reservation> futureReservations = userReservations.stream()
-                .filter(reservation -> reservation.getDateTime().isAfter(currentDateTime))
+                .filter(reservation ->addDuration(reservation).isAfter(currentDateTime))
                 .collect(Collectors.toList());
 
         return reservationMapper.mapReservationsToDto(futureReservations);
@@ -71,20 +71,27 @@ public class ReservationService {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         List<Reservation> pastReservations = userReservations.stream()
-                .filter(reservation -> reservation.getDateTime().isBefore(currentDateTime)  || reservation.getDateTime().isEqual(currentDateTime))
+                .filter(reservation -> addDuration(reservation).isBefore(currentDateTime))
                 .collect(Collectors.toList());
 
         for (Reservation pastRes: pastReservations
              ) {
-            if(pastRes.getStatus().equals(ReservationStatus.Pending)){
+            if(pastRes.getStatus().equals(ReservationStatus.Confirmed)){
                 pastRes.setStatus(ReservationStatus.Cancelled);
                 updateReservation(pastRes);
                 customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
                 customerRepository.save(customer);
+            } else if (pastRes.getStatus().equals(ReservationStatus.Pending)) {
+                pastRes.setStatus(ReservationStatus.Cancelled);
+                updateReservation(pastRes);
             }
         }
 
         return reservationMapper.mapReservationsToDto(pastReservations);
+    }
+
+    public LocalDateTime addDuration(Reservation res){
+        return res.getDateTime().plusHours(res.getDuration());
     }
 
 
