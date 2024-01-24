@@ -2,6 +2,7 @@ package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.AvailableDateDto;
 import com.ISA.ISAProject.Dto.EquipmentDto;
+import com.ISA.ISAProject.Dto.ReservationCancelationDTO;
 import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,17 @@ public class ReservationController {
     } else {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    }
+
+    @PutMapping("/cancelReservation")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ReservationCancelationDTO> cancelReservation(@RequestBody ReservationDto reservationDto){
+
+        ReservationCancelationDTO canceledReservation = reservationService.cancelReservation(reservationDto);
+        if(canceledReservation == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+            return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
     }
 }

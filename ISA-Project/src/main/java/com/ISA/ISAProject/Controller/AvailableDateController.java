@@ -44,10 +44,10 @@ public class AvailableDateController {
         }
     }
 
-    @GetMapping("/getByCompanyId/{companyId}")
+    @GetMapping("/getByCompanyId/")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@PathVariable  Integer companyId){
-        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId);
+    public ResponseEntity<List<AvailableDateDto>> getByCompanyId(@RequestParam Integer companyId , @RequestParam Integer userId){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getAllAvailableDaysByCompanyId(companyId,userId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
@@ -58,10 +58,10 @@ public class AvailableDateController {
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}")
+    @GetMapping(value = "/getExtraByCompanyId/{companyId}/{selectedDate}/{userId}")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate){
-        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate);
+    public ResponseEntity<List<AvailableDateDto>> getExtraByCompanyId(@PathVariable  Integer companyId, @PathVariable String selectedDate,@PathVariable Integer userId){
+        List<AvailableDateDto> allAvailableDates = availableDateService.getExtraAvailableDaysByCompanyId(companyId, selectedDate,userId);
         return new ResponseEntity<>(allAvailableDates, HttpStatus.OK);
     }
 
