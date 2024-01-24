@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -52,10 +53,31 @@ public class ReservationService {
     }
 
     @Transactional
-    public List<ReservationDto> getReservationsByUserId(Integer userId) {
+    public List<ReservationDto> getFutureReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
-        return reservationMapper.mapReservationsToDto(userReservations);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        List<Reservation> futureReservations = userReservations.stream()
+                .filter(reservation -> reservation.getDateTime().isAfter(currentDateTime))
+                .collect(Collectors.toList());
+
+        return reservationMapper.mapReservationsToDto(futureReservations);
     }
+
+    @Transactional
+    public List<ReservationDto> getPastReservationsByUserId(Integer userId) {
+        List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        List<Reservation> pastReservations = userReservations.stream()
+                .filter(reservation -> reservation.getDateTime().isBefore(currentDateTime)  || reservation.getDateTime().isEqual(currentDateTime))
+                .collect(Collectors.toList());
+
+        return reservationMapper.mapReservationsToDto(pastReservations);
+    }
+
 
     @Transactional
     public boolean isEquipmentReservedByAdmin(Equipment equipment, Company company) {

@@ -91,6 +91,8 @@ public class WebSecurityConfig {
                 .antMatchers("/updateSystemAdmin").hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPANYADMIN")
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/company/getAll").permitAll()
+                .antMatchers("/api/reservations/byUserId/{userId}").hasAuthority("ROLE_CUSTOMER")
+                .antMatchers("/api/reservations/pastByUserId/{userId}").hasAuthority("ROLE_CUSTOMER")
                 //.antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
                 .antMatchers("/api/equipment/**").permitAll()
                 .antMatchers(("/api/availableDate/**")).permitAll()
