@@ -32,11 +32,12 @@ VALUES
     ('Silver', 65, 20),
     ('Regular', 45, 5);
 
-INSERT INTO customers (user_id, company_info, occupation, penalty_points, loyality_program_id)
-VALUES
-    (1,'Company1', 'Medical', 4, 1),
-    (3, 'Company2', 'Dental', 3, 2);
 
+
+INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
+VALUES
+    (1,'Company1', 'Medical', 4, '2023-12-30T08:45:00', 1),
+    (3, 'Company2', 'Dental', 3, '2024-1-20T08:45:00', 2);
 
 
 INSERT INTO company_admins  (company_id, user_id)

@@ -97,6 +97,13 @@ public class CompanyAdminController {
         return new ResponseEntity<>(adminDto, HttpStatus.OK);
     }
 
+    /*
+    @GetMapping(value = "/getAll")
+    public ResponseEntity<List<CompanyAdminDto>> getAAllCompanyAdmins(){
+        List<CompanyAdminDto> admins = _companyAdminService.getAllCompanyAdmins();
+        return new ResponseEntity<>(admins, HttpStatus.OK);
+    }*/
+
     @CrossOrigin
     @PutMapping(value = "/updateAdmin")
     public ResponseEntity<Void> updateCustomer(@Valid @RequestBody CompanyAdminDto adminDto) {
