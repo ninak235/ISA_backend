@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,6 +27,9 @@ public class Customer {
     @Column(name = "PenaltyPoints")
     private long penaltyPoints;
 
+    @Column(name = "LastPenaltyPointsDateReset")
+    private LocalDateTime lastPenaltyPointsDateReset;
+
     @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Complaint> complaintSet = new HashSet<>();
     @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
@@ -36,13 +40,14 @@ public class Customer {
         this.complaintSet = new HashSet<>();
     }
 
-    public Customer(User user, String occupation, String companyInfo, Set<Complaint> complaintSet) {
+    public Customer(User user, String occupation, String companyInfo, Set<Complaint> complaintSet, LocalDateTime lastPenaltyPointsDateReset) {
         this.user = user;
         this.occupation = occupation;
         this.companyInfo = companyInfo;
         this.id = user.getId();
         this.penaltyPoints= 0;
         this.complaintSet = complaintSet;
+        this.lastPenaltyPointsDateReset = lastPenaltyPointsDateReset;
     }
 
     public Integer getId() {
@@ -113,5 +118,13 @@ public class Customer {
 
     public void setReservationSet(Set<Reservation> reservationSet) {
         this.reservationSet = reservationSet;
+    }
+
+    public LocalDateTime getLastPenaltyPointsDateReset() {
+        return lastPenaltyPointsDateReset;
+    }
+
+    public void setLastPenaltyPointsDateReset(LocalDateTime lastPenaltyPointsDateReset) {
+        this.lastPenaltyPointsDateReset = lastPenaltyPointsDateReset;
     }
 }

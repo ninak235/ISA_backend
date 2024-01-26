@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class CustomerService {
 
@@ -63,7 +66,26 @@ public class CustomerService {
         return updatedCustomer;
     }
 
+    public void resetPenaltyPoints() {
+        System.out.println("usao u reset");
+        LocalDateTime currentDate = LocalDateTime.now();
+        List<Customer> customers = _customerRepository.findAll();
+
+        for (Customer customer : customers) {
+            LocalDateTime lastResetDate = customer.getLastPenaltyPointsDateReset();
+
+            if (lastResetDate == null || !currentDate.getMonth().equals(lastResetDate.getMonth())) {
+
+                customer.setPenaltyPoints(0);
+                customer.setLastPenaltyPointsDateReset(currentDate);
+                _customerRepository.save(customer);
+            }
+        }
+    }
+
+
     public Customer getById(Integer customerId) {
+        resetPenaltyPoints();
         return _customerRepository.findById(customerId).orElse(null);
     }
 
