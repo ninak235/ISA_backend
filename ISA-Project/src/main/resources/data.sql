@@ -36,8 +36,8 @@ VALUES
 
 INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
 VALUES
-    (1,'Company1', 'Medical', 4, '2023-12-30T08:45:00', 1),
-    (3, 'Company2', 'Dental', 3, '2024-1-20T08:45:00', 2);
+    (1,'Company1', 'Medical', 0, '2023-12-30T08:45:00', 1),
+    (3, 'Company2', 'Dental', 0, '2024-1-20T08:45:00', 2);
 
 
 INSERT INTO company_admins  (company_id, user_id)
@@ -91,8 +91,8 @@ VALUES
     ('2025-10-10T17:00:00', 2, 5, 0, 1, 2),
     ('2024-01-24T17:00:00', 3, 5, 1, 1, 2),
     ('2024-01-25T17:00:00', 3, 5, 1, 1, 2),
-    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2);
-
+    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2),
+    ('2024-02-22T10:30:00', 1, 4, 1, 3, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id)
 VALUES

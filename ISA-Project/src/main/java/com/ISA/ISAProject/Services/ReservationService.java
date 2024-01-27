@@ -74,18 +74,7 @@ public class ReservationService {
                 .filter(reservation -> addDuration(reservation).isBefore(currentDateTime))
                 .collect(Collectors.toList());
 
-        for (Reservation pastRes: pastReservations
-             ) {
-            if(pastRes.getStatus().equals(ReservationStatus.Confirmed)){
-                pastRes.setStatus(ReservationStatus.Cancelled);
-                updateReservation(pastRes);
-                customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
-                customerRepository.save(customer);
-            } else if (pastRes.getStatus().equals(ReservationStatus.Pending)) {
-                pastRes.setStatus(ReservationStatus.Cancelled);
-                updateReservation(pastRes);
-            }
-        }
+
 
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
@@ -148,6 +137,52 @@ public class ReservationService {
             customer.setPenaltyPoints(customer.getPenaltyPoints()+1);
         }
         customerRepository.save(customer);
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
+        AvailableDate canceledDate = availableDates.stream()
+                .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
+                .findFirst()
+                .orElse(null);
+
+        canceledDate.setTaken(false);
+        availableDateRepository.save(canceledDate);
+
+        ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
+        return cancelationDTO;
+    }
+
+    public ReservationCancelationDTO cancelReservationQR(ReservationDto reservationDto){
+
+        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+        reservation.setStatus(ReservationStatus.Cancelled);
+        updateReservation(reservation);
+
+        Customer customer = customerService.getById(reservationDto.getCustomerId());
+
+        customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
+        customerRepository.save(customer);
+
+        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
+        AvailableDate canceledDate = availableDates.stream()
+                .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
+                .findFirst()
+                .orElse(null);
+
+        canceledDate.setTaken(false);
+        availableDateRepository.save(canceledDate);
+
+        ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
+        return cancelationDTO;
+    }
+
+    public ReservationCancelationDTO pickUpReservation(ReservationDto reservationDto){
+
+        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+        reservation.setStatus(ReservationStatus.PickedUp);
+        updateReservation(reservation);
+
+        Customer customer = customerService.getById(reservationDto.getCustomerId());
+
+
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
         AvailableDate canceledDate = availableDates.stream()
                 .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
