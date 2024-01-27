@@ -45,6 +45,10 @@ public class Equipment {
     @ManyToMany(mappedBy = "reservationEquipments")
     private Set<Reservation> equipmentReservations = new HashSet<>();
 
+    public Set<CompanyEquipment> getCompanyEquipmentSet() {
+        return companyEquipmentSet;
+    }
+
     public Equipment(){
     }
 

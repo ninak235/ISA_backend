@@ -30,6 +30,8 @@ public class ReservationService {
     private CustomerRepository customerRepository;
     @Autowired
     private CompanyAdminService companyAdminService;
+    @Autowired
+    private CompanyEquipmentRepository companyEquipmentRepository;
 
 
     @Transactional
@@ -187,6 +189,25 @@ public class ReservationService {
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
         reservation.setStatus(ReservationStatus.PickedUp);
         updateReservation(reservation);
+
+        CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
+        Company company = companyAdmin.getCompany();
+        Set<Equipment> equipmentList = reservation.getReservationEquipments();
+
+        for (Equipment e : equipmentList) {
+            Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, e);
+
+            companyEquipmentOptional.ifPresent(companyEquipment -> {
+                Integer currentQuantity = companyEquipment.getQuantity();
+                Integer newQuantity = currentQuantity - 1;
+
+                companyEquipmentRepository.updateQuantity(company, e, newQuantity);
+
+                System.out.println("UPDATE" + newQuantity);
+            });
+        }
+
+
 
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
