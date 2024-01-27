@@ -26,6 +26,12 @@ VALUES
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
+INSERT INTO location(address,city,country,latitude,longitude)
+VALUES
+    ('Vojvodjanska 22','Novi Sad','Srbija',45.245018,19.837681 ),
+    ('Tolstojeva 10' , 'Novi Sad','Srbija',45.245431,19.833935 );
+
+
 INSERT INTO loyality_program (name_category, required_points, discount)
 VALUES
     ('Gold', 100, 40),
@@ -33,11 +39,12 @@ VALUES
     ('Regular', 45, 5);
 
 
-
 INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
 VALUES
     (1,'Company1', 'Medical', 0, '2023-12-30T08:45:00', 1),
     (3, 'Company2', 'Dental', 0, '2024-1-20T08:45:00', 2);
+
+
 
 
 INSERT INTO company_admins  (company_id, user_id)
@@ -98,3 +105,7 @@ INSERT INTO reservation_equipment (reservation_id, equipment_id)
 VALUES
     (1, 1),
     (1, 2);
+
+
+
+
