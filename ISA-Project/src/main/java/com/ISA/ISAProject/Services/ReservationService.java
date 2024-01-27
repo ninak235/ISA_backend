@@ -161,14 +161,22 @@ public class ReservationService {
         customer.setPenaltyPoints(customer.getPenaltyPoints()+2);
         customerRepository.save(customer);
 
+        /*
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
         AvailableDate canceledDate = availableDates.stream()
                 .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
                 .findFirst()
                 .orElse(null);
 
-        canceledDate.setTaken(false);
-        availableDateRepository.save(canceledDate);
+        if (canceledDate != null) {
+            canceledDate.setTaken(false);
+            availableDateRepository.save(canceledDate);
+        } else {
+            // Handle the case where canceledDate is null
+            System.out.println("No matching AvailableDate found for reservation time: " + reservation.getDateTime());
+        }
+
+         */
 
         ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
         return cancelationDTO;
@@ -182,7 +190,7 @@ public class ReservationService {
 
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
-
+    /*
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
         AvailableDate canceledDate = availableDates.stream()
                 .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
@@ -191,6 +199,7 @@ public class ReservationService {
 
         canceledDate.setTaken(false);
         availableDateRepository.save(canceledDate);
+        */
 
         ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
         return cancelationDTO;
