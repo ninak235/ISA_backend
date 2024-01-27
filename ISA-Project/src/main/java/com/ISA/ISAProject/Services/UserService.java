@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class UserService {
         return _userRepository.save(updatedUser);
     }
 
+
     public User getById(Integer userId) {
         return _userRepository.findById(userId).orElse(null);
     }
@@ -71,7 +73,7 @@ public class UserService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints(), dto.getLoyalityProgramId());
     }
 
 }

@@ -35,13 +35,15 @@ public class CustomerDto {
 
     private long penaltyPoints;
 
+    private Integer loyalityProgramId;
+
     private Set<Reservation> reservationSet;
 
     public CustomerDto(){
 
     }
 
-    public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints) {
+    public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints, Integer loyalityProgramId) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
         this.userName = user.getUsername();
@@ -53,6 +55,7 @@ public class CustomerDto {
         this.occupation = occupation;
         this.companyInfo = companyInfo;
         this.penaltyPoints = penaltyPoints;
+        this.loyalityProgramId = loyalityProgramId;
     }
 
     public String getFirstName() {
@@ -133,6 +136,14 @@ public class CustomerDto {
 
     public void setPenaltyPoints(Integer penaltyPoints) {
         this.penaltyPoints = penaltyPoints;
+    }
+
+    public Integer getLoyalityProgramId() {
+        return loyalityProgramId;
+    }
+
+    public void setLoyalityProgramId(Integer loyalityProgramId) {
+        this.loyalityProgramId = loyalityProgramId;
     }
 
     public String getUserName() {

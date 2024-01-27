@@ -44,12 +44,12 @@ public class Reservation {
 
 
 
-    public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, ReservationStatus status, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
+    public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
         this.id = id;
         this.dateTime = dateTime;
         this.duration = duration;
         this.grade = grade;
-        this.status = status;
+        this.status = ReservationStatus.Pending;
         this.customer = customer;
         this.companyAdmin = companyAdmin;
         //this.companyEquipments = new HashSet<>();//companyEquipments;
@@ -65,6 +65,7 @@ public class Reservation {
         this.companyAdmin = reservation.getCompanyAdmin();
         this.reservationEquipments = reservation.getReservationEquipments();
     }
+
 
 
 

@@ -6,7 +6,7 @@ VALUES
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
-    ('Novi Sad', 'Srbija', '069875465','zarkokn@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '069875465','katarina.medic01@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
     -- CUSTOMER: 11111111
     ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','AdminCompany1', true, 'Janic', '$2a$12$P9VeoGInlK53ACrgEuwl5O2iLay0ZLHkzj3q71bv/mXmw3uThJZ8i', false,'2017-10-01 21:58:58.508-07'),
     -- COMPANY ADMIN: 22222222
@@ -32,11 +32,17 @@ VALUES
     ('Tolstojeva 10' , 'Novi Sad','Srbija',45.245431,19.833935 );
 
 
-
-INSERT INTO customers (user_id, company_info, occupation, penalty_points)
+INSERT INTO loyality_program (name_category, required_points, discount)
 VALUES
-    (1,'Company1', 'Medical', 4),
-    (3, 'Company2', 'Dental', 3);
+    ('Gold', 100, 40),
+    ('Silver', 65, 20),
+    ('Regular', 45, 5);
+
+
+INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
+VALUES
+    (1,'Company1', 'Medical', 0, '2023-12-30T08:45:00', 1),
+    (3, 'Company2', 'Dental', 0, '2024-1-20T08:45:00', 2);
 
 
 
@@ -92,8 +98,8 @@ VALUES
     ('2025-10-10T17:00:00', 2, 5, 0, 1, 2),
     ('2024-01-24T17:00:00', 3, 5, 1, 1, 2),
     ('2024-01-25T17:00:00', 3, 5, 1, 1, 2),
-    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2);
-
+    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2),
+    ('2024-02-22T10:30:00', 1, 4, 1, 3, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id)
 VALUES

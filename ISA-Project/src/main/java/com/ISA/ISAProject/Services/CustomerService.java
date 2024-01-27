@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class CustomerService {
 
@@ -32,7 +35,7 @@ public class CustomerService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints(), dto.getLoyalityProgramId());
     }
 
     public User getByEmail(String email){
@@ -57,13 +60,34 @@ public class CustomerService {
         Customer updatedCustomer = _customerRepository.findByUser_Email(customer.getUser().getEmail());
         updatedCustomer.setOccupation(customer.getOccupation());
         updatedCustomer.setCompanyInfo(customer.getCompanyInfo());
+        updatedCustomer.setPenaltyPoints(customer.getPenaltyPoints());
         updatedCustomer.setUser(user);
         _customerRepository.save(updatedCustomer);
 
         return updatedCustomer;
     }
 
+
+    public void resetPenaltyPoints() {
+        System.out.println("usao u reset");
+        LocalDateTime currentDate = LocalDateTime.now();
+        List<Customer> customers = _customerRepository.findAll();
+
+        for (Customer customer : customers) {
+            LocalDateTime lastResetDate = customer.getLastPenaltyPointsDateReset();
+
+            if (lastResetDate == null || !currentDate.getMonth().equals(lastResetDate.getMonth())) {
+
+                customer.setPenaltyPoints(0);
+                customer.setLastPenaltyPointsDateReset(currentDate);
+                _customerRepository.save(customer);
+            }
+        }
+    }
+
+
     public Customer getById(Integer customerId) {
+        resetPenaltyPoints();
         return _customerRepository.findById(customerId).orElse(null);
     }
 

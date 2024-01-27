@@ -98,4 +98,29 @@ public class ReservationController {
         else
             return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
     }
+
+    @PutMapping("/cancelReservationQR")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ReservationCancelationDTO> cancelReservationQR(@RequestBody ReservationDto reservationDto){
+
+        ReservationCancelationDTO canceledReservation = reservationService.cancelReservationQR(reservationDto);
+        if(canceledReservation == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+            return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
+    }
+
+    @PutMapping("/pickUpReservation")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ReservationCancelationDTO> pickUpReservation(@RequestBody ReservationDto reservationDto){
+
+        ReservationCancelationDTO canceledReservation = reservationService.pickUpReservation(reservationDto);
+        if(canceledReservation == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+            emailService.sendConfirmationEmail(canceledReservation, userService.findById(reservationDto.getCustomerId()).getEmail());
+            return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
+    }
 }
