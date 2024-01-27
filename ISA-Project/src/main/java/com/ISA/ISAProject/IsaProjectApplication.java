@@ -2,6 +2,8 @@ package com.ISA.ISAProject;
 
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,12 @@ public class IsaProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(IsaProjectApplication.class, args);
+	}
+
+	@Bean
+	public ConnectionFactory connectionFactory() {
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
+		return connectionFactory;
 	}
 
 }
