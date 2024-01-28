@@ -19,8 +19,9 @@ public class Company {
     @Column(name = "Name" , unique = true,nullable = false)
     private String name;
 
-    @Column(name = "Adress" , unique = true,nullable = false)
-    private String adress;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
     @Column(name = "Description",nullable = false)
     private String description;
@@ -52,9 +53,9 @@ public class Company {
         this.companyAdminSet = new HashSet<>();
     }
 
-    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
+    public Company(String name, Location location, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
-        this.adress = adress;
+        this.location = location;
         this.description = description;
         this.grade =  grade;
         this.startWorkingTime = startWorkingTime;
@@ -80,12 +81,12 @@ public class Company {
         this.name = name;
     }
 
-    public String getAddress() {
-        return  adress;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public String getDescription() {

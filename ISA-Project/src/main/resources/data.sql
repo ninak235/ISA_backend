@@ -1,8 +1,16 @@
-INSERT INTO Company (name, adress, start_working_time, end_working_time, description, grade, deleted)
+INSERT INTO location(address, city, country, latitude, longitude)
 VALUES
-    ('Company1', 'Address1', '09:00:00', '17:30:00',  'Description1', 'A', false),
-    ('Company2', 'Address2', '09:00:00', '17:30:00', 'Description2', 'B', false),
-    ('Company3', 'Address3', '09:00:00', '17:30:00', 'Description3', 'C', false);
+    ('Vojvodjanska 22', 'Novi Sad', 'Srbija', 45.245018, 19.837681),
+    ('Tolstojeva 10', 'Novi Sad', 'Srbija', 45.245431, 19.833935),
+    ('Gunduliceva 22', 'Novi Sad', 'Srbija', 45.34343, 19.434333),
+    ('Sumadijska 18', 'Novi Sad', 'Srbija', 45.2334, 19.323233);
+
+
+INSERT INTO Company (name, location_id, start_working_time, end_working_time, description, grade, deleted)
+VALUES
+    ('Company1', 1, '09:00:00', '17:30:00',  'Description1', 'A', false),
+    ('Company2', 2, '09:00:00', '17:30:00', 'Description2', 'B', false),
+    ('Company3', 3, '09:00:00', '17:30:00', 'Description3', 'C', false);
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
@@ -26,10 +34,7 @@ VALUES
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
-INSERT INTO location(address,city,country,latitude,longitude)
-VALUES
-    ('Vojvodjanska 22','Novi Sad','Srbija',45.245018,19.837681 ),
-    ('Tolstojeva 10' , 'Novi Sad','Srbija',45.245431,19.833935 );
+
 
 
 INSERT INTO loyality_program (name_category, required_points, discount)
