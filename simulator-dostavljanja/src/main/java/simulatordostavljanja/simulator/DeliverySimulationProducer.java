@@ -17,9 +17,9 @@ public class DeliverySimulationProducer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void sendToExchange(String exchange, String routingkey, ContractBean contract){
+    public void sendToExchange(String exchange, String routingkey, String contract){
+        log.info("Sending> ... Message=[ " + contract + " ] Exchange=[" + exchange + "] RoutingKey=[" + routingkey + "]");
         rabbitTemplate.convertAndSend(exchange, routingkey, contract);
-        System.out.println("Poruka poslata u razmjenu (" + exchange + ") s ključem rutiranja (" + routingkey + ")");
     }
 
 }

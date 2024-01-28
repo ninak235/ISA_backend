@@ -13,8 +13,8 @@ public class DeliverySimulationController {
     @Autowired
     private DeliverySimulationProducer producer;
 
-    @PostMapping(value="/{exchange}/{queue}",consumes = "application/json")
-    public ResponseEntity<String> sendMessageToExchange(@PathVariable("exchange") String exchange, @PathVariable("queue") String queue, @RequestBody ContractBean contract) {
+    @PostMapping(value="/{exchange}/{queue}",consumes = "text/plain")
+    public ResponseEntity<String> sendMessageToExchange(@PathVariable("exchange") String exchange, @PathVariable("queue") String queue, @RequestBody String contract) {
         producer.sendToExchange(exchange, queue, contract);
         return ResponseEntity.ok().build();
     }

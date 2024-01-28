@@ -3,7 +3,7 @@ package com.ISA.ISAProject.Dto;
 import java.util.List;
 
 public class ContractDto {
-    private List<String> equipmentNames;
+    //private List<String> equipmentNames;
     private int quantity;
     private String exactDeliveryTime;
     private String hospitalName;
@@ -18,14 +18,14 @@ public class ContractDto {
         this.hospitalName = hospitalName;
         this.hospitalAddress = hospitalAddress;
     }
-
+/*
     public List<String> getEquipmentNames() {
         return equipmentNames;
     }
 
     public void setEquipmentNames(List<String> equipmentNames) {
         this.equipmentNames = equipmentNames;
-    }
+    }*/
 
     public int getQuantity() {
         return quantity;
@@ -62,7 +62,7 @@ public class ContractDto {
     @Override
     public String toString() {
         return "ContractDto{" +
-                "equipmentNames=" + equipmentNames +
+                //"equipmentNames=" + equipmentNames +
                 ", quantity=" + quantity +
                 ", exactDeliveryTime='" + exactDeliveryTime + '\'' +
                 ", hospitalName='" + hospitalName + '\'' +

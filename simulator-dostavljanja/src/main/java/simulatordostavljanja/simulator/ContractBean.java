@@ -1,30 +1,31 @@
 package simulatordostavljanja.simulator;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ContractBean {
+public class ContractBean{
 
-    private List<String> equipmentNames;
+   // private List<String> equipmentNames;
     private int quantity;
     private String exactDeliveryTime;
     private String hospitalName;
     private String hospitalAddress;
 
-    public ContractBean(List<String> equipmentNames, int quantity, String exactDeliveryTime, String hospitalName, String hospitalAddress) {
-        this.equipmentNames = equipmentNames;
+    public ContractBean(int quantity, String exactDeliveryTime, String hospitalName, String hospitalAddress) {
+        //this.equipmentNames = equipmentNames;
         this.quantity = quantity;
         this.exactDeliveryTime = exactDeliveryTime;
         this.hospitalName = hospitalName;
         this.hospitalAddress = hospitalAddress;
     }
-
+/*
     public List<String> getEquipmentNames() {
         return equipmentNames;
     }
 
     public void setEquipmentNames(List<String> equipmentNames) {
         this.equipmentNames = equipmentNames;
-    }
+    }*/
 
     public int getQuantity() {
         return quantity;
@@ -62,7 +63,7 @@ public class ContractBean {
     @Override
     public String toString() {
         return "Contract{" +
-                "equipmentNames=" + equipmentNames +
+               // "equipmentNames=" + equipmentNames +
                 ", quantity=" + quantity +
                 ", exactDeliveryTime='" + exactDeliveryTime + '\'' +
                 ", hospitalName='" + hospitalName + '\'' +

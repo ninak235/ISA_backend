@@ -21,7 +21,7 @@ public class SimulatorDostavljanjaApplication {
 	@Value("delivery-simulator")
 	String queue;
 
-	@Value("myexchange")
+	@Value("exchange")
 	String exchange;
 
 	@Value("delivery-simulator")
