@@ -30,4 +30,5 @@ public class LocationService {
         _locationRepository.save(location);
         return  new LocationDto(location);
     }
+
 }
