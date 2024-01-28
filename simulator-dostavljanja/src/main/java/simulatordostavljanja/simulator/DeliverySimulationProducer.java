@@ -1,5 +1,7 @@
 package simulatordostavljanja.simulator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -17,9 +19,20 @@ public class DeliverySimulationProducer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void sendToExchange(String exchange, String routingkey, String contract){
-        log.info("Sending> ... Message=[ " + contract + " ] Exchange=[" + exchange + "] RoutingKey=[" + routingkey + "]");
-        rabbitTemplate.convertAndSend(exchange, routingkey, contract);
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    // log.info("Sending> ... Message=[ " + contract + " ] Exchange=[" + exchange + "] RoutingKey=[" + routingkey + "]");
+
+
+    public void sendToExchange(String exchange, String routingkey, ContractBean contract) {
+        try {
+            String jsonContract = objectMapper.writeValueAsString(contract);
+            rabbitTemplate.convertAndSend(exchange, routingkey, jsonContract);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            // Handle the exception accordingly
+        }
     }
 
 }
