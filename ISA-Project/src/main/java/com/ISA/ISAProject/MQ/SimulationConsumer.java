@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.MQ;
 
+import com.ISA.ISAProject.Dto.ContractDto;
 import com.ISA.ISAProject.Dto.LocationDto;
 import com.ISA.ISAProject.Model.Location;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +31,13 @@ public class SimulationConsumer {
         String jsonLocation = objectMapper.writeValueAsString(location);
         log.info(jsonLocation);
         simpMessagingTemplate.convertAndSend("/socket-publisher/", jsonLocation);
+    }
+
+    @RabbitListener(queues="delivery-simulator")
+    public void handler(ContractDto contract) throws JsonProcessingException {
+        String jsonContract = objectMapper.writeValueAsString(contract);
+        log.info(jsonContract);
+        simpMessagingTemplate.convertAndSend("/socket-publisher/", jsonContract);
     }
 
 }
