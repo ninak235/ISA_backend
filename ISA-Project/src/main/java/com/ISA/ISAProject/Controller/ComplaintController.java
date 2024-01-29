@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Controller;
 import com.ISA.ISAProject.Dto.CompanyEquipmentDto;
 import com.ISA.ISAProject.Dto.ComplaintDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
+import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Model.Complaint;
 import com.ISA.ISAProject.Model.Customer;
 import com.ISA.ISAProject.Services.ComplaintService;
@@ -21,6 +22,18 @@ public class ComplaintController {
 
     @Autowired
     private ComplaintService _complaintService;
+
+    @PostMapping("/new")
+    //@PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ComplaintDto> createReservation(@RequestBody ComplaintDto complaintDto) {
+        ComplaintDto createdComplaint = _complaintService.createComplaint(complaintDto);
+
+        if (createdComplaint != null) {
+            return new ResponseEntity<>(createdComplaint, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")

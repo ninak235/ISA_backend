@@ -33,6 +33,13 @@ public class ComplaintService {
     }
 
     @Transactional
+    public ComplaintDto createComplaint(ComplaintDto complaintDto){
+        Complaint complaint = _complaintMapper.dtoToComplaint(complaintDto);
+        _complaintRepository.save(complaint);
+        return  new ComplaintDto(complaint);
+    }
+
+    @Transactional
     public List<ComplaintDto> getAllComplaints() {
         List<Complaint> complaints = _complaintRepository.findAll();
         return _complaintMapper.mapComplaintToDto(complaints);
