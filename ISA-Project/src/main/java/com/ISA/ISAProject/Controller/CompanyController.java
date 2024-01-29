@@ -73,11 +73,11 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> registerCompany(@Valid @RequestBody CompanyDto companyDto) {
         try {
 
-            LocationDto locationDto = companyDto.getLocationDto();
-            LocationDto newLocation = _locationService.createLocation(locationDto);
+            //LocationDto locationDto = companyDto.getLocationDto();
+            //LocationDto newLocation = _locationService.createLocation(locationDto);
 
             // Postavljanje lokacije u CompanyDto
-            companyDto.setLocationDto(newLocation);
+            //companyDto.setLocationDto(newLocation);
             CompanyDto newCompany = _companyService.registerCompany(companyDto);
 
             if (newCompany == null) {

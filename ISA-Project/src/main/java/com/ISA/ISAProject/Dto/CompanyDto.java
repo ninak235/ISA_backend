@@ -3,6 +3,8 @@ package com.ISA.ISAProject.Dto;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Location;
 
+import java.time.LocalTime;
+
 
 public class CompanyDto {
     private Integer id;
@@ -87,7 +89,9 @@ public class CompanyDto {
         this.id = id;
     }
 
-  /*  public List<EquipmentDto> getEquipmentSet() {
+
+
+    /*  public List<EquipmentDto> getEquipmentSet() {
         return equipmentSet;
     }
 

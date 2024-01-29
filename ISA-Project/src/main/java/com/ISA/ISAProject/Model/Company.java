@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
@@ -21,7 +22,7 @@ public class Company {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
+    private Location locationDto;
 
     @Column(name = "Description",nullable = false)
     private String description;
@@ -30,9 +31,11 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "StartWorkingTime")
     private LocalTime startWorkingTime;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "EndWorkingTime")
     private LocalTime endWorkingTime;
 
@@ -48,6 +51,8 @@ public class Company {
     private boolean deleted;
 
     public Company(){
+        this.startWorkingTime = LocalTime.of(10, 0, 0, 0);
+        this.endWorkingTime = LocalTime.of(12, 0, 0, 0);
         this.companyEquipmentSet = new HashSet<>();
         this.deleted=false;
         this.companyAdminSet = new HashSet<>();
@@ -55,11 +60,11 @@ public class Company {
 
     public Company(String name, Location location, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
-        this.location = location;
+        this.locationDto = location;
         this.description = description;
         this.grade =  grade;
-        this.startWorkingTime = startWorkingTime;
-        this.endWorkingTime = endWorkingTime;
+        this.startWorkingTime = LocalTime.of(10, 0, 0, 0);
+        this.endWorkingTime = LocalTime.of(12, 0, 0, 0);
         this.companyEquipmentSet = companyEquipmentSet;
         this.companyAdminSet = companyAdminSet;
     }
@@ -82,11 +87,11 @@ public class Company {
     }
 
     public Location getLocation() {
-        return location;
+        return locationDto;
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.locationDto = location;
     }
 
     public String getDescription() {
@@ -105,6 +110,13 @@ public class Company {
         this.grade = grade;
     }
 
+    public Location getLocationDto() {
+        return locationDto;
+    }
+
+    public void setLocationDto(Location locationDto) {
+        this.locationDto = locationDto;
+    }
 
     @Transient
     public Set<Equipment> getEquipmentList() {
