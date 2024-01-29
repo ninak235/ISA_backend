@@ -1,46 +1,53 @@
 package simulatordostavljanja.simulator;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContractBean{
 
-   // private List<String> equipmentNames;
-    private int quantity;
-    private String exactDeliveryTime;
+    private List<String> equipmentNames;
+    private List<Integer> quantity;
+    private LocalDateTime exactDeliveryTime;
     private String hospitalName;
-    private String hospitalAddress;
+    private double hospitalAddressLong;
+    private double hospitalAddressLat;
+    private String companyName;
 
-    public ContractBean(int quantity, String exactDeliveryTime, String hospitalName, String hospitalAddress) {
-        //this.equipmentNames = equipmentNames;
-        this.quantity = quantity;
+    public ContractBean(LocalDateTime exactDeliveryTime, String hospitalName,String companyName, double hospitalAddressLong, double hospitalAddressLat) {
         this.exactDeliveryTime = exactDeliveryTime;
         this.hospitalName = hospitalName;
-        this.hospitalAddress = hospitalAddress;
+        this.hospitalAddressLong = hospitalAddressLong;
+        this.hospitalAddressLat = hospitalAddressLat;
+        this.companyName = companyName;
+        this.equipmentNames = new ArrayList<>();
+        this.quantity = new ArrayList<>();
     }
-/*
+
+
+    public LocalDateTime getExactDeliveryTime() {
+        return exactDeliveryTime;
+    }
+
+    public void setExactDeliveryTime(LocalDateTime exactDeliveryTime) {
+        this.exactDeliveryTime = exactDeliveryTime;
+    }
+
     public List<String> getEquipmentNames() {
         return equipmentNames;
     }
 
     public void setEquipmentNames(List<String> equipmentNames) {
         this.equipmentNames = equipmentNames;
-    }*/
+    }
 
-    public int getQuantity() {
+    public List<Integer> getQuantity(){
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public  void setQuantity(List<Integer> quantity){
         this.quantity = quantity;
-    }
-
-    public String getExactDeliveryTime() {
-        return exactDeliveryTime;
-    }
-
-    public void setExactDeliveryTime(String exactDeliveryTime) {
-        this.exactDeliveryTime = exactDeliveryTime;
     }
 
     public String getHospitalName() {
@@ -51,24 +58,28 @@ public class ContractBean{
         this.hospitalName = hospitalName;
     }
 
-    public String getHospitalAddress() {
-        return hospitalAddress;
+
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setHospitalAddress(String hospitalAddress) {
-        this.hospitalAddress = hospitalAddress;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-
-    @Override
-    public String toString() {
-        return "Contract{" +
-               // "equipmentNames=" + equipmentNames +
-                ", quantity=" + quantity +
-                ", exactDeliveryTime='" + exactDeliveryTime + '\'' +
-                ", hospitalName='" + hospitalName + '\'' +
-                ", hospitalAddress='" + hospitalAddress + '\'' +
-                '}';
+    public double getHospitalAddressLong() {
+        return hospitalAddressLong;
     }
 
+    public void setHospitalAddressLong(double hospitalAddressLong) {
+        this.hospitalAddressLong = hospitalAddressLong;
+    }
+
+    public double getHospitalAddressLat() {
+        return hospitalAddressLat;
+    }
+
+    public void setHospitalAddressLat(double hospitalAddressLat) {
+        this.hospitalAddressLat = hospitalAddressLat;
+    }
 }

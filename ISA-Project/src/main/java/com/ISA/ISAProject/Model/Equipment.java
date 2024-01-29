@@ -45,6 +45,19 @@ public class Equipment {
     @ManyToMany(mappedBy = "reservationEquipments")
     private Set<Reservation> equipmentReservations = new HashSet<>();
 
+    public Set<Contract> getContractsOfEquipment() {
+        return contractsOfEquipment;
+    }
+
+    public void setContractsOfEquipment(Set<Contract> contractsOfEquipment) {
+        this.contractsOfEquipment = contractsOfEquipment;
+    }
+
+    @ManyToMany
+    @JoinTable(name="contract_equipment", joinColumns=@JoinColumn(name="equipment_id"),
+                inverseJoinColumns = @JoinColumn(name="contract_id"))
+    Set<Contract> contractsOfEquipment;
+
     public Equipment(){
     }
 

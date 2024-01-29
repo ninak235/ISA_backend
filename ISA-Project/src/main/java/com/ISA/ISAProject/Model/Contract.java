@@ -1,42 +1,60 @@
-package com.ISA.ISAProject.Dto;
+package com.ISA.ISAProject.Model;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class ContractDto {
+@Entity(name = "Contracts")
+public class Contract {
 
-    private List<String> equipmentNames;
-    private List<Integer> quantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "ExactDeliveryTime",nullable = false)
     private LocalDateTime exactDeliveryTime;
+    @Column(name = "HospitalName",nullable = false)
     private String hospitalName;
+    @Column(name = "HospitalAddressLong",nullable = false)
     private double hospitalAddressLong;
+    @Column(name = "HospitalAddressLat",nullable = false)
     private double hospitalAddressLat;
+    @Column(name = "CompanyName",nullable = false)
     private String companyName;
+    @Column(name= "Quantity",nullable = false)
+    private double quantity;
+    @ManyToMany(mappedBy = "contractsOfEquipment")
+    private Set<Equipment> equipmentNames;
 
-    public ContractDto(LocalDateTime exactDeliveryTime, String hospitalName, String companyName, double hospitalAddressLat, double hospitalAddressLong) {
+    public Contract(){
+
+    }
+
+    public Contract(LocalDateTime exactDeliveryTime, String hospitalName, String companyName, double hospitalAddressLat, double hospitalAddressLong, double quantity) {
         this.exactDeliveryTime = exactDeliveryTime;
         this.hospitalName = hospitalName;
         this.hospitalAddressLat = hospitalAddressLat;
         this.hospitalAddressLong = hospitalAddressLong;
         this.companyName = companyName;
-        this.equipmentNames = new ArrayList<>();
-        this.quantity = new ArrayList<>();
+        this.equipmentNames = new HashSet<>();
+        this.quantity = quantity;
     }
 
-    public List<String> getEquipmentNames() {
+    public Set<Equipment> getEquipmentNames() {
         return equipmentNames;
     }
 
-    public void setEquipmentNames(List<String> equipmentNames) {
+    public void setEquipmentNames(Set<Equipment> equipmentNames) {
         this.equipmentNames = equipmentNames;
     }
 
-    public List<Integer> getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(List<Integer> quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
@@ -84,7 +102,7 @@ public class ContractDto {
 
     @Override
     public String toString() {
-        return "ContractDto{" +
+        return "Contract{" +
                 "equipmentNames=" + equipmentNames +
                 ", quantity=" + quantity +
                 ", exactDeliveryTime=" + exactDeliveryTime +
