@@ -23,39 +23,33 @@ public class Contract {
     private double hospitalAddressLat;
     @Column(name = "CompanyName",nullable = false)
     private String companyName;
-    @Column(name= "Quantity",nullable = false)
-    private double quantity;
+
+    /*dobar primer alternative
     @ManyToMany(mappedBy = "contractsOfEquipment")
-    private Set<Equipment> equipmentNames;
+    private Set<Equipment> contractsOfEquipment;*/
+
+    @OneToMany(mappedBy = "contract")
+    Set<ContractEquipment> contractsOfEquipment;
 
     public Contract(){
 
     }
 
-    public Contract(LocalDateTime exactDeliveryTime, String hospitalName, String companyName, double hospitalAddressLat, double hospitalAddressLong, double quantity) {
+    public Contract(LocalDateTime exactDeliveryTime, String hospitalName, String companyName, double hospitalAddressLat, double hospitalAddressLong) {
         this.exactDeliveryTime = exactDeliveryTime;
         this.hospitalName = hospitalName;
         this.hospitalAddressLat = hospitalAddressLat;
         this.hospitalAddressLong = hospitalAddressLong;
         this.companyName = companyName;
-        this.equipmentNames = new HashSet<>();
-        this.quantity = quantity;
+        this.contractsOfEquipment = new HashSet<>();
     }
 
-    public Set<Equipment> getEquipmentNames() {
-        return equipmentNames;
+    public Set<ContractEquipment> getcontractsOfEquipment() {
+        return contractsOfEquipment;
     }
 
-    public void setEquipmentNames(Set<Equipment> equipmentNames) {
-        this.equipmentNames = equipmentNames;
-    }
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
+    public void setcontractsOfEquipment(Set<ContractEquipment> contractsOfEquipment) {
+        this.contractsOfEquipment = contractsOfEquipment;
     }
 
     public LocalDateTime getExactDeliveryTime() {
@@ -103,8 +97,7 @@ public class Contract {
     @Override
     public String toString() {
         return "Contract{" +
-                "equipmentNames=" + equipmentNames +
-                ", quantity=" + quantity +
+                "contractsOfEquipment=" + contractsOfEquipment +
                 ", exactDeliveryTime=" + exactDeliveryTime +
                 ", hospitalName='" + hospitalName + '\'' +
                 ", hospitalAddressLong=" + hospitalAddressLong +

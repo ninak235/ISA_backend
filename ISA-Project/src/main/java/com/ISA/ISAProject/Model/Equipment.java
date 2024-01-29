@@ -42,21 +42,29 @@ public class Equipment {
     @Column(name="price", nullable = false)
     private Float price;
 
+
     @ManyToMany(mappedBy = "reservationEquipments")
     private Set<Reservation> equipmentReservations = new HashSet<>();
 
-    public Set<Contract> getContractsOfEquipment() {
+
+
+    public Set<ContractEquipment> getContractsOfEquipment() {
         return contractsOfEquipment;
     }
 
-    public void setContractsOfEquipment(Set<Contract> contractsOfEquipment) {
+    public void setContractsOfEquipment(Set<ContractEquipment> contractsOfEquipment) {
         this.contractsOfEquipment = contractsOfEquipment;
     }
 
+    /* dobar primer alternative
     @ManyToMany
     @JoinTable(name="contract_equipment", joinColumns=@JoinColumn(name="equipment_id"),
                 inverseJoinColumns = @JoinColumn(name="contract_id"))
-    Set<Contract> contractsOfEquipment;
+    Set<Contract> contractsOfEquipment;*/
+
+
+    @OneToMany(mappedBy = "equipment")
+    Set<ContractEquipment> contractsOfEquipment;
 
     public Equipment(){
     }

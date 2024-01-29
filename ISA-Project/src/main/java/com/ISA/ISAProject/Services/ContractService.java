@@ -2,8 +2,10 @@ package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.ContractDto;
 import com.ISA.ISAProject.Model.Contract;
+import com.ISA.ISAProject.Model.ContractEquipment;
 import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Repository.CompanyRepository;
+import com.ISA.ISAProject.Repository.ContractEquipmentRepository;
 import com.ISA.ISAProject.Repository.ContractRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class ContractService {
 
     @Autowired
     private ContractRepository _contractRepository;
+
+    @Autowired
+    private ContractEquipmentRepository _conEqRepository;
 
     public boolean isContractValid(ContractDto contractDto){
         for (String eq:
@@ -50,19 +55,18 @@ public class ContractService {
         System.out.println("USAO U CREATE");
         if(this.isContractValid(contractDto)){
             System.out.println("SVE JE OK");
-            Contract contract = new Contract(contractDto.getExactDeliveryTime(), contractDto.getHospitalName(), contractDto.getCompanyName(), contractDto.getHospitalAddressLat(), contractDto.getHospitalAddressLong(), contractDto.getQuantity().get(0));
-            Set<Equipment> equipmentSet = new HashSet<>();
+            Contract contract = new Contract(contractDto.getExactDeliveryTime(), contractDto.getHospitalName(), contractDto.getCompanyName(), contractDto.getHospitalAddressLat(), contractDto.getHospitalAddressLong());
+            _contractRepository.save(contract);
 
             for (int i = 0; i < contractDto.getEquipmentNames().size(); i++) {
                 Equipment equipment = _equipmentRepository.findEquipmentByName(contractDto.getEquipmentNames().get(i));
                 if (equipment != null) {
-                    equipmentSet.add(equipment);
-                    equipment.getContractsOfEquipment().add(contract);
+                    ContractEquipment contractEquipment = new ContractEquipment(contractDto.getQuantity().get(i));
+                    contractEquipment.setContract(contract);
+                    contractEquipment.setEquipment(equipment);
+                    _conEqRepository.save(contractEquipment);
                 }
             }
-
-            contract.setEquipmentNames(equipmentSet);
-            _contractRepository.save(contract);
         }
     }
 
