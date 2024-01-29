@@ -8,12 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Controller
 @Component
 public class SimulationConsumer {
 
@@ -24,12 +27,13 @@ public class SimulationConsumer {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @RabbitListener(queues="location-simulator")
+    @MessageMapping("/send/location")
     public void handler(LocationDto location) throws JsonProcessingException {
         //log.info("Consumer> " + location);
         locations.add(location);
         String jsonLocation = objectMapper.writeValueAsString(location);
         log.info(jsonLocation);
-        simpMessagingTemplate.convertAndSend("/socket-publisher/", jsonLocation);
+        simpMessagingTemplate.convertAndSend("/socket-publisher", jsonLocation);
     }
 
 }
