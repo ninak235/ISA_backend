@@ -56,9 +56,10 @@ public class CompanyAdminService {
     }
 
     @Transactional
-    public List<CompanyAdminDto> getAllCompanyAdmins() {
+    public List<CompanyAdmin> getAllCompanyAdmins() {
         List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
-        return _companyAdminMapper.mapCompanyAdminsToDto(companyAdmins);
+        //return _companyAdminMapper.mapCompanyAdminsToDto(companyAdmins);
+        return companyAdmins;
     }
 
     @Transactional
