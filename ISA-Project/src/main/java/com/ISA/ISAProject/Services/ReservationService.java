@@ -66,6 +66,19 @@ public class ReservationService {
     }
 
     @Transactional
+    public List<ReservationDto> getFutureReservationsByAdminId(Integer adminId) {
+        List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        List<Reservation> futureReservations = userReservations.stream()
+                .filter(reservation ->addDuration(reservation).isAfter(currentDateTime) && !reservation.getStatus().equals(ReservationStatus.PickedUp))
+                .collect(Collectors.toList());
+
+        return reservationMapper.mapReservationsToDto(futureReservations);
+    }
+
+    @Transactional
     public List<ReservationDto> getPastReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
         Customer customer = customerService.getById(userId);
@@ -75,6 +88,24 @@ public class ReservationService {
         List<Reservation> pastReservations = userReservations.stream()
                 .filter(reservation -> addDuration(reservation).isBefore(currentDateTime))
                 .collect(Collectors.toList());
+
+
+
+        return reservationMapper.mapReservationsToDto(pastReservations);
+    }
+
+    @Transactional
+    public List<ReservationDto> getPastReservationsByAdminId(Integer adminId) {
+        List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
+        //CompanyAdmin admin = companyAdminService.getById(adminId);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        List<Reservation> pastReservations = userReservations.stream()
+                .filter(reservation -> addDuration(reservation).isBefore(currentDateTime) && !reservation.getStatus().equals(ReservationStatus.PickedUp))
+                .collect(Collectors.toList());
+
+
 
 
 
