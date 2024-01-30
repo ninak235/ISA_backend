@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class DeliverySimulationConsumer {
 
     @Autowired
     private ContractService _contractService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     @RabbitListener(queues="delivery-simulator")
@@ -49,6 +53,9 @@ public class DeliverySimulationConsumer {
             log.info("Consumer:" + contract);
 
             _contractService.createContract(contract);
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

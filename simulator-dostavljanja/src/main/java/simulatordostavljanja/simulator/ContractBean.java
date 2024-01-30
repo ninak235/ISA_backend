@@ -82,4 +82,17 @@ public class ContractBean{
     public void setHospitalAddressLat(double hospitalAddressLat) {
         this.hospitalAddressLat = hospitalAddressLat;
     }
+
+    @Override
+    public String toString() {
+        return "ContractBean{" +
+                "equipmentNames=" + equipmentNames +
+                ", quantity=" + quantity +
+                ", exactDeliveryTime=" + exactDeliveryTime +
+                ", hospitalName='" + hospitalName + '\'' +
+                ", hospitalAddressLong=" + hospitalAddressLong +
+                ", hospitalAddressLat=" + hospitalAddressLat +
+                ", companyName='" + companyName + '\'' +
+                '}';
+    }
 }

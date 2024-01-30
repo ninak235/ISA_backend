@@ -1,4 +1,7 @@
-package com.ISA.ISAProject.Model;
+package com.ISA.ISAProject.Dto;
+
+import com.ISA.ISAProject.Model.Contract;
+import com.ISA.ISAProject.Model.ContractEquipment;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -7,48 +10,53 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity(name = "Contracts")
-public class Contract {
+public class ContractFrontDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "ExactDeliveryTime",nullable = false)
     private LocalDateTime exactDeliveryTime;
-    @Column(name = "HospitalName",nullable = false)
     private String hospitalName;
-    @Column(name = "HospitalAddressLong",nullable = false)
     private double hospitalAddressLong;
-    @Column(name = "HospitalAddressLat",nullable = false)
+
     private double hospitalAddressLat;
-    @Column(name = "CompanyName",nullable = false)
+
     private String companyName;
 
-    /*dobar primer alternative
-    @ManyToMany(mappedBy = "contractsOfEquipment")
-    private Set<Equipment> contractsOfEquipment;*/
+    private List<ContractEquipmentDto> contractsOfEquipment = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contract")
-    Set<ContractEquipment> contractsOfEquipment;
-
-    public Contract(){
-
+    public ContractFrontDto(){
+        contractsOfEquipment = new ArrayList<>();
     }
 
-    public Contract(LocalDateTime exactDeliveryTime, String hospitalName, String companyName, double hospitalAddressLat, double hospitalAddressLong) {
-        this.exactDeliveryTime = exactDeliveryTime;
-        this.hospitalName = hospitalName;
-        this.hospitalAddressLat = hospitalAddressLat;
-        this.hospitalAddressLong = hospitalAddressLong;
-        this.companyName = companyName;
-        this.contractsOfEquipment = new HashSet<>();
+    public ContractFrontDto(Contract contract) {
+        this.id = contract.getId();
+        this.exactDeliveryTime = contract.getExactDeliveryTime();
+        this.hospitalName = contract.getHospitalName();
+        this.hospitalAddressLat = contract.getHospitalAddressLat();
+        this.hospitalAddressLong = contract.getHospitalAddressLong();
+        this.companyName = contract.getCompanyName();
+        Set<ContractEquipment> equipmentSet = contract.getcontractsOfEquipment();
+        List<ContractEquipmentDto> contractEquipmentDtoSet = new ArrayList<>();
+        for (ContractEquipment conEq: equipmentSet) {
+            ContractEquipmentDto contractEquipmentDto = new ContractEquipmentDto(conEq.getQuantity(), conEq.getEquipment().getName());
+            contractEquipmentDtoSet.add(contractEquipmentDto);
+        }
+        this.contractsOfEquipment = contractEquipmentDtoSet;
     }
 
-    public Set<ContractEquipment> getcontractsOfEquipment() {
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<ContractEquipmentDto> getContractsOfEquipment() {
         return contractsOfEquipment;
     }
 
-    public void setcontractsOfEquipment(Set<ContractEquipment> contractsOfEquipment) {
+    public void setContractsOfEquipment(List<ContractEquipmentDto> contractsOfEquipment) {
         this.contractsOfEquipment = contractsOfEquipment;
     }
 
@@ -106,11 +114,4 @@ public class Contract {
                 '}';
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }
