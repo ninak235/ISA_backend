@@ -135,8 +135,9 @@ public class CompanyController {
             @PathVariable String oldCompanyName,
             @RequestParam(name = "oldId") Integer oldId,
             @RequestParam(name = "newId") Integer newId,
+            @RequestParam(name = "updatedQuantity") Integer updatedQuantity,
             @Valid @RequestBody Company updatedCompany) {
-        _companyService.changeCompanyEquipment(oldCompanyName, oldId, newId);
+        _companyService.changeCompanyEquipment(oldCompanyName, oldId, newId, updatedQuantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

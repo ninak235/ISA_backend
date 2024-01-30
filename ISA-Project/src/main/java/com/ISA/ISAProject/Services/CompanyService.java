@@ -123,7 +123,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId) {
+    public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId, Integer updatedQuantity) {
         System.out.println("Updating company equipment for company: " + companyName);
 
         // Find the company by name
@@ -139,15 +139,11 @@ public class CompanyService {
 
             // Fetch the Equipment entity with newId from the database
             Optional<Equipment> optionalNewEquipment = _equipmentRepository.findById(newId);
-
+            companyEquipment.setQuantity(updatedQuantity);
             if (optionalNewEquipment.isPresent()) {
                 Equipment newEquipment = optionalNewEquipment.get();
-
                 // Set the new equipment for the found CompanyEquipment
                 companyEquipment.setEquipment(newEquipment);
-
-                // Save the updated company
-                _companyRepository.save(existingCompany);
 
                 System.out.println("Updated Company: " + existingCompany);
                 System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
@@ -155,6 +151,8 @@ public class CompanyService {
                 // Handle the case where the equipment with newId is not found
                 System.out.println("Equipment with newId not found");
             }
+            // Save the updated company
+            _companyRepository.save(existingCompany);
         } else {
             // Handle the case where the CompanyEquipment with oldId is not found
             System.out.println("CompanyEquipment with oldId not found");
