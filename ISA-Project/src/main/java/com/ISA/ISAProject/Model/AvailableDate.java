@@ -1,12 +1,13 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class AvailableDate {
+public class AvailableDate implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

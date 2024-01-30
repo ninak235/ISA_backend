@@ -9,6 +9,7 @@ import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
@@ -90,11 +91,15 @@ public class CompanyService {
         return null;
     }*/
 
+
     @Transactional
     public Company getById(Integer companyId){
         return _companyRepository.findById(companyId).orElse(null);
     }
 
+    @Cacheable(
+            value = "companyCache",
+            key ="#companyName")
     @Transactional
     public Company getByName(String companyName){
         return _companyRepository.findCompanyByName(companyName);

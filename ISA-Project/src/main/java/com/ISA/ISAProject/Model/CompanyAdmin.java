@@ -1,12 +1,13 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "CompanyAdmins")
-public class CompanyAdmin {
+public class CompanyAdmin implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,6 +12,10 @@ import com.ISA.ISAProject.Token.AccountConfirmationToken;
 import com.ISA.ISAProject.Token.PickUpReservationToken;
 import com.ISA.ISAProject.Token.ReservationConfirmationToken;
 import com.ISA.ISAProject.Token.TokenUtils;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,8 +50,10 @@ public class AuthenticationController {
     @Autowired
     private UserService _userService;
 
+    private final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/login")
+    @RateLimiter(name = "standard", fallbackMethod = "standardFallback")
     public ResponseEntity<UserTokenStateDto> createAuthenticationToken(@RequestBody JwtAuthenticationRequestDto authenticationRequestDto){
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -60,6 +66,12 @@ public class AuthenticationController {
         int expiresIn = tokenUtils.getExpiredIn();
         System.out.println(jwt);
         return ResponseEntity.ok(new UserTokenStateDto(jwt, expiresIn));
+    }
+
+    private ResponseEntity<UserTokenStateDto> standardFallback(JwtAuthenticationRequestDto authenticationRequestDto, RequestNotPermitted rnp) {
+        LOG.warn("Prevazidjen broj poziva u ogranicenom vremenskom intervalu");
+        // Samo prosledjujemo izuzetak -> global exception handler koji bi ga obradio :)
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
 

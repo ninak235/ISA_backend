@@ -4,13 +4,14 @@ import com.ISA.ISAProject.Enum.TypeOfEquipment;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Where(clause = "deleted = false")
 @Entity(name = "Equipment")
-public class Equipment {
+public class Equipment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
