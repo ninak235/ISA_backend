@@ -12,6 +12,7 @@ import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 
 import java.util.*;
 
@@ -134,5 +135,17 @@ public class ContractService {
             contractFrontDtos.add(contractFrontDto);
         }
         return  contractFrontDtos;
+    }
+
+    @Transactional
+    public void changeDate(String response) {
+        Contract contract = _contractRepository.findContractByHospitalName(response);
+        if(contract != null){
+            System.out.println("PRE" + contract.getExactDeliveryTime());
+            LocalDateTime newDate = contract.getExactDeliveryTime().plusMonths(1);
+            System.out.println("POSLE" + newDate);
+            contract.setExactDeliveryTime(newDate);
+            _contractRepository.save(contract);
+        }
     }
 }
