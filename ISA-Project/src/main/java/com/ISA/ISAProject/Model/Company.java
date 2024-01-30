@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
@@ -19,8 +20,9 @@ public class Company {
     @Column(name = "Name" , unique = true,nullable = false)
     private String name;
 
-    @Column(name = "Adress" , unique = true,nullable = false)
-    private String adress;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location locationDto;
 
     @Column(name = "Description",nullable = false)
     private String description;
@@ -29,9 +31,11 @@ public class Company {
     @Column(name = "Grade")
     private String grade;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "StartWorkingTime")
     private LocalTime startWorkingTime;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "EndWorkingTime")
     private LocalTime endWorkingTime;
 
@@ -47,18 +51,20 @@ public class Company {
     private boolean deleted;
 
     public Company(){
+        this.startWorkingTime = LocalTime.of(10, 0, 0, 0);
+        this.endWorkingTime = LocalTime.of(12, 0, 0, 0);
         this.companyEquipmentSet = new HashSet<>();
         this.deleted=false;
         this.companyAdminSet = new HashSet<>();
     }
 
-    public Company(String name, String adress, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
+    public Company(String name, Location location, String description, String grade, LocalTime startWorkingTime, LocalTime endWorkingTime, Set<CompanyEquipment> companyEquipmentSet, Set<CompanyAdmin> companyAdminSet) {
         this.name = name;
-        this.adress = adress;
+        this.locationDto = location;
         this.description = description;
         this.grade =  grade;
-        this.startWorkingTime = startWorkingTime;
-        this.endWorkingTime = endWorkingTime;
+        this.startWorkingTime = LocalTime.of(10, 0, 0, 0);
+        this.endWorkingTime = LocalTime.of(12, 0, 0, 0);
         this.companyEquipmentSet = companyEquipmentSet;
         this.companyAdminSet = companyAdminSet;
     }
@@ -80,12 +86,12 @@ public class Company {
         this.name = name;
     }
 
-    public String getAddress() {
-        return  adress;
+    public Location getLocation() {
+        return locationDto;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setLocation(Location location) {
+        this.locationDto = location;
     }
 
     public String getDescription() {
@@ -104,6 +110,13 @@ public class Company {
         this.grade = grade;
     }
 
+    public Location getLocationDto() {
+        return locationDto;
+    }
+
+    public void setLocationDto(Location locationDto) {
+        this.locationDto = locationDto;
+    }
 
     @Transient
     public Set<Equipment> getEquipmentList() {

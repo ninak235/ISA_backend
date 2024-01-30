@@ -63,6 +63,33 @@ public class CompanyService {
         return _companyMapper.mapCompaniesEquipmentToDto(companies);
     }
 
+    /*
+    @Transactional
+    public LocationDto getLocationForCompany(Integer comapnyId){
+        Company company = _companyRepository.findById(comapnyId).orElse(null);
+
+        if (company != null) {
+            // Ako kompanija postoji, dohvati podatke o lokaciji
+            Location location = company.getLocation();
+
+            if (location != null) {
+                // Ako postoji lokacija, mapiraj je na LocationDto i vrati
+                LocationDto locationDto = new LocationDto();
+                locationDto.setId(location.getId());
+                locationDto.setAddress(location.getAddress());
+                locationDto.setCity(location.getCity());
+                locationDto.setCountry(location.getCountry());
+                locationDto.setLatitude(location.getLatitude());
+                locationDto.setLongitude(location.getLongitude());
+
+                return locationDto;
+            }
+        }
+
+        // Ako ne postoji kompanija ili nema podataka o lokaciji, vrati null
+        return null;
+    }*/
+
     @Transactional
     public Company getById(Integer companyId){
         return _companyRepository.findById(companyId).orElse(null);
@@ -112,7 +139,7 @@ public class CompanyService {
         Company updatedCompany = _companyRepository.findCompanyByName(oldCompanyName);
 
         updatedCompany.setName(company.getName());
-        updatedCompany.setAdress(company.getAddress());
+        updatedCompany.setLocation(company.getLocation());
         updatedCompany.setDescription(company.getDescription());
         updatedCompany.setGrade(company.getGrade());
 
@@ -123,7 +150,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId) {
+    public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId, Integer updatedQuantity) {
         System.out.println("Updating company equipment for company: " + companyName);
 
         // Find the company by name
@@ -139,15 +166,11 @@ public class CompanyService {
 
             // Fetch the Equipment entity with newId from the database
             Optional<Equipment> optionalNewEquipment = _equipmentRepository.findById(newId);
-
+            companyEquipment.setQuantity(updatedQuantity);
             if (optionalNewEquipment.isPresent()) {
                 Equipment newEquipment = optionalNewEquipment.get();
-
                 // Set the new equipment for the found CompanyEquipment
                 companyEquipment.setEquipment(newEquipment);
-
-                // Save the updated company
-                _companyRepository.save(existingCompany);
 
                 System.out.println("Updated Company: " + existingCompany);
                 System.out.println("Updated CompanyEquipmentSet: " + existingCompany.getCompanyEquipmentSet());
@@ -155,6 +178,8 @@ public class CompanyService {
                 // Handle the case where the equipment with newId is not found
                 System.out.println("Equipment with newId not found");
             }
+            // Save the updated company
+            _companyRepository.save(existingCompany);
         } else {
             // Handle the case where the CompanyEquipment with oldId is not found
             System.out.println("CompanyEquipment with oldId not found");

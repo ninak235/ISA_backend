@@ -1,12 +1,21 @@
-INSERT INTO Company (name, adress, start_working_time, end_working_time, description, grade, deleted)
+INSERT INTO location(address, city, country, latitude, longitude)
 VALUES
-    ('Company1', 'Address1', '09:00:00', '17:30:00',  'Description1', 'A', false),
-    ('Company2', 'Address2', '09:00:00', '17:30:00', 'Description2', 'B', false),
-    ('Company3', 'Address3', '09:00:00', '17:30:00', 'Description3', 'C', false);
+    ('Vojvodjanska 22', 'Novi Sad', 'Srbija', 45.245018, 19.837681),
+    ('Tolstojeva 10', 'Novi Sad', 'Srbija', 45.245431, 19.833935),
+    ('Gunduliceva 22', 'Novi Sad', 'Srbija', 45.34343, 19.434333),
+    ('Sumadijska 18', 'Novi Sad', 'Srbija', 45.2334, 19.323233),
+    ('Sumadijska 29', 'Novi Sad', 'Srbija', 45.43345, 19.43553);
+
+
+INSERT INTO Company (name, location_id, start_working_time, end_working_time, description, grade, deleted)
+VALUES
+    ('Company1', 3, '09:00:00', '17:30:00',  'Description1', 'A', false),
+    ('Company2', 4, '09:00:00', '17:30:00', 'Description2', 'B', false),
+    ('Company3', 5, '09:00:00', '17:30:00', 'Description3', 'C', false);
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
-    ('Novi Sad', 'Srbija', '069875465','zarkokn@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '069875465','katarina.medic01@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
     -- CUSTOMER: 11111111
     ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','AdminCompany1', true, 'Janic', '$2a$12$P9VeoGInlK53ACrgEuwl5O2iLay0ZLHkzj3q71bv/mXmw3uThJZ8i', false,'2017-10-01 21:58:58.508-07'),
     -- COMPANY ADMIN: 22222222
@@ -26,17 +35,20 @@ VALUES
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
-INSERT INTO location(address,city,country,latitude,longitude)
+
+
+
+INSERT INTO loyality_program (name_category, required_points, discount)
 VALUES
-    ('Vojvodjanska 22','Novi Sad','Srbija',45.245018,19.837681 ),
-    ('Tolstojeva 10' , 'Novi Sad','Srbija',45.245431,19.833935 );
+    ('Gold', 100, 40),
+    ('Silver', 65, 20),
+    ('Regular', 45, 5);
 
 
-
-INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset)
+INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
 VALUES
-    (1,'Company1', 'Medical', 4, '2023-12-30T08:45:00'),
-    (3, 'Company2', 'Dental', 3, '2024-1-20T08:45:00');
+    (1,'Company1', 'Medical', 0, '2023-12-30T08:45:00', 1),
+    (3, 'Company2', 'Dental', 0, '2024-1-20T08:45:00', 2);
 
 
 
@@ -92,8 +104,8 @@ VALUES
     ('2025-10-10T17:00:00', 2, 5, 0, 1, 2),
     ('2024-01-24T17:00:00', 3, 5, 1, 1, 2),
     ('2024-01-25T17:00:00', 3, 5, 1, 1, 2),
-    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2);
-
+    ('2023-12-17T12:00:00', 5, 5, 1, 1, 2),
+    ('2024-02-22T10:30:00', 1, 4, 1, 3, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id)
 VALUES

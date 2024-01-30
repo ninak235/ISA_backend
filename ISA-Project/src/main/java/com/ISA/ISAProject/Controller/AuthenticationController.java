@@ -9,6 +9,7 @@ import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Services.*;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
+import com.ISA.ISAProject.Token.PickUpReservationToken;
 import com.ISA.ISAProject.Token.ReservationConfirmationToken;
 import com.ISA.ISAProject.Token.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,24 @@ public class AuthenticationController {
                 reservation.setStatus(ReservationStatus.Confirmed);
                 _reservationService.updateReservation(reservation);
                 return new ResponseEntity<>("Reservation successfully confirmed.", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("Reservation not found for the provided token.", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("Invalid or expired token.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/pickUp-reservation")
+    public ResponseEntity<String>PickUpReservation(@RequestParam("token") String reservationToken){
+
+        PickUpReservationToken token = _tokenService.getPickUpReservationToken(reservationToken);
+        if(token != null){
+            Reservation reservation = token.getReservation();
+            if(reservation != null){
+                reservation.setStatus(ReservationStatus.PickedUp);
+                _reservationService.updateReservation(reservation);
+                return new ResponseEntity<>("Reservation successfully picked up.", HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("Reservation not found for the provided token.", HttpStatus.NOT_FOUND);
             }

@@ -22,10 +22,9 @@ public class CustomerController {
 
 
     @GetMapping(value = "/{customerId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer customerId){
         Customer customer = _customerService.getById(customerId);
-        CustomerDto customerDto = new CustomerDto(customer.getUser(), customer.getOccupation(), customer.getCompanyInfo(), customer.getPenaltyPoints());
+        CustomerDto customerDto = new CustomerDto(customer.getUser(), customer.getOccupation(), customer.getCompanyInfo(), customer.getPenaltyPoints(), customer.getLoyalityProgram().getId());
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 

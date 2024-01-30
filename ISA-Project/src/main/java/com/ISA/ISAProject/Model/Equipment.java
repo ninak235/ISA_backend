@@ -47,7 +47,6 @@ public class Equipment {
     private Set<Reservation> equipmentReservations = new HashSet<>();
 
 
-
     public Set<ContractEquipment> getContractsOfEquipment() {
         return contractsOfEquipment;
     }

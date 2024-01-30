@@ -58,7 +58,14 @@ public class CompanyAdminService {
     }
 
     @Transactional
-    public List<CompanyAdminDto> getAllCompanyAdmins() {
+    public List<CompanyAdmin> getAllCompanyAdmins() {
+        List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
+
+        return companyAdmins;
+    }
+
+    @Transactional
+    public List<CompanyAdminDto> getCompanyAdmins() {
         List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
         List<CompanyAdminDto> companyAdminDtos = new ArrayList<>();
         for (CompanyAdmin ca: companyAdmins){

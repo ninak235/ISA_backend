@@ -1,14 +1,13 @@
 package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.EquipmentDto;
+import com.ISA.ISAProject.Dto.ReservationCancelationDTO;
 import com.ISA.ISAProject.Dto.ReservationDto;
 import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
-import com.ISA.ISAProject.Repository.AccountConfirmationTokenRepository;
-import com.ISA.ISAProject.Repository.ReservationConfirmationTokenRepository;
-import com.ISA.ISAProject.Repository.ReservationRepository;
-import com.ISA.ISAProject.Repository.UserRepository;
+import com.ISA.ISAProject.Repository.*;
 import com.ISA.ISAProject.Token.AccountConfirmationToken;
+import com.ISA.ISAProject.Token.PickUpReservationToken;
 import com.ISA.ISAProject.Token.ReservationConfirmationToken;
 import com.ISA.ISAProject.utils.QrCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,8 @@ public class EmailService {
     private AccountConfirmationTokenRepository _tokenRepository;
     @Autowired
     private ReservationConfirmationTokenRepository _reservationTokenRepository;
+    @Autowired
+    private PickUpReservationTokenRepository _pickUpReservationTokenRepository;
     @Autowired
     private ReservationRepository _reservationRepository;
     @Autowired
@@ -87,6 +88,33 @@ public class EmailService {
         }
     }
 
+    @Async
+    @Transactional
+    public void sendConfirmationEmail(ReservationCancelationDTO reserv, String email)throws MailException{
+        Optional<Reservation> reservationOptional = _reservationRepository.findById(reserv.getReservationId());
+        if(reservationOptional.isPresent()){
+            Reservation reservation = reservationOptional.get();
+            //ReservationDto reservationDto = new ReservationDto(reservation);
+            //String reservationInfo = createReservationInfoString(reservationDto);
+            try{
+                //byte[] qrCodeBytes = qrCodeUtil.generateQrCode(reservationInfo);
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                helper.setTo(email);
+                helper.setFrom(env.getProperty("spring.mail.username"));
+                helper.setSubject("Picked up Reservation!");
+                helper.setText("To pick up your reservation,please click here: " + "http://localhost:8080/auth/pickUp-reservation?token=" + generatePickUpToken(reservation));
+                //helper.addInline("qrCodeImage", new ByteArrayResource(qrCodeBytes), "image/png");
+                javaMailSender.send(message);
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("User not found for email: " + email);
+        }
+    }
+
     private String generateToken(User user){
         AccountConfirmationToken confirmationToken = new AccountConfirmationToken(user);
         _tokenRepository.save(confirmationToken);
@@ -96,6 +124,12 @@ public class EmailService {
     private String generateReservationToken(Reservation reservation){
         ReservationConfirmationToken reservationToken = new ReservationConfirmationToken(reservation);
         _reservationTokenRepository.save(reservationToken);
+        return reservationToken.getReservationToken();
+    }
+
+    private String generatePickUpToken(Reservation reservation){
+        PickUpReservationToken reservationToken = new PickUpReservationToken(reservation);
+        _pickUpReservationTokenRepository.save(reservationToken);
         return reservationToken.getReservationToken();
     }
 

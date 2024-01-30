@@ -15,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 @RestController
@@ -101,9 +103,24 @@ public class CompanyAdminController {
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<CompanyAdminDto>> getAAllCompanyAdmins(){
-        List<CompanyAdminDto> admins = _companyAdminService.getAllCompanyAdmins();
+        List<CompanyAdminDto> admins = _companyAdminService.getCompanyAdmins();
         return new ResponseEntity<>(admins, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/company/{companyId}")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
+    public ResponseEntity<List<CompanyAdminDto>> getCompanyAdmins(@PathVariable Integer companyId){
+        List<CompanyAdmin> allAdmins = _companyAdminService.getAllCompanyAdmins();
+        List<CompanyAdminDto> adminDtos = allAdmins.stream()
+                .filter(admin -> admin.getCompany().getId().equals(companyId))
+                .map(admin -> new CompanyAdminDto(admin.getUser(), admin.getCompany().getId()))
+                .collect(Collectors.toList());
+
+
+        //CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
+        return new ResponseEntity<>(adminDtos, HttpStatus.OK);
+    }
+
 
     @CrossOrigin
     @PutMapping(value = "/updateAdmin")

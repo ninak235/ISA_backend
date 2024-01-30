@@ -35,17 +35,23 @@ public class Customer {
     @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Reservation> reservationSet = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LoyalityProgramId", nullable = true)
+    private LoyalityProgram loyalityProgram;
+
     public Customer() {
         this.penaltyPoints = 0;
         this.complaintSet = new HashSet<>();
     }
 
-    public Customer(User user, String occupation, String companyInfo, Set<Complaint> complaintSet, LocalDateTime lastPenaltyPointsDateReset) {
+
+    public Customer(User user, String occupation, String companyInfo, Set<Complaint> complaintSet, LocalDateTime lastPenaltyPointsDateReset, LoyalityProgram loyalityProgram) {
         this.user = user;
         this.occupation = occupation;
         this.companyInfo = companyInfo;
         this.id = user.getId();
         this.penaltyPoints= 0;
+        this.loyalityProgram = loyalityProgram;
         this.complaintSet = complaintSet;
         this.lastPenaltyPointsDateReset = lastPenaltyPointsDateReset;
     }
@@ -96,6 +102,14 @@ public class Customer {
 
     public void setComplaintSet(Set<Complaint> complaintSet) {
         this.complaintSet = complaintSet;
+    }
+
+    public LoyalityProgram getLoyalityProgram() {
+        return loyalityProgram;
+    }
+
+    public void setLoyalityProgram(LoyalityProgram loyalityProgram) {
+        this.loyalityProgram = loyalityProgram;
     }
 
     @Override

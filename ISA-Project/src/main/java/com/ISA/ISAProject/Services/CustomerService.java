@@ -35,7 +35,7 @@ public class CustomerService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints(), dto.getLoyalityProgramId());
     }
 
     public User getByEmail(String email){
@@ -60,11 +60,13 @@ public class CustomerService {
         Customer updatedCustomer = _customerRepository.findByUser_Email(customer.getUser().getEmail());
         updatedCustomer.setOccupation(customer.getOccupation());
         updatedCustomer.setCompanyInfo(customer.getCompanyInfo());
+        updatedCustomer.setPenaltyPoints(customer.getPenaltyPoints());
         updatedCustomer.setUser(user);
         _customerRepository.save(updatedCustomer);
 
         return updatedCustomer;
     }
+
 
     public void resetPenaltyPoints() {
         System.out.println("usao u reset");

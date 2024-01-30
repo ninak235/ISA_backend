@@ -73,7 +73,7 @@ public class UserService {
         Customer customer = _userMapper.dtoToCustomer(dto);
         _customerRepository.save(customer);
 
-        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints());
+        return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints(), dto.getLoyalityProgramId());
     }
 
 }

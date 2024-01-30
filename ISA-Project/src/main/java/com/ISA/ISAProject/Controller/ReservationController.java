@@ -62,10 +62,34 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/byAdminId/{adminId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<ReservationDto>> getFutureReservationByAdminId(@PathVariable Integer adminId) {
+        List<ReservationDto> reservationsDto = reservationService.getFutureReservationsByAdminId(adminId);
+
+        if (reservationsDto != null) {
+            return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/pastByUserId/{userId}")
     //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<ReservationDto>> getPastReservationsByUserId(@PathVariable Integer userId) {
         List<ReservationDto> reservationsDto = reservationService.getPastReservationsByUserId(userId);
+
+        if (reservationsDto != null) {
+            return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/pastByAdminId/{adminId}")
+    //@PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<List<ReservationDto>> getPastReservationsByAdminId(@PathVariable Integer adminId) {
+        List<ReservationDto> reservationsDto = reservationService.getPastReservationsByAdminId(adminId);
 
         if (reservationsDto != null) {
             return new ResponseEntity<>(reservationsDto, HttpStatus.OK);
@@ -96,6 +120,31 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else
+            return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
+    }
+
+    @PutMapping("/cancelReservationQR")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ReservationCancelationDTO> cancelReservationQR(@RequestBody ReservationDto reservationDto){
+
+        ReservationCancelationDTO canceledReservation = reservationService.cancelReservationQR(reservationDto);
+        if(canceledReservation == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+            return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
+    }
+
+    @PutMapping("/pickUpReservation")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ReservationCancelationDTO> pickUpReservation(@RequestBody ReservationDto reservationDto){
+
+        ReservationCancelationDTO canceledReservation = reservationService.pickUpReservation(reservationDto);
+        if(canceledReservation == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else
+            emailService.sendConfirmationEmail(canceledReservation, userService.findById(reservationDto.getCustomerId()).getEmail());
             return new ResponseEntity<>(canceledReservation,HttpStatus.OK);
     }
 }
