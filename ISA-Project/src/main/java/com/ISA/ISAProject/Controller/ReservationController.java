@@ -124,7 +124,7 @@ public class ReservationController {
     }
 
     @PutMapping("/cancelReservationQR")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationCancelationDTO> cancelReservationQR(@RequestBody ReservationDto reservationDto){
 
         ReservationCancelationDTO canceledReservation = reservationService.cancelReservationQR(reservationDto);
@@ -136,7 +136,7 @@ public class ReservationController {
     }
 
     @PutMapping("/pickUpReservation")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationCancelationDTO> pickUpReservation(@RequestBody ReservationDto reservationDto){
 
         ReservationCancelationDTO canceledReservation = reservationService.pickUpReservation(reservationDto);
