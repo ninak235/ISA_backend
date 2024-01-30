@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Model.Location;
 import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 public class CompanyEquipmentDto {
     private Integer id;
     private String name;
-    private String adress;
+    private LocationDto locationDto;
     private String description;
     private String grade;
 
@@ -25,7 +26,19 @@ public class CompanyEquipmentDto {
     public CompanyEquipmentDto(Company company) {
         this.id = company.getId();
         this.name = company.getName();
-        this.adress = company.getAddress();
+        Location location = company.getLocation();
+
+        if (location != null) {
+            LocationDto locationDto = new LocationDto();
+            locationDto.setId(location.getId());
+            locationDto.setAddress(location.getAddress());
+            locationDto.setCity(location.getCity());
+            locationDto.setCountry(location.getCountry());
+            locationDto.setLatitude(location.getLatitude());
+            locationDto.setLongitude(location.getLongitude());
+
+            this.locationDto = locationDto;
+        }
         this.description = company.getDescription();
         this.grade = company.getGrade();
 
@@ -52,12 +65,12 @@ public class CompanyEquipmentDto {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public LocationDto getLocationDto() {
+        return locationDto;
     }
 
-    public void setAdress(String address){
-        this.adress = address;
+    public void setLocationDto(LocationDto locationDto) {
+        this.locationDto = locationDto;
     }
 
     public String getDescription() {

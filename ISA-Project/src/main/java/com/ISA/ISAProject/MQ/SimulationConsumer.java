@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.MQ;
 
 import com.ISA.ISAProject.Dto.LocationDto;
+import com.ISA.ISAProject.Dto.LocationSimulatorDto;
 import com.ISA.ISAProject.Model.Location;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,17 +24,16 @@ public class SimulationConsumer {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     private static final Logger log = LoggerFactory.getLogger(SimulationConsumer.class);
-    public List<LocationDto> locations = new ArrayList<>();
+    public List<LocationSimulatorDto> locations = new ArrayList<>();
     ObjectMapper objectMapper = new ObjectMapper();
 
     @RabbitListener(queues="location-simulator")
     @MessageMapping("/send/location")
-    public void handler(LocationDto location) throws JsonProcessingException {
+    public void handler(LocationSimulatorDto location) throws JsonProcessingException {
         //log.info("Consumer> " + location);
         locations.add(location);
         String jsonLocation = objectMapper.writeValueAsString(location);
         log.info(jsonLocation);
         simpMessagingTemplate.convertAndSend("/socket-publisher", jsonLocation);
     }
-
 }

@@ -20,10 +20,10 @@ public class Location {
     private String Address;
 
     @Column(name = "Longitude" , nullable = false)
-    private float Longitude;
+    private double Longitude;
 
     @Column(name = "Latitude" , nullable = false)
-    private float Latitude;
+    private double Latitude;
 
     public Location() {
     }
@@ -69,19 +69,19 @@ public class Location {
         Address = address;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         Longitude = longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         Latitude = latitude;
     }
 
@@ -90,7 +90,7 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return Float.compare(Longitude, location.Longitude) == 0 && Float.compare(Latitude, location.Latitude) == 0 && Objects.equals(Id, location.Id) && Objects.equals(Country, location.Country) && Objects.equals(City, location.City) && Objects.equals(Address, location.Address);
+        return Double.compare(Longitude, location.Longitude) == 0 && Double.compare(Latitude, location.Latitude) == 0 && Objects.equals(Id, location.Id) && Objects.equals(Country, location.Country) && Objects.equals(City, location.City) && Objects.equals(Address, location.Address);
     }
 
     @Override
