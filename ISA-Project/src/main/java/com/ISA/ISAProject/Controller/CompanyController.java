@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Controller;
 
+import com.ISA.ISAProject.Config.CacheConfig;
 import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Services.CompanyService;
@@ -18,6 +19,7 @@ public class CompanyController {
 
     @Autowired
     private CompanyService _companyService;
+
 
     @GetMapping("/getAll")
     public ResponseEntity<List<CompanyEquipmentDto>> getAllCompanies(){

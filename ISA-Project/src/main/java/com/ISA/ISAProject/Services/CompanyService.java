@@ -7,20 +7,17 @@ import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.CompanyEquipmentRepository;
 import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.EquipmentRepository;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Equipment;
-import com.ISA.ISAProject.Repository.CompanyRepository;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-//import lombok.ToString;
+
+
+
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -33,7 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CompanyService {
+public class CompanyService  {
 
     @Autowired
     private CompanyRepository _companyRepository;
@@ -68,6 +65,9 @@ public class CompanyService {
         return _companyRepository.findById(companyId).orElse(null);
     }
 
+    @Cacheable(
+            value = "companyCache",
+            key = "#companyName")
     @Transactional
     public Company getByName(String companyName){
         return _companyRepository.findCompanyByName(companyName);

@@ -1,5 +1,4 @@
 package com.ISA.ISAProject.Controller;
-
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Dto.JwtAuthenticationRequestDto;
 import com.ISA.ISAProject.Dto.ReservationDto;
@@ -12,6 +11,12 @@ import com.ISA.ISAProject.Token.AccountConfirmationToken;
 import com.ISA.ISAProject.Token.PickUpReservationToken;
 import com.ISA.ISAProject.Token.ReservationConfirmationToken;
 import com.ISA.ISAProject.Token.TokenUtils;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.vavr.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,11 +26,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.time.Duration;
+
 import java.time.LocalDateTime;
+import java.util.List;
+
+import java.util.function.Supplier;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,8 +55,10 @@ public class AuthenticationController {
     @Autowired
     private UserService _userService;
 
+    private final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/login")
+    @RateLimiter(name = "standard", fallbackMethod = "standardFallback")
     public ResponseEntity<UserTokenStateDto> createAuthenticationToken(@RequestBody JwtAuthenticationRequestDto authenticationRequestDto){
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -60,6 +71,16 @@ public class AuthenticationController {
         int expiresIn = tokenUtils.getExpiredIn();
         System.out.println(jwt);
         return ResponseEntity.ok(new UserTokenStateDto(jwt, expiresIn));
+    }
+
+    private ResponseEntity<UserTokenStateDto> standardFallback(JwtAuthenticationRequestDto authenticationRequestDto,RequestNotPermitted rnp) {
+        LOG.warn("Prevazidjen broj poziva u ogranicenom vremenskom intervalu");
+        // Samo prosledjujemo izuzetak -> global exception handler koji bi ga obradio :)
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+    }
+
+    public ResponseEntity<UserTokenStateDto> loginRateLimitFallback(JwtAuthenticationRequestDto authenticationRequestDto, HttpServletRequest request, Throwable throwable) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
 

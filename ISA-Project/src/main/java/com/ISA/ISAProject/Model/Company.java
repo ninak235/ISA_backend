@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Where(clause = "deleted = false")
 @Entity(name = "Company")
-public class Company {
+public class Company implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -149,7 +150,7 @@ public class Company {
         admin.setCompany(null);
 
     }
-
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -163,6 +164,20 @@ public class Company {
         return Objects.hash(id);
     }
 
+    */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return deleted == company.deleted && Objects.equals(id, company.id) && Objects.equals(name, company.name) && Objects.equals(adress, company.adress) && Objects.equals(description, company.description) && Objects.equals(grade, company.grade) && Objects.equals(startWorkingTime, company.startWorkingTime) && Objects.equals(endWorkingTime, company.endWorkingTime) && Objects.equals(companyEquipmentSet, company.companyEquipmentSet) && Objects.equals(companyAdminSet, company.companyAdminSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, adress, description, grade, startWorkingTime, endWorkingTime, companyEquipmentSet, companyAdminSet, deleted);
+    }
 
     public LocalTime getStartWorkingTime() {
         return startWorkingTime;
