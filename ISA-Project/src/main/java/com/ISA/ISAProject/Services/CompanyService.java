@@ -63,6 +63,33 @@ public class CompanyService {
         return _companyMapper.mapCompaniesEquipmentToDto(companies);
     }
 
+    /*
+    @Transactional
+    public LocationDto getLocationForCompany(Integer comapnyId){
+        Company company = _companyRepository.findById(comapnyId).orElse(null);
+
+        if (company != null) {
+            // Ako kompanija postoji, dohvati podatke o lokaciji
+            Location location = company.getLocation();
+
+            if (location != null) {
+                // Ako postoji lokacija, mapiraj je na LocationDto i vrati
+                LocationDto locationDto = new LocationDto();
+                locationDto.setId(location.getId());
+                locationDto.setAddress(location.getAddress());
+                locationDto.setCity(location.getCity());
+                locationDto.setCountry(location.getCountry());
+                locationDto.setLatitude(location.getLatitude());
+                locationDto.setLongitude(location.getLongitude());
+
+                return locationDto;
+            }
+        }
+
+        // Ako ne postoji kompanija ili nema podataka o lokaciji, vrati null
+        return null;
+    }*/
+
     @Transactional
     public Company getById(Integer companyId){
         return _companyRepository.findById(companyId).orElse(null);
@@ -112,7 +139,7 @@ public class CompanyService {
         Company updatedCompany = _companyRepository.findCompanyByName(oldCompanyName);
 
         updatedCompany.setName(company.getName());
-        updatedCompany.setAdress(company.getAddress());
+        updatedCompany.setLocation(company.getLocation());
         updatedCompany.setDescription(company.getDescription());
         updatedCompany.setGrade(company.getGrade());
 

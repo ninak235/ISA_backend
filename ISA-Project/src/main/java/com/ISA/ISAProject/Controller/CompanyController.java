@@ -1,8 +1,11 @@
 package com.ISA.ISAProject.Controller;
 
 import com.ISA.ISAProject.Dto.*;
+import com.ISA.ISAProject.Mapper.LocationMapper;
 import com.ISA.ISAProject.Model.Company;
+import com.ISA.ISAProject.Model.Location;
 import com.ISA.ISAProject.Services.CompanyService;
+import com.ISA.ISAProject.Services.LocationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +21,20 @@ public class CompanyController {
 
     @Autowired
     private CompanyService _companyService;
+    @Autowired
+    private LocationService _locationService;
+    @Autowired
+    private LocationMapper _locationMapper;
 
     @GetMapping("/getAll")
     public ResponseEntity<List<CompanyEquipmentDto>> getAllCompanies(){
         List<CompanyEquipmentDto> allCompanies = _companyService.getAllCompanies();
+
+        /*
+        for (CompanyEquipmentDto company : allCompanies) { // Prilagodite prema stvarnoj logici
+            LocationDto locationDto = _companyService.getLocationForCompany(company.getId()); // Prilagodite prema stvarnoj logici
+            company.setLocationDto(locationDto);
+        }*/
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
     }
 
@@ -55,11 +68,16 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/registerCompany", consumes = "application/json")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<CompanyDto> registerCompany(@Valid @RequestBody CompanyDto companyDto) {
         try {
 
+            //LocationDto locationDto = companyDto.getLocationDto();
+            //LocationDto newLocation = _locationService.createLocation(locationDto);
+
+            // Postavljanje lokacije u CompanyDto
+            //companyDto.setLocationDto(newLocation);
             CompanyDto newCompany = _companyService.registerCompany(companyDto);
 
             if (newCompany == null) {
@@ -71,6 +89,8 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     /*
         @PostMapping("/create")
         public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
