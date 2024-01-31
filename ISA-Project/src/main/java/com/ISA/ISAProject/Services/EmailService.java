@@ -3,6 +3,7 @@ package com.ISA.ISAProject.Services;
 import com.ISA.ISAProject.Dto.EquipmentDto;
 import com.ISA.ISAProject.Dto.ReservationCancelationDTO;
 import com.ISA.ISAProject.Dto.ReservationDto;
+import com.ISA.ISAProject.Model.Equipment;
 import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Repository.*;
@@ -45,6 +46,9 @@ public class EmailService {
     private QrCodeUtil qrCodeUtil;
     @Autowired
     private Environment env;
+
+    @Autowired
+    private EquipmentRepository _equipmentRepository;
 
     @Async
     public void sendEmail(String email) throws MailException {
@@ -150,9 +154,12 @@ public class EmailService {
                 .append(", Customer ID: ").append(reservationDto.getCustomerId())
                 .append(", Company Admin ID: ").append(reservationDto.getCompanyAdminId());
 
-        List<EquipmentDto> reservationEquipments = reservationDto.getReservationEquipments();
-            reservationInfo.append(", Reservation Equipments: ");
-            for (EquipmentDto equipment : reservationEquipments) {
+
+        reservationInfo.append(", Reservation Equipments: ");
+        for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
+            String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
+            Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
+
                 reservationInfo.append("[ID: ").append(equipment.getId())
                         .append(", Name: ").append(equipment.getName())
                         .append(", Description: ").append(equipment.getDescription())

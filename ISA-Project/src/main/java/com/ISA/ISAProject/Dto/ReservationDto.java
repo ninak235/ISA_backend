@@ -32,11 +32,19 @@ public class ReservationDto {
 
     private String customerName;
     private String customerLastName;
+    private List<ReservationEquipmentDto> reservationOfEquipments = new ArrayList<>();
 
-    private List<EquipmentDto> reservationEquipments;
+    public List<ReservationEquipmentDto> getReservationOfEquipments() {
+        return reservationOfEquipments;
+    }
+
+    public void setReservationOfEquipments(List<ReservationEquipmentDto> reservationOfEquipments) {
+        this.reservationOfEquipments = reservationOfEquipments;
+    }
+
 
     public ReservationDto() {
-        reservationEquipments = new ArrayList<>();
+        reservationOfEquipments = new ArrayList<>();
     }
 
 
@@ -54,16 +62,14 @@ public class ReservationDto {
             this.customerName = customer.getUser().getFirstName();
             this.customerLastName = customer.getUser().getLastName();
         }
-        this.reservationEquipments  = new ArrayList<>();
-        for (Equipment equipment : reservation.getReservationEquipments()) {
-            EquipmentDto equipmentDto = new EquipmentDto();
-            equipmentDto.setId(equipment.getId());
-             equipmentDto.setDescription(equipment.getDescription());
-             equipmentDto.setGrade(equipment.getGrade());
-             equipmentDto.setName(equipment.getName());
-             equipmentDto.setPrice(equipment.getPrice());
-            reservationEquipments.add(equipmentDto);
+
+        Set<ReservationEquipment> equipmentSet = reservation.getReservationOfEquipments();
+        List<ReservationEquipmentDto> resEquipmentDtoSet = new ArrayList<>();
+        for (ReservationEquipment resEq: equipmentSet) {
+            ReservationEquipmentDto reservationEquipmentDto = new ReservationEquipmentDto(resEq.getQuantity(), resEq.getEquipment().getName());
+            resEquipmentDtoSet.add(reservationEquipmentDto);
         }
+        this.reservationOfEquipments = resEquipmentDtoSet;
 
     }
 
@@ -138,12 +144,12 @@ public class ReservationDto {
     public void setCustomerLastName(String customerLastName) {
         this.customerLastName = customerLastName;
     }
-    public List<EquipmentDto> getReservationEquipments() {
+    /*public List<EquipmentDto> getReservationEquipments() {
         return reservationEquipments;
     }
 
     public void setReservationEquipments(List<EquipmentDto> reservationEquipments) {
         this.reservationEquipments = reservationEquipments;
 
-    }
+    }*/
 }

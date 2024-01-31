@@ -48,6 +48,13 @@ public class EquipmentService {
         return _equipmentMapper.mapEquipmentCompanysToDto(filteredEquipments);
     }
 
+    @Transactional
+    public EquipmentDto getByEquipmentName(String name){
+        return new EquipmentDto(_equipmentRepository.findEquipmentByName(name));
+    }
+
+
+    @Transactional
     public List<EquipmentCompanyDto> getByTypeEquipment(String type) {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();

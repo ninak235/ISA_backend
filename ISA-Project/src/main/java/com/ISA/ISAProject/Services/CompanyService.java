@@ -1,6 +1,7 @@
 package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.*;
+import com.ISA.ISAProject.Mapper.ComEqMapper;
 import com.ISA.ISAProject.Mapper.CompanyMapper;
 import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Model.*;
@@ -51,6 +52,9 @@ public class CompanyService {
 
     @Autowired
     private EquipmentMapper _equipmentMapper;
+
+    @Autowired
+    private ComEqMapper _comEqMapper;
 
     public CompanyService(CompanyMapper companyMapper, EquipmentMapper equipmentMapper){
         _companyMapper = companyMapper;
@@ -307,4 +311,14 @@ public class CompanyService {
         return _companyMapper.mapCompaniesEquipmentToDto(filteredCompanies);
     }
 
+    @Transactional
+    public ComEqDto getComEq(Integer companyId, Integer equipmentId) {
+        Company company1 = _companyRepository.findCompanyById(companyId);
+        Equipment equipment1 = _equipmentRepository.findEquipmentById(equipmentId);
+        if(company1 != null && equipment1 != null){
+            CompanyEquipment companyEquipment = _companyEquipmentRepository.findByCompanyAndEquipment(company1, equipment1);
+            return _comEqMapper.mapCompanyEquipmentToDto(companyEquipment);
+        }
+        return null;
+    }
 }

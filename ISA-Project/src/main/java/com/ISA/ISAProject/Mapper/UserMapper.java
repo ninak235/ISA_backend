@@ -29,6 +29,7 @@ public class UserMapper {
 
     public Customer dtoToCustomer(CustomerDto dto) {
         User user = modelMapper.map(dto, User.class);
+        user.setEnabled(false);
         List<Role> roles = roleService.findByName("ROLE_CUSTOMER");
         user.setRoles(roles);
         Customer customer = modelMapper.map(dto, Customer.class);

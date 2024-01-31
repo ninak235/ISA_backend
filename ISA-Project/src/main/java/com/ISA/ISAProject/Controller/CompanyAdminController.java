@@ -98,12 +98,18 @@ public class CompanyAdminController {
         return new ResponseEntity<>(adminDto, HttpStatus.OK);
     }
 
-    /*
+
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<CompanyAdminDto>> getAAllCompanyAdmins(){
-        List<CompanyAdminDto> admins = _companyAdminService.getAllCompanyAdmins();
-        return new ResponseEntity<>(admins, HttpStatus.OK);
-    }*/
+        List<CompanyAdmin> allAdmins = _companyAdminService.getAllCompanyAdmins();
+        List<CompanyAdminDto> adminDtos = allAdmins.stream()
+                .map(admin -> new CompanyAdminDto(admin.getUser(), admin.getCompany().getId()))
+                .collect(Collectors.toList());
+
+
+        //CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
+        return new ResponseEntity<>(adminDtos, HttpStatus.OK);
+    }
 
     @GetMapping(value = "/company/{companyId}")
     @PreAuthorize("hasRole('COMPANYADMIN')")

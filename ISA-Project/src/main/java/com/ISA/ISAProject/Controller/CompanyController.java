@@ -26,6 +26,12 @@ public class CompanyController {
     @Autowired
     private LocationMapper _locationMapper;
 
+    @GetMapping("/equipments/getBy/{companyId}/{equipmentId}")
+    public ResponseEntity<ComEqDto> getComEq(@PathVariable Integer companyId, @PathVariable Integer equipmentId){
+        ComEqDto comEqs = _companyService.getComEq(companyId, equipmentId);
+        return new ResponseEntity<>(comEqs, HttpStatus.OK);
+    }
+
     @GetMapping("/getAll")
     public ResponseEntity<List<CompanyEquipmentDto>> getAllCompanies(){
         List<CompanyEquipmentDto> allCompanies = _companyService.getAllCompanies();

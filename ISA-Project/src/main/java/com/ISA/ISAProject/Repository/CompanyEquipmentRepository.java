@@ -16,6 +16,10 @@ public interface CompanyEquipmentRepository extends JpaRepository<CompanyEquipme
     @Query("DELETE FROM CompanyEquipment ce WHERE ce.company.id = :companyId AND ce.equipment.id = :equipmentId")
     void deleteByCompanyIdAndEquipmentId(@Param("companyId") Integer companyId, @Param("equipmentId") Integer equipmentId);
 
-    Optional<CompanyEquipment> findByCompanyAndEquipment(Company company, Equipment equipment);
+    CompanyEquipment findByCompanyAndEquipment(Company company, Equipment equipment);
+
+    @Modifying
+    @Query("UPDATE CompanyEquipment ce SET ce.quantity = :newQuantity WHERE ce.company = :company AND ce.equipment = :equipment")
+    void updateQuantity(@Param("company") Company company, @Param("equipment") Equipment equipment, @Param("newQuantity") Integer newQuantity);
 
 }
