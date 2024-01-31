@@ -72,10 +72,17 @@ VALUES
     (3600, '2024-2-23T08:45:00', 5, true, 0),
     (3600, '2024-2-24T10:30:00', 5, false, 0),
     (3600, '2024-2-21T10:30:00', 2, false, 0),
-    (3600, '2024-2-25T08:45:00', 2, true, 0),
+    (3600, '2024-2-25T09:00:00', 2, true, 0),
     (3600, '2024-2-15T12:00:00', 3, false, 0),
     (3600, '2024-2-27T09:00:00', 3, false, 0),
     (3600, '2024-2-28T10:00:00', 4, false, 0);
+
+INSERT INTO reservation (price, date_time, duration, grade, status, version, customer_id, company_admin_id)
+VALUES
+    (1000, '2024-2-23T08:45:00', 3600, 5, 1, 0, 1, 2),
+    (200, '2024-2-25T09:00:00', 3600 , 5, 1, 0, 1, 2),
+    (500, '2023-3-31T17:00:00', 3600, 5, 1, 0, 1, 2),
+    (2000, '2023-3-25T17:00:00', 3600, 5, 3, 0, 1, 2);
 
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
@@ -98,14 +105,6 @@ VALUES
     (50, 0, 2, 3),
     (30, 0, 2, 1);
 
-INSERT INTO reservation (price, date_time, duration, grade, status, version, customer_id, company_admin_id)
-VALUES
-    ('2023-12-17T10:00:00', 1, 5, 2, 0, 1, 2),
-    ('2025-10-10T17:00:00', 2, 5, 0, 0, 1, 2),
-    ('2024-01-24T17:00:00', 3, 5, 1, 0, 1, 2),
-    ('2024-01-25T17:00:00', 3, 5, 1, 0, 1, 2),
-    ('2023-12-17T12:00:00', 5, 5, 1, 0, 1, 2),
-    ('2024-02-22T10:30:00', 1, 4, 1, 0, 3, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id, quantity)
 VALUES
@@ -113,9 +112,7 @@ VALUES
     (1, 2, 15),
     (2, 1, 4),
     (3, 3, 8),
-    (4, 3, 10),
-    (5, 1, 20),
-    (6, 1, 20);
+    (4, 3, 10);
 
 
 

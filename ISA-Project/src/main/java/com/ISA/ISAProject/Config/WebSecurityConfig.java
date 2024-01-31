@@ -79,41 +79,24 @@ public class WebSecurityConfig {
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
-
                 .antMatchers("/company/add-equipment/").hasAuthority("ROLE_COMPANYADMIN")
                 .antMatchers("/company/update/equipment/change/**").hasAuthority("ROLE_COMPANYADMIN")
                 .antMatchers("/company/update/equipment/delete/**").hasAuthority("ROLE_COMPANYADMIN")
-                //.antMatchers("/api/company/**").permitAll()
                 .antMatchers("/api/companyAdmin/*").permitAll()
-                //.antMatchers("/company/add-equipment/").hasAuthority("ROLE_COMPANYADMIN")
-                //.antMatchers("/company/update/equipment/change/**").hasAuthority("ROLE_COMPANYADMIN")
-                //.antMatchers("/company/update/equipment/delete/**").hasAuthority("ROLE_COMPANYADMIN")
                 .antMatchers("/api/company/**").permitAll()
                 .antMatchers("/api/companyAdmin/getAll").permitAll()
                 .antMatchers("/api/availableDate/getAll").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .antMatchers("/api/complaint/new").hasAuthority("ROLE_CUSTOMER") //.permitAll()
-                //.antMatchers("/complaint/update").permitAll()
-                //.antMatchers("/reservations/**").permitAll()
                 .antMatchers("/updateSystemAdmin").hasAnyAuthority("ROLE_ADMIN", "ROLE_COMPANYADMIN")
                 .antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/company/getAll").permitAll()
-                .antMatchers("/api/company/equipments/getAll").permitAll()
                 .antMatchers("/api/reservations/**").permitAll() //hasAuthority("ROLE_CUSTOMER")
-                .antMatchers("/api/reservations/pastByUserId/{userId}").permitAll() //hasAuthority("ROLE_CUSTOMER")
-                //.antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()//SWAGGER
-                .antMatchers("/api/equipment/**").permitAll()
-                .antMatchers(("/api/availableDate/**")).permitAll()
-                //.antMatchers("/api/company/registerCompany").permitAll()
                 .antMatchers("/api/equipment/**").permitAll()
                 .antMatchers(("/api/availableDate/**")).permitAll()
                 .antMatchers(("/api/user/**")).permitAll()
-                //.antMatchers(("/api/loyalityProgram/**")).permitAll()
                 .antMatchers(("/socket/**")).permitAll()
                 .antMatchers("/api/contract/**").permitAll()
-                //.antMatchers("/api/company/registerCompany").permitAll()
                 .antMatchers(("/api/location/**")).permitAll()
-                .antMatchers("/api/company/registerCompany").permitAll()
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
                 // koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
                 // samo korisnik koji ima rolu 'ADMIN', navodimo na sledeci nacin:

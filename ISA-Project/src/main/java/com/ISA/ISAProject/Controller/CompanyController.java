@@ -32,6 +32,7 @@ public class CompanyController {
         return new ResponseEntity<>(comEqs, HttpStatus.OK);
     }
 
+
     @GetMapping("/getAll")
     public ResponseEntity<List<CompanyEquipmentDto>> getAllCompanies(){
         List<CompanyEquipmentDto> allCompanies = _companyService.getAllCompanies();

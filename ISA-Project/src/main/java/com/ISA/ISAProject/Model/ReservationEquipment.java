@@ -1,9 +1,11 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
 
-public class ReservationEquipment {
+public class ReservationEquipment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
