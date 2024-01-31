@@ -25,21 +25,21 @@ public class ReservationController {
         private UserService userService;
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
+    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<List<ReservationDto>> getAllReservations() {
         List<ReservationDto> allReservations = reservationService.getAllReservations();
         return new ResponseEntity<>(allReservations, HttpStatus.OK);
     }
 
     @GetMapping("/getAllByAdminId/{companyAdminId}")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
+    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<List<ReservationDto>> getAllReservationsByCompanyAdminId(@PathVariable Integer companyAdminId) {
         List<ReservationDto> allReservations = reservationService.getAllReservationsByCompanyAdminId(companyAdminId);
         return new ResponseEntity<>(allReservations, HttpStatus.OK);
     }
 
     @GetMapping("/{reservationId}")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
+    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationDto> getReservationById(@PathVariable Integer reservationId) {
         ReservationDto reservationDto = reservationService.getReservationById(reservationId);
 
@@ -99,7 +99,7 @@ public class ReservationController {
     }
 
     @PostMapping("/new")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
         ReservationDto createdReservation = reservationService.createReservation(reservationDto);
 
@@ -112,7 +112,7 @@ public class ReservationController {
     }
 
     @PutMapping("/cancelReservation")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    //@PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ReservationCancelationDTO> cancelReservation(@RequestBody ReservationDto reservationDto){
 
         ReservationCancelationDTO canceledReservation = reservationService.cancelReservation(reservationDto);
@@ -124,7 +124,7 @@ public class ReservationController {
     }
 
     @PutMapping("/cancelReservationQR")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
+    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationCancelationDTO> cancelReservationQR(@RequestBody ReservationDto reservationDto){
 
         ReservationCancelationDTO canceledReservation = reservationService.cancelReservationQR(reservationDto);
@@ -136,7 +136,7 @@ public class ReservationController {
     }
 
     @PutMapping("/pickUpReservation")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
+    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<ReservationCancelationDTO> pickUpReservation(@RequestBody ReservationDto reservationDto){
 
         ReservationCancelationDTO canceledReservation = reservationService.pickUpReservation(reservationDto);

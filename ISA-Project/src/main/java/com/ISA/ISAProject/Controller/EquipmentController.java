@@ -64,4 +64,10 @@ public class EquipmentController {
         }
     }
 
+    @GetMapping("/byEquipmentName/{name}")
+    public ResponseEntity<EquipmentDto> getByEquipmentName(@PathVariable String name){
+        EquipmentDto createdEquipment = _equipmentService.getByEquipmentName(name);
+        return new ResponseEntity<>(createdEquipment, HttpStatus.OK);
+    }
+
 }

@@ -32,6 +32,7 @@ public class ReservationDto {
 
     private String customerName;
     private String customerLastName;
+    private List<ReservationEquipmentDto> reservationOfEquipments = new ArrayList<>();
 
     public List<ReservationEquipmentDto> getReservationOfEquipments() {
         return reservationOfEquipments;
@@ -41,7 +42,6 @@ public class ReservationDto {
         this.reservationOfEquipments = reservationOfEquipments;
     }
 
-    private List<ReservationEquipmentDto> reservationOfEquipments = new ArrayList<>();
 
     public ReservationDto() {
         reservationOfEquipments = new ArrayList<>();

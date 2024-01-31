@@ -3,8 +3,10 @@ package com.ISA.ISAProject.Services;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Mapper.UserMapper;
 import com.ISA.ISAProject.Model.Customer;
+import com.ISA.ISAProject.Model.LoyalityProgram;
 import com.ISA.ISAProject.Model.User;
 import com.ISA.ISAProject.Repository.CustomerRepository;
+import com.ISA.ISAProject.Repository.LoyalityProgramRepository;
 import com.ISA.ISAProject.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -24,6 +27,8 @@ public class CustomerService {
     private UserRepository _userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LoyalityProgramRepository _loyalityProgramRepository;
 
 
     public CustomerService(UserMapper userMapper){
@@ -33,6 +38,12 @@ public class CustomerService {
     public CustomerDto registerCustomer(CustomerDto dto){
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         Customer customer = _userMapper.dtoToCustomer(dto);
+
+        Optional<LoyalityProgram> loyalityProgramOptional = _loyalityProgramRepository.findById(3);
+        if (loyalityProgramOptional.isPresent()) {
+            LoyalityProgram loyalityProgram = loyalityProgramOptional.get();
+            customer.setLoyalityProgram(loyalityProgram);
+        }
         _customerRepository.save(customer);
 
         return new CustomerDto(customer.getUser(),dto.getOccupation(),dto.getCompanyInfo(), dto.getPenaltyPoints(), dto.getLoyalityProgramId());

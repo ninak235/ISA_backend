@@ -147,14 +147,10 @@ public class ReservationService {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
         CompanyAdmin companyAdmin = companyAdminService.getById(reservationDto.getCompanyAdminId());
-        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+        Reservation reservation = new Reservation(reservationDto.getId(), reservationDto.getDateTime(), reservationDto.getDuration(), reservationDto.getGrade(), customer, companyAdmin);
 
-        reservation.setCompanyAdmin(companyAdmin);
-        reservation.setCustomer(customer);
-
-        //Reservation reservation2 = new Reservation(reservationDto.getId(), reservationDto.getDateTime(), reservationDto.getDuration(), reservationDto.getGrade(), customer, companyAdmin);
         Reservation reservation1 = reservationRepository.save(reservation);
-
+        Set<ReservationEquipment> reservationEquipments = new HashSet<>();
         for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
             String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
             Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
@@ -162,10 +158,12 @@ public class ReservationService {
                 ReservationEquipment resEq = new ReservationEquipment(reservationDto.getReservationOfEquipments().get(i).getQuantity());
                 resEq.setReservation(reservation1);
                 resEq.setEquipment(equipment);
+                reservationEquipments.add(resEq);
                 _resEqRepository.save(resEq);
             }
         }
 
+        reservation1.setReservationOfEquipments(reservationEquipments);
         return new ReservationDto(reservation1);
     }
 
@@ -244,16 +242,16 @@ public class ReservationService {
         for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
             String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
             Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
-            Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, equipment);
+            CompanyEquipment companyEquipment = companyEquipmentRepository.findByCompanyAndEquipment(company, equipment);
 
-            companyEquipmentOptional.ifPresent(companyEquipment -> {
+            if(companyEquipment != null){
                 Integer currentQuantity = companyEquipment.getQuantity();
                 Integer newQuantity = currentQuantity - 1;
 
                 companyEquipmentRepository.updateQuantity(company, equipment, newQuantity);
 
                 System.out.println("UPDATE" + newQuantity);
-            });
+            };
         }
 
 
