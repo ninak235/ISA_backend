@@ -36,7 +36,7 @@ public class CompanyAdmin {
     */
 
     public CompanyAdmin() {
-        this.company = new Company();
+        //this.company = new Company();
         this.complaintSet = new HashSet<>();
     }
 

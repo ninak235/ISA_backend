@@ -31,6 +31,8 @@ public class ReservationService {
     @Autowired
     private CompanyAdminService companyAdminService;
     @Autowired
+    private CompanyService companyService;
+    @Autowired
     private CompanyEquipmentRepository companyEquipmentRepository;
 
 
@@ -152,6 +154,7 @@ public class ReservationService {
         return new ReservationDto(reservation1);
     }
 
+    @Transactional
     public void updateReservation(Reservation reservation){
         reservationRepository.save(reservation);
     }
@@ -215,14 +218,19 @@ public class ReservationService {
         return cancelationDTO;
     }
 
+    @Transactional
     public ReservationCancelationDTO pickUpReservation(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
         reservation.setStatus(ReservationStatus.PickedUp);
         updateReservation(reservation);
 
-        CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
-        Company company = companyAdmin.getCompany();
+        //CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
+        Integer companyAdminId = reservation.getCompanyAdmin().getId();
+        CompanyAdmin companyAdmin = companyAdminService.getById(companyAdminId);
+        Integer companyId = companyAdmin.getCompanyId();
+        Company company = companyService.getById(companyId);
+        //Company company = companyAdmin.getCompany();
         Set<Equipment> equipmentList = reservation.getReservationEquipments();
 
         for (Equipment e : equipmentList) {
@@ -230,11 +238,17 @@ public class ReservationService {
 
             companyEquipmentOptional.ifPresent(companyEquipment -> {
                 Integer currentQuantity = companyEquipment.getQuantity();
-                Integer newQuantity = currentQuantity - 1;
 
-                companyEquipmentRepository.updateQuantity(company, e, newQuantity);
+                if (currentQuantity > 0) {  // Ensure quantity is non-negative before decrementing
+                    Integer newQuantity = currentQuantity - 1;
 
-                System.out.println("UPDATE" + newQuantity);
+                    companyEquipment.setQuantity(newQuantity);  // Update the quantity in the entity
+                    companyEquipmentRepository.save(companyEquipment);  // Save the updated entity
+
+                    System.out.println("UPDATE: " + newQuantity);
+                } else {
+                    System.out.println("Cannot decrease quantity below zero.");
+                }
             });
         }
 

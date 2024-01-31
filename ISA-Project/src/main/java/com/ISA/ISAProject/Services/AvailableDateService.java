@@ -189,7 +189,7 @@ public class AvailableDateService {
             for (LocalDateTime dateTime : allDateTimes) {
                 //CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
                 if(!isAdminBusy(dateTime, companyAdminId)){
-                    AvailableDate availableDate = new AvailableDate(admin, dateTime, 3);
+                    AvailableDate availableDate = new AvailableDate(admin, dateTime, 3600);
                     newDates.add(availableDate);
                     System.out.println("New date added: " + availableDate);
                 }
@@ -232,7 +232,7 @@ public class AvailableDateService {
             CompanyAdmin admin = optAdmin.get();
             for(AvailableDate date: availableDates){
                 LocalDateTime startTime = date.getStartTime();
-                LocalDateTime sum = startTime.plusHours(3);
+                LocalDateTime sum = startTime.plusMinutes(179);
                 if(dateTime.compareTo(startTime) >= 0 && dateTime.compareTo(sum) <= 0){
                     return true;
                 }

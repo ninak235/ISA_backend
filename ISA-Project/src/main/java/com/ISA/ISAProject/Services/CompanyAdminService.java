@@ -120,6 +120,7 @@ public class CompanyAdminService {
         CompanyAdmin admin = _userMapper.dtoToCompanyAdmin(adminDto);
 
         User user = _userRepository.findByEmailIgnoreCase(adminDto.getEmail());
+        user.setId(adminDto.getId());
         user.setFirstName(adminDto.getFirstName());
         user.setLastName(adminDto.getLastName());
         user.setPassword(adminDto.getPassword());
@@ -129,7 +130,10 @@ public class CompanyAdminService {
 
         CompanyAdmin updatedAdmin = _companyAdminRepository.findByUser_Email(admin.getUser().getEmail());
 
-        updatedAdmin.setCompany(admin.getCompany());
+        Integer companyId = updatedAdmin.getCompanyId();
+        Company company = _companyService.getById(companyId);
+
+        updatedAdmin.setCompany(company);
         updatedAdmin.setUser(user);
         _companyAdminRepository.save(updatedAdmin);
 

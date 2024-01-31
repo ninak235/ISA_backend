@@ -92,7 +92,6 @@ public class CompanyAdminController {
     }
     */
     @GetMapping(value = "/{adminId}")
-    @PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<CompanyAdminDto> getAdminById(@PathVariable Integer adminId){
         CompanyAdmin admin = _companyAdminService.getById(adminId);
         CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
