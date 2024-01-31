@@ -102,7 +102,7 @@ public class ContractService {
         return true;
     }
 
-    @Transactional
+
     public void createContract(ContractDto contractDto){
         if(this.isContractValid(contractDto)){
             if(this.isContractNew(contractDto)) {
@@ -114,7 +114,7 @@ public class ContractService {
         }
     }
 
-    @Transactional
+
     public List<ContractFrontDto> getAllContracts(){
         List<Contract> contracts = _contractRepository.findAll();
         List<ContractFrontDto> contractFrontDtos = new ArrayList<>();
@@ -126,7 +126,6 @@ public class ContractService {
     }
 
 
-    @Transactional
     public List<ContractFrontDto> getAllContractsByCompanyName(String name) {
         List<Contract> contracts = _contractRepository.findContractsByCompanyName(name);
         List<ContractFrontDto> contractFrontDtos = new ArrayList<>();
@@ -137,7 +136,7 @@ public class ContractService {
         return  contractFrontDtos;
     }
 
-    @Transactional
+
     public void changeDate(String response) {
         Contract contract = _contractRepository.findContractByHospitalName(response);
         if(contract != null){

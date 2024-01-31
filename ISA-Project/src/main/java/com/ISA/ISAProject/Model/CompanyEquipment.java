@@ -28,6 +28,9 @@ public class CompanyEquipment implements Serializable {
     @ManyToMany(mappedBy = "companyEquipments")
     private Set<Reservation> reservations = new HashSet<>();*/
 
+    @Version
+    private Integer version;
+
     public CompanyEquipment(Integer id, Company company, Equipment equipment, Integer quantity) {
         this.id = id;
         this.company = company;
@@ -69,6 +72,14 @@ public class CompanyEquipment implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

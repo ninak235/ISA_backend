@@ -10,7 +10,11 @@ import com.ISA.ISAProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.OptimisticLockException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,6 +35,8 @@ public class ReservationService {
     @Autowired
     private CompanyAdminService companyAdminService;
     @Autowired
+    private CompanyService companyService;
+    @Autowired
     private CompanyEquipmentRepository companyEquipmentRepository;
     @Autowired
     private EquipmentRepository _equipmentRepository;
@@ -38,25 +44,25 @@ public class ReservationService {
     private ReservationEquipmentRepository _resEqRepository;
 
 
-    @Transactional
+    //@Transactional
     public List<ReservationDto> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
         return  reservationMapper.mapReservationsToDto(reservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getAllReservationsByCompanyAdminId(Integer companyAdminId) {
         List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdminId);
         return reservationMapper.mapReservationsToDto(reservations);
     }
 
-    @Transactional
+
     public ReservationDto getReservationById(Integer reservationId) {
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         return optionalReservation.map(reservationMapper::mapReservationToDto).orElse(null);
     }
 
-    @Transactional
+
     public List<ReservationDto> getFutureReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
 
@@ -69,7 +75,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(futureReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getFutureReservationsByAdminId(Integer adminId) {
         List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
 
@@ -82,7 +88,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(futureReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getPastReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
         Customer customer = customerService.getById(userId);
@@ -98,7 +104,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getPastReservationsByAdminId(Integer adminId) {
         List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
         //CompanyAdmin admin = companyAdminService.getById(adminId);
@@ -109,10 +115,6 @@ public class ReservationService {
                 .filter(reservation -> addDuration(reservation).isBefore(currentDateTime) && !reservation.getStatus().equals(ReservationStatus.PickedUp))
                 .collect(Collectors.toList());
 
-
-
-
-
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
 
@@ -121,7 +123,7 @@ public class ReservationService {
     }
 
 
-    @Transactional
+
     public boolean isEquipmentReservedByAdmin(Equipment equipment, Company company) {
         List<CompanyAdmin> companyAdmins = new ArrayList<>(company.getCompanyAdmin());
 
@@ -142,7 +144,7 @@ public class ReservationService {
     }
 
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
@@ -167,10 +169,25 @@ public class ReservationService {
         return new ReservationDto(reservation1);
     }
 
+    @Transactional
     public void updateReservation(Reservation reservation){
-        reservationRepository.save(reservation);
+        // Fetch the existing Reservation entity
+        Reservation existingReservation = reservationRepository.findById(reservation.getId()).orElse(null);
+
+        if (existingReservation != null) {
+            // Update the existing entity with the changes
+            existingReservation.setStatus(reservation.getStatus());
+            // Update other fields as needed
+
+            // Save the updated entity
+            reservationRepository.save(existingReservation);
+        } else {
+            // Handle the case where the entity with the given ID is not found
+            // (Optional: throw an exception, log a warning, etc.)
+        }
     }
 
+    //@Transactional
     public ReservationCancelationDTO cancelReservation(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
@@ -198,6 +215,7 @@ public class ReservationService {
         return cancelationDTO;
     }
 
+    //@Transactional
     public ReservationCancelationDTO cancelReservationQR(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
@@ -230,6 +248,7 @@ public class ReservationService {
         return cancelationDTO;
     }
 
+    @Transactional
     public ReservationCancelationDTO pickUpReservation(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
@@ -246,7 +265,8 @@ public class ReservationService {
 
             if(companyEquipment != null){
                 Integer currentQuantity = companyEquipment.getQuantity();
-                Integer newQuantity = currentQuantity - 1;
+                Integer newQuantity = currentQuantity - reservationDto.getReservationOfEquipments().get(i).getQuantity();
+                System.out.println("NEW*************" + newQuantity);
 
                 companyEquipmentRepository.updateQuantity(company, equipment, newQuantity);
 

@@ -1,5 +1,4 @@
 package com.ISA.ISAProject.Controller;
-import com.ISA.ISAProject.Dto.CompanyAdminBasicDto;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.Complaint;
@@ -46,7 +45,7 @@ public class CompanyAdminController {
 
 
     @PostMapping(value = "/registerCompanyAdmin")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> registerCompanyAdmin(@Valid @RequestBody CompanyAdminDto registrationDto) {
         try {
             if (_emailService.isEmailUnique(registrationDto.getEmail())) {
@@ -93,7 +92,6 @@ public class CompanyAdminController {
     }
     */
     @GetMapping(value = "/{adminId}")
-    //@PreAuthorize("hasRole('COMPANYADMIN')")
     public ResponseEntity<CompanyAdminDto> getAdminById(@PathVariable Integer adminId){
         CompanyAdmin admin = _companyAdminService.getById(adminId);
         CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
@@ -103,8 +101,14 @@ public class CompanyAdminController {
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<CompanyAdminDto>> getAAllCompanyAdmins(){
-        List<CompanyAdminDto> admins = _companyAdminService.getCompanyAdmins();
-        return new ResponseEntity<>(admins, HttpStatus.OK);
+        List<CompanyAdmin> allAdmins = _companyAdminService.getAllCompanyAdmins();
+        List<CompanyAdminDto> adminDtos = allAdmins.stream()
+                .map(admin -> new CompanyAdminDto(admin.getUser(), admin.getCompany().getId()))
+                .collect(Collectors.toList());
+
+
+        //CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
+        return new ResponseEntity<>(adminDtos, HttpStatus.OK);
     }
 
     @GetMapping(value = "/company/{companyId}")
@@ -120,7 +124,6 @@ public class CompanyAdminController {
         //CompanyAdminDto adminDto = new CompanyAdminDto(admin.getUser(), admin.getCompany().getId());
         return new ResponseEntity<>(adminDtos, HttpStatus.OK);
     }
-
 
     @CrossOrigin
     @PutMapping(value = "/updateAdmin")

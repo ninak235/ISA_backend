@@ -37,7 +37,7 @@ public class CompanyAdmin implements Serializable {
     */
 
     public CompanyAdmin() {
-        this.company = new Company();
+        //this.company = new Company();
         this.complaintSet = new HashSet<>();
     }
 

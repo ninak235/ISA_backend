@@ -74,7 +74,7 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/registerCompany", consumes = "application/json")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<CompanyDto> registerCompany(@Valid @RequestBody CompanyDto companyDto) {
         try {
@@ -147,6 +147,7 @@ public class CompanyController {
 
     @CrossOrigin
     @PutMapping(value = "/update/{oldCompanyName}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateCompany(@PathVariable String oldCompanyName, @Valid @RequestBody CompanyDto companyDto) {
         Company company = _companyService.updateCompany(oldCompanyName, companyDto);
         if (company != null) {

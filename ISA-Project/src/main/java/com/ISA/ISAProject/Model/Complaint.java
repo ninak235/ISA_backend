@@ -24,6 +24,9 @@ public class Complaint implements Serializable {
     @JoinColumn(name = "CustomerId", nullable = false)
     private Customer customer;
 
+    @Version
+    private Integer version;
+
     public Complaint() {
         this.companyAdmin = new CompanyAdmin();
         this.customer = new Customer();
@@ -66,6 +69,14 @@ public class Complaint implements Serializable {
 
     public void setCompanyAdmin(CompanyAdmin companyAdmin) {
         this.companyAdmin = companyAdmin;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
 

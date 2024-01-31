@@ -21,4 +21,5 @@ public interface CompanyEquipmentRepository extends JpaRepository<CompanyEquipme
     @Modifying
     @Query("UPDATE CompanyEquipment ce SET ce.quantity = :newQuantity WHERE ce.company = :company AND ce.equipment = :equipment")
     void updateQuantity(@Param("company") Company company, @Param("equipment") Equipment equipment, @Param("newQuantity") Integer newQuantity);
+
 }
