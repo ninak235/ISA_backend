@@ -9,7 +9,7 @@ import com.ISA.ISAProject.Repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LocationService {
@@ -24,7 +24,6 @@ public class LocationService {
         _locationMapper = locationMapper;
     }
 
-    @Transactional
     public LocationDto createLocation(LocationDto locationDto){
         Location location = _locationMapper.dtoToLocation(locationDto);
         _locationRepository.save(location);

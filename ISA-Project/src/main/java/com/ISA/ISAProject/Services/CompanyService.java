@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import lombok.ToString;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 
@@ -57,8 +57,6 @@ public class CompanyService {
         _equipmentMapper = equipmentMapper;
     }
 
-
-    @Transactional
     public List<CompanyEquipmentDto> getAllCompanies() {
         List<Company> companies = _companyRepository.findAll();
         return _companyMapper.mapCompaniesEquipmentToDto(companies);
@@ -92,7 +90,6 @@ public class CompanyService {
     }*/
 
 
-    @Transactional
     public Company getById(Integer companyId){
         return _companyRepository.findById(companyId).orElse(null);
     }
@@ -100,16 +97,18 @@ public class CompanyService {
     @Cacheable(
             value = "companyCache",
             key ="#companyName")
-    @Transactional
     public Company getByName(String companyName){
         return _companyRepository.findCompanyByName(companyName);
     }
-    @Transactional
+
+
+    /*
     public CompanyDto createCompany(CompanyDto companyDto) {
         Company newCompany = _companyMapper.dtoToCompany(companyDto);
         _companyRepository.save(newCompany);
         return new CompanyDto(newCompany);
     }
+     */
     /*
     @CrossOrigin
     @Transactional
@@ -138,7 +137,6 @@ public class CompanyService {
 
      */
 
-    @Transactional
     public Company updateCompany(String oldCompanyName, CompanyDto companyDto) {
         Company company = _companyMapper.dtoToCompany(companyDto);
         Company updatedCompany = _companyRepository.findCompanyByName(oldCompanyName);
@@ -154,7 +152,7 @@ public class CompanyService {
         return updatedCompany;
     }
 
-    @Transactional
+    //@Transactional
     public Company changeCompanyEquipment(String companyName, Integer oldId, Integer newId, Integer updatedQuantity) {
         System.out.println("Updating company equipment for company: " + companyName);
 
@@ -193,7 +191,7 @@ public class CompanyService {
         return existingCompany;
     }
 
-    @Transactional
+    //@Transactional
     public Company deleteCompanyEquipment(String companyName, Integer oldId) {
         System.out.println("Deleting company equipment for company: " + companyName);
 
@@ -228,7 +226,7 @@ public class CompanyService {
 
 
 
-    @Transactional
+    //@Transactional
     public Company addEquipmentToCompany(String companyName, Integer equipmentId) {
         System.out.println("Adding equipment to company: " + companyName);
 
@@ -296,7 +294,7 @@ public class CompanyService {
         return "";
     }
 
-    @Transactional
+
     public List<CompanyEquipmentDto> getByGradeCompanies(String grade) {
         List<Company> companies = _companyRepository.findAll();
         List<Company> filteredCompanies = new ArrayList<>();

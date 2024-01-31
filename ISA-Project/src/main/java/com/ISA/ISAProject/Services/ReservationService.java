@@ -10,7 +10,11 @@ import com.ISA.ISAProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.OptimisticLockException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,25 +40,25 @@ public class ReservationService {
     private CompanyEquipmentRepository companyEquipmentRepository;
 
 
-    @Transactional
+    //@Transactional
     public List<ReservationDto> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
         return reservationMapper.mapReservationsToDto(reservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getAllReservationsByCompanyAdminId(Integer companyAdminId) {
         List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdminId);
         return reservationMapper.mapReservationsToDto(reservations);
     }
 
-    @Transactional
+
     public ReservationDto getReservationById(Integer reservationId) {
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         return optionalReservation.map(reservationMapper::mapReservationToDto).orElse(null);
     }
 
-    @Transactional
+
     public List<ReservationDto> getFutureReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
 
@@ -67,7 +71,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(futureReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getFutureReservationsByAdminId(Integer adminId) {
         List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
 
@@ -80,7 +84,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(futureReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getPastReservationsByUserId(Integer userId) {
         List<Reservation> userReservations = reservationRepository.findAllByCustomer_Id(userId);
         Customer customer = customerService.getById(userId);
@@ -96,7 +100,7 @@ public class ReservationService {
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
 
-    @Transactional
+
     public List<ReservationDto> getPastReservationsByAdminId(Integer adminId) {
         List<Reservation> userReservations = reservationRepository.findAllByCompanyAdmin_Id(adminId);
         //CompanyAdmin admin = companyAdminService.getById(adminId);
@@ -107,10 +111,6 @@ public class ReservationService {
                 .filter(reservation -> addDuration(reservation).isBefore(currentDateTime) && !reservation.getStatus().equals(ReservationStatus.PickedUp))
                 .collect(Collectors.toList());
 
-
-
-
-
         return reservationMapper.mapReservationsToDto(pastReservations);
     }
 
@@ -119,7 +119,7 @@ public class ReservationService {
     }
 
 
-    @Transactional
+
     public boolean isEquipmentReservedByAdmin(Equipment equipment, Company company) {
         List<CompanyAdmin> companyAdmins = new ArrayList<>(company.getCompanyAdmin());
 
@@ -139,7 +139,7 @@ public class ReservationService {
     }
 
 
-    @Transactional//(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
@@ -172,7 +172,7 @@ public class ReservationService {
         }
     }
 
-
+    //@Transactional
     public ReservationCancelationDTO cancelReservation(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
@@ -200,6 +200,7 @@ public class ReservationService {
         return cancelationDTO;
     }
 
+    //@Transactional
     public ReservationCancelationDTO cancelReservationQR(ReservationDto reservationDto){
 
         Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
@@ -234,54 +235,44 @@ public class ReservationService {
 
     @Transactional
     public ReservationCancelationDTO pickUpReservation(ReservationDto reservationDto){
+        try{
+            Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+            reservation.setStatus(ReservationStatus.PickedUp);
+            updateReservation(reservation);
 
-        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
-        reservation.setStatus(ReservationStatus.PickedUp);
-        updateReservation(reservation);
+            Integer companyAdminId = reservation.getCompanyAdmin().getId();
+            CompanyAdmin companyAdmin = companyAdminService.getById(companyAdminId);
+            Integer companyId = companyAdmin.getCompanyId();
+            Company company = companyService.getById(companyId);
+            Set<Equipment> equipmentList = reservation.getReservationEquipments();
 
-        //CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
-        Integer companyAdminId = reservation.getCompanyAdmin().getId();
-        CompanyAdmin companyAdmin = companyAdminService.getById(companyAdminId);
-        Integer companyId = companyAdmin.getCompanyId();
-        Company company = companyService.getById(companyId);
-        //Company company = companyAdmin.getCompany();
-        Set<Equipment> equipmentList = reservation.getReservationEquipments();
+            for (Equipment e : equipmentList) {
+                Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, e);
 
-        for (Equipment e : equipmentList) {
-            Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, e);
+                companyEquipmentOptional.ifPresent(companyEquipment -> {
+                    Integer currentQuantity = companyEquipment.getQuantity();
 
-            companyEquipmentOptional.ifPresent(companyEquipment -> {
-                Integer currentQuantity = companyEquipment.getQuantity();
+                    if (currentQuantity >= 1) {  // Ensure quantity is non-negative before decrementing
+                        Integer newQuantity = currentQuantity - 1;
 
-                if (currentQuantity >= 1) {  // Ensure quantity is non-negative before decrementing
-                    Integer newQuantity = currentQuantity - 1;
+                        companyEquipment.setQuantity(newQuantity);  // Update the quantity in the entity
+                        companyEquipmentRepository.save(companyEquipment);  // Save the updated entity
 
-                    companyEquipment.setQuantity(newQuantity);  // Update the quantity in the entity
-                    companyEquipmentRepository.save(companyEquipment);  // Save the updated entity
+                        System.out.println("UPDATE: " + newQuantity);
+                    } else {
+                        System.out.println("Cannot decrease quantity below zero.");
+                    }
+                });
+            }
 
-                    System.out.println("UPDATE: " + newQuantity);
-                } else {
-                    System.out.println("Cannot decrease quantity below zero.");
-                }
-            });
+            Customer customer = customerService.getById(reservationDto.getCustomerId());
+            ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
+            return cancelationDTO;
+        }
+        catch(OptimisticLockException e){
+            throw new RuntimeException("Conflict occurred while trying to make a reservation.", e);
         }
 
 
-
-        Customer customer = customerService.getById(reservationDto.getCustomerId());
-
-    /*
-        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
-        AvailableDate canceledDate = availableDates.stream()
-                .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
-                .findFirst()
-                .orElse(null);
-
-        canceledDate.setTaken(false);
-        availableDateRepository.save(canceledDate);
-        */
-
-        ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
-        return cancelationDTO;
     }
 }

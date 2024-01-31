@@ -9,7 +9,7 @@ import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class EquipmentService {
     private CompanyService _companyService;
     @Autowired ReservationService _reservationService;
 
-    @Transactional
+
     public List<EquipmentCompanyDto> getAllEquipment() {
         List<Equipment> equipments = _equipmentRepository.findAll();
         System.out.println(equipments);
@@ -35,7 +35,7 @@ public class EquipmentService {
         return "";
     }
 
-    @Transactional
+
     public List<EquipmentCompanyDto> getByGradeEquipment(String grade) {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();
@@ -48,9 +48,6 @@ public class EquipmentService {
         return _equipmentMapper.mapEquipmentCompanysToDto(filteredEquipments);
     }
 
-
-
-    @Transactional
     public List<EquipmentCompanyDto> getByTypeEquipment(String type) {
         List<Equipment> equipments = _equipmentRepository.findAll();
         List<Equipment> filteredEquipments = new ArrayList<>();
@@ -63,15 +60,13 @@ public class EquipmentService {
         return _equipmentMapper.mapEquipmentCompanysToDto(filteredEquipments);
     }
 
-
-    @Transactional
     public EquipmentDto createEquipment(EquipmentDto equipmentDto) {
         // Map EquipmentDto to Equipment entity and save it
         Equipment equipment = _equipmentRepository.save(_equipmentMapper.mapDtoToEntity(equipmentDto));
         return new EquipmentDto(equipment);
     }
 
-    @Transactional
+
     public boolean checkIfEquipmentIsReserved(Integer equipmentId, Integer companyId) {
         Equipment equipment = _equipmentRepository.findEquipmentById(equipmentId);
         Company company = _companyService.getById(companyId);

@@ -15,7 +15,9 @@ import com.ISA.ISAProject.Repository.ComplaintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,20 +34,17 @@ public class ComplaintService {
         _complaintMapper = complaintMapper;
     }
 
-    @Transactional
     public ComplaintDto createComplaint(ComplaintDto complaintDto){
         Complaint complaint = _complaintMapper.dtoToComplaint(complaintDto);
         _complaintRepository.save(complaint);
         return  new ComplaintDto(complaint);
     }
 
-    @Transactional
     public List<ComplaintDto> getAllComplaints() {
         List<Complaint> complaints = _complaintRepository.findAll();
         return _complaintMapper.mapComplaintToDto(complaints);
     }
 
-    @Transactional
     public List<ComplaintDto> getAllComplaintsByAdminId(Integer companyAdminId) {
         List<Complaint> complaints = _complaintRepository.findByCompanyAdminId(companyAdminId);
         return _complaintMapper.mapComplaintToDto(complaints);
@@ -53,16 +52,22 @@ public class ComplaintService {
 
     @Transactional
     public Complaint updateComplaint(ComplaintDto complaintDto) {
-        Complaint complaint = _complaintMapper.dtoToComplaint(complaintDto);
+        try{
+            Complaint complaint = _complaintMapper.dtoToComplaint(complaintDto);
 
 
-        Complaint updatedComplaint = _complaintRepository.findById(complaint.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Complaint not found with id: " + complaint.getId()));
+            Complaint updatedComplaint = _complaintRepository.findById(complaint.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Complaint not found with id: " + complaint.getId()));
 
-        updatedComplaint.setContent(complaint.getContent());
-        updatedComplaint.setReplay(complaint.getReplay());
+            updatedComplaint.setContent(complaint.getContent());
+            updatedComplaint.setReplay(complaint.getReplay());
 
-        return _complaintRepository.save(updatedComplaint);
+            return _complaintRepository.save(updatedComplaint);
+        }
+        catch(OptimisticLockException e){
+            throw new RuntimeException("Conflict occurred while trying to answer the complaint. Only one admin can reply to it.", e);
+        }
+
     }
 
 }

@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import com.ISA.ISAProject.Repository.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 @Service
 public class CompanyAdminService {
 
@@ -57,14 +57,14 @@ public class CompanyAdminService {
         _companyService = companyService;
     }
 
-    @Transactional
+
     public List<CompanyAdmin> getAllCompanyAdmins() {
         List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
 
         return companyAdmins;
     }
 
-    @Transactional
+    /*
     public List<CompanyAdminDto> getCompanyAdmins() {
         List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
         List<CompanyAdminDto> companyAdminDtos = new ArrayList<>();
@@ -77,13 +77,11 @@ public class CompanyAdminService {
         return companyAdminDtos;
     }
 
-    @Transactional
     public CompanyAdminDto getCompanyAdminById(Integer adminId) {
         Optional<CompanyAdmin> optionalCompanyAdmin = _companyAdminRepository.findById(adminId);
         return optionalCompanyAdmin.map(_companyAdminMapper::mapCompanyAdminToDto).orElse(null);
     }
-    /* spaletovo
-    @Transactional
+
     public CompanyAdminDto createCompanyAdmin(CompanyAdminDto dto, Integer companyId) {
         CompanyAdmin admin = _userMapper.dtoToAdmin(dto);
         Company company = _companyService.getById(companyId);
@@ -130,7 +128,6 @@ public class CompanyAdminService {
     }
 
      */
-    @Transactional
     public CompanyAdmin updateAdmin(CompanyAdminDto adminDto) {
         CompanyAdmin admin = _userMapper.dtoToCompanyAdmin(adminDto);
 
@@ -155,7 +152,7 @@ public class CompanyAdminService {
         return updatedAdmin;
     }
 
-
+    /*
     public User getByEmail(String email) {
         return _userRepository.findByEmailIgnoreCase(email);
     }
@@ -163,8 +160,8 @@ public class CompanyAdminService {
     public void updateUser(User user) {
         _userRepository.save(user);
     }
+    */
 
-    @Transactional
     public CompanyAdmin getById(Integer adminId) {
         return _companyAdminRepository.findById(adminId).orElse(null);
     }

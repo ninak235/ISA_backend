@@ -21,7 +21,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +62,6 @@ public class EmailService {
     }
 
     @Async
-    @Transactional
     public void sendReservationEmail(ReservationDto reserv, String email)throws MailException{
         Optional<Reservation> reservationOptional = _reservationRepository.findById(reserv.getId());
         if(reservationOptional.isPresent()){
@@ -89,7 +88,6 @@ public class EmailService {
     }
 
     @Async
-    @Transactional
     public void sendConfirmationEmail(ReservationCancelationDTO reserv, String email)throws MailException{
         Optional<Reservation> reservationOptional = _reservationRepository.findById(reserv.getReservationId());
         if(reservationOptional.isPresent()){

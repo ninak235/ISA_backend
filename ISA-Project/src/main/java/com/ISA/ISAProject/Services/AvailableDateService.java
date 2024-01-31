@@ -19,7 +19,9 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,19 +43,18 @@ public class AvailableDateService {
     @Autowired
     ReservationRepository reservationRepository;
 
-    @Transactional
     public List<AvailableDateDto> getAllAvailableDays() {
         List<AvailableDate> availableDates = availableDateRepository.findAll();
         return availableDateMapper.mapAvailableDatesToDto(availableDates);
     }
 
-    @Transactional
+
     public AvailableDateDto getAvailableDateById(Integer availableDateId) {
         Optional<AvailableDate> optionalAvailableDate = availableDateRepository.findById(availableDateId);
         return optionalAvailableDate.map(availableDateMapper::mapAvailableDateToDto).orElse(null);
     }
 
-    @Transactional
+
     public List<AvailableDateDto> getAllAvailableDaysByCompanyId(Integer companyId,Integer userId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
         List<AvailableDate> futureAvailableDates = new ArrayList<>();
@@ -95,12 +96,13 @@ public class AvailableDateService {
         return null;
     }
 
-    @Transactional
+
     public List<AvailableDateDto> getAllAvailableDaysByAdminId(Integer adminId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(adminId);
         return availableDateMapper.mapAvailableDatesToDto(availableDates);
     }
 
+    /*
     @Transactional
     public List<AvailableDateDto> getAllAvailableDaysByCompanyAndAdminId(Integer companyId, Integer companyAdminId){
         List<AvailableDate> availableDates = availableDateRepository.findAvailableDatesByAdmin_Company_Id(companyId);
@@ -110,8 +112,10 @@ public class AvailableDateService {
 
         return availableDateMapper.mapAvailableDatesToDto(availableDates);
     }
+    */
 
-    @Transactional
+
+
     public List<AvailableDateDto> getExtraAvailableDaysByCompanyId(Integer companyId, String selectedDate,Integer userId) {
         Instant instant = parseSelectedDate(selectedDate);
         if (instant != null) {
@@ -128,7 +132,7 @@ public class AvailableDateService {
         return null;
     }
 
-    @Transactional
+
     public List<AvailableDateDto> getExtraAvailableDaysByCompanyIdAndAdminId(String companyName, Integer companyAdminId, String selectedDate) {
         Instant instant = parseSelectedDate(selectedDate);
         if (instant != null) {
@@ -246,17 +250,29 @@ public class AvailableDateService {
 
     }
 
-    @Transactional //(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public AvailableDateDto createAvailableDate(AvailableDateDto availableDateDto) {
-        AvailableDate availableDate = availableDateRepository.save(availableDateMapper.mapDtoToEntity((availableDateDto)));
-        return new AvailableDateDto(availableDate);
+        try{
+            AvailableDate availableDate = availableDateRepository.save(availableDateMapper.mapDtoToEntity((availableDateDto)));
+            return new AvailableDateDto(availableDate);
+        }
+        catch(OptimisticLockException e ){
+            throw new RuntimeException("Conflict occurred while creating a new available date.", e);
+        }
+
     }
 
-    @Transactional//(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public AvailableDate update(AvailableDateDto availableDateDto) {
-        AvailableDate availableDate = availableDateRepository.findById(availableDateDto.getId()).orElse(null);
-        availableDate.setTaken(availableDateDto.getTaken());
-        availableDateRepository.save(availableDate);
-        return availableDate;
+        try{
+            AvailableDate availableDate = availableDateRepository.findById(availableDateDto.getId()).orElse(null);
+            availableDate.setTaken(availableDateDto.getTaken());
+            availableDateRepository.save(availableDate);
+            return availableDate;
+        }
+        catch(OptimisticLockException e){
+            throw new RuntimeException("Conflict occurred while updating the available date.", e);
+        }
+
     }
 }
