@@ -12,6 +12,8 @@ import com.ISA.ISAProject.Repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.*;
@@ -140,11 +142,31 @@ public class ContractService {
     public void changeDate(String response) {
         Contract contract = _contractRepository.findContractByHospitalName(response);
         if(contract != null){
+
             System.out.println("PRE" + contract.getExactDeliveryTime());
             LocalDateTime newDate = contract.getExactDeliveryTime().plusMonths(1);
             System.out.println("POSLE" + newDate);
             contract.setExactDeliveryTime(newDate);
             _contractRepository.save(contract);
+        }
+    }
+    public void nextDate() {
+        List<ContractFrontDto> contracts = getAllContracts();
+
+        LocalDateTime today = LocalDateTime.now().withNano(0).withSecond(0); // Get current date and time with seconds and nanoseconds set to zero
+        LocalDate todayDate = today.toLocalDate();
+
+        for (ContractFrontDto contract:contracts) {
+            LocalDateTime deliveryTime = contract.getExactDeliveryTime();
+            LocalDate deliveryDate = deliveryTime.toLocalDate(); // Extract the date part
+
+            if (deliveryDate.equals(todayDate)){
+                LocalDateTime newDate = contract.getExactDeliveryTime().plusMonths(1);
+                contract.setExactDeliveryTime(newDate);
+                Contract contract1 = _contractRepository.findContractByHospitalName(contract.getHospitalName());
+                _contractRepository.save(contract1);
+            }
+
         }
     }
 }

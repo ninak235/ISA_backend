@@ -2,9 +2,7 @@ package com.ISA.ISAProject.Services;
 
 import com.ISA.ISAProject.Dto.*;
 import com.ISA.ISAProject.Enum.ReservationStatus;
-import com.ISA.ISAProject.Mapper.EquipmentMapper;
 import com.ISA.ISAProject.Mapper.ReservationMapper;
-import com.ISA.ISAProject.Mapper.UserMapper;
 import com.ISA.ISAProject.Model.*;
 import com.ISA.ISAProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.OptimisticLockException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -150,7 +147,7 @@ public class ReservationService {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
         CompanyAdmin companyAdmin = companyAdminService.getById(reservationDto.getCompanyAdminId());
-        Reservation reservation = new Reservation(reservationDto.getId(), reservationDto.getDateTime(), reservationDto.getDuration(), reservationDto.getGrade(), customer, companyAdmin);
+        Reservation reservation = new Reservation(reservationDto.getId(), reservationDto.getDateTime(), reservationDto.getDuration(), reservationDto.getGrade(), reservationDto.getPrice(), customer, companyAdmin);
 
         Reservation reservation1 = reservationRepository.save(reservation);
         Set<ReservationEquipment> reservationEquipments = new HashSet<>();
