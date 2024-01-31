@@ -24,6 +24,9 @@ public class AvailableDate implements Serializable {
     @Column(name = "taken")
     private boolean taken;
 
+    @Version
+    private Integer version;
+
 
     public AvailableDate() {
 
@@ -74,6 +77,14 @@ public class AvailableDate implements Serializable {
 
     public boolean getTaken(){
         return taken;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

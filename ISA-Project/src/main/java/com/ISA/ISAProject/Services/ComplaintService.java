@@ -51,7 +51,7 @@ public class ComplaintService {
         return _complaintMapper.mapComplaintToDto(complaints);
     }
 
-
+    @Transactional
     public Complaint updateComplaint(ComplaintDto complaintDto) {
         Complaint complaint = _complaintMapper.dtoToComplaint(complaintDto);
 

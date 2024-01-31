@@ -43,7 +43,8 @@ public class Reservation implements Serializable {
     )
     private Set<Equipment> reservationEquipments = new HashSet<>();
 
-
+    @Version
+    private Integer version;
 
     public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
         this.id = id;
@@ -136,5 +137,13 @@ public class Reservation implements Serializable {
 
     public void setReservationEquipments(Set<Equipment> equipments) {
         this.reservationEquipments = equipments;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

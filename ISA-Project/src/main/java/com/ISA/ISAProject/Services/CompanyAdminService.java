@@ -164,6 +164,7 @@ public class CompanyAdminService {
         _userRepository.save(user);
     }
 
+    @Transactional
     public CompanyAdmin getById(Integer adminId) {
         return _companyAdminRepository.findById(adminId).orElse(null);
     }

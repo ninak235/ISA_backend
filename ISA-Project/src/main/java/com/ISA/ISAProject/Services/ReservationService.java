@@ -139,7 +139,7 @@ public class ReservationService {
     }
 
 
-    @Transactional
+    @Transactional//(isolation = Isolation.SERIALIZABLE)
     public ReservationDto createReservation(ReservationDto reservationDto) {
         Customer customer = customerService.getById(reservationDto.getCustomerId());
 
@@ -156,8 +156,22 @@ public class ReservationService {
 
     @Transactional
     public void updateReservation(Reservation reservation){
-        reservationRepository.save(reservation);
+        // Fetch the existing Reservation entity
+        Reservation existingReservation = reservationRepository.findById(reservation.getId()).orElse(null);
+
+        if (existingReservation != null) {
+            // Update the existing entity with the changes
+            existingReservation.setStatus(reservation.getStatus());
+            // Update other fields as needed
+
+            // Save the updated entity
+            reservationRepository.save(existingReservation);
+        } else {
+            // Handle the case where the entity with the given ID is not found
+            // (Optional: throw an exception, log a warning, etc.)
+        }
     }
+
 
     public ReservationCancelationDTO cancelReservation(ReservationDto reservationDto){
 
@@ -239,7 +253,7 @@ public class ReservationService {
             companyEquipmentOptional.ifPresent(companyEquipment -> {
                 Integer currentQuantity = companyEquipment.getQuantity();
 
-                if (currentQuantity > 0) {  // Ensure quantity is non-negative before decrementing
+                if (currentQuantity >= 1) {  // Ensure quantity is non-negative before decrementing
                     Integer newQuantity = currentQuantity - 1;
 
                     companyEquipment.setQuantity(newQuantity);  // Update the quantity in the entity

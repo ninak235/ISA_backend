@@ -10,6 +10,9 @@ import com.ISA.ISAProject.Repository.CompanyRepository;
 import com.ISA.ISAProject.Repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -243,13 +246,13 @@ public class AvailableDateService {
 
     }
 
-    @Transactional
+    @Transactional //(isolation = Isolation.SERIALIZABLE)
     public AvailableDateDto createAvailableDate(AvailableDateDto availableDateDto) {
         AvailableDate availableDate = availableDateRepository.save(availableDateMapper.mapDtoToEntity((availableDateDto)));
         return new AvailableDateDto(availableDate);
     }
 
-    @Transactional
+    @Transactional//(isolation = Isolation.REPEATABLE_READ)
     public AvailableDate update(AvailableDateDto availableDateDto) {
         AvailableDate availableDate = availableDateRepository.findById(availableDateDto.getId()).orElse(null);
         availableDate.setTaken(availableDateDto.getTaken());
