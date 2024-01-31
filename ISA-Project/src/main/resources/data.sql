@@ -31,7 +31,7 @@ VALUES
 INSERT INTO equipment (equipment_name, description, equipment_type, grade, price, deleted)
 VALUES
     ('Equipment1', 'Description1', 'Therapeutic','A', 100, false),
-    ('Equipment2', 'Description2','Surgical','C', 344, false),
+    ('Equipment2', 'Description2','Surgical','C', 300, false),
     ('Equipment3', 'Description3','Surgical','D', 565,   false),
     ('Equipment4', 'Description4','Dental','B', 876, false);
 
@@ -47,8 +47,8 @@ VALUES
 
 INSERT INTO customers (user_id, company_info, occupation, penalty_points, last_penalty_points_date_reset, loyality_program_id)
 VALUES
-    (1,'Company1', 'Medical', 0, '2023-12-30T08:45:00', 1),
-    (3, 'Company2', 'Dental', 0, '2024-1-20T08:45:00', 2);
+    (1,'Company1', 'Medical', 6, '2024-12-31T08:45:00', 1),
+    (3, 'Company2', 'Dental', 6, '2023-12-30T08:45:00', 2);
 
 
 
@@ -98,14 +98,14 @@ VALUES
     (50, 0, 2, 3),
     (30, 0, 2, 1);
 
-INSERT INTO reservation (date_time, duration, grade, status, version, customer_id, company_admin_id)
+INSERT INTO reservation (price, date_time, duration, grade, status, version, customer_id, company_admin_id)
 VALUES
-    ('2023-12-17T10:00:00', 1, 5, 2, 0, 1, 2),
-    ('2025-10-10T17:00:00', 2, 5, 0, 0, 1, 2),
-    ('2024-01-24T17:00:00', 3, 5, 1, 0, 1, 2),
-    ('2024-01-25T17:00:00', 3, 5, 1, 0, 1, 2),
-    ('2023-12-17T12:00:00', 5, 5, 1, 0, 1, 2),
-    ('2024-02-22T10:30:00', 1, 4, 1, 0, 3, 2);
+    (5500, '2023-12-17T10:00:00', 1, 5, 2, 0, 1, 2),
+    (400, '2025-10-10T17:00:00', 2, 5, 0, 0, 1, 2),
+    (4520, '2024-01-24T17:00:00', 3, 5, 1, 0, 1, 2),
+    (5650, '2024-01-25T17:00:00', 3, 5, 1, 0, 1, 2),
+    (2000, '2023-12-17T12:00:00', 5, 5, 1, 0, 1, 2),
+    (2000,'2024-02-22T10:30:00', 1, 4, 1, 0, 3, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id, quantity)
 VALUES
@@ -114,7 +114,8 @@ VALUES
     (2, 1, 4),
     (3, 3, 8),
     (4, 3, 10),
-    (5, 1, 20);
+    (5, 1, 20),
+    (6, 1, 20);
 
 
 

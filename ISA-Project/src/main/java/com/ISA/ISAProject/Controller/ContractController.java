@@ -34,6 +34,7 @@ public class ContractController {
     @PostMapping(value="/{exchange}/{queue}",consumes = "text/plain")
     public ResponseEntity<String> sendMessageToExchange(@PathVariable("exchange") String exchange, @PathVariable("queue") String queue, @RequestBody String response) {
         if(response.equals("Dostava je zapocela,vasa narudzbina ce biti na vasoj adresi uskoro!") || response.equals( "Dostava stigla!")){
+            //_contractService.nextDate();
             _responseService.sendToExchange(exchange,queue,response);
             System.out.println("*********DOSTAVA DEO**************");
         }
