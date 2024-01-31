@@ -15,7 +15,7 @@ VALUES
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)
 VALUES
-    ('Novi Sad', 'Srbija', '069875465','zarkokn@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
+    ('Novi Sad', 'Srbija', '069875465','spasoje.brboric@gmail.com', 'Zdravko','Customer', true, 'Zdravkic', '$2a$10$sngO7OZwcduKMsU1W3TpN.unpzrK4BvTtY7xMW2jRHCXcVzAfNTCa' , false,'2017-10-01 21:58:58.508-07'),
     -- CUSTOMER: 11111111
     ('Novi Sad', 'Srbija', '067459844','jana@gmail.com', 'Jana','AdminCompany1', true, 'Janic', '$2a$12$P9VeoGInlK53ACrgEuwl5O2iLay0ZLHkzj3q71bv/mXmw3uThJZ8i', false,'2017-10-01 21:58:58.508-07'),
     -- COMPANY ADMIN: 22222222
@@ -69,13 +69,13 @@ VALUES
 
 INSERT INTO available_date (duration, start_time, admin_id, taken, version)
 VALUES
-    (2, '2024-2-23T08:45:00', 5, true, 0),
-    (3, '2024-2-24T10:30:00', 5, false, 0),
-    (3, '2024-2-21T10:30:00', 2, false, 0),
-    (4, '2024-2-25T08:45:00', 2, true, 0),
-    (3, '2024-2-15T12:00:00', 3, false, 0),
-    (1, '2024-2-27T10:30:00', 3, false, 0),
-    (3, '2024-2-28T10:00:00', 4, false, 0);
+    (3600, '2024-2-23T08:45:00', 5, true, 0),
+    (3600, '2024-2-24T10:30:00', 5, false, 0),
+    (3600, '2024-2-21T10:30:00', 2, false, 0),
+    (3600, '2024-2-25T08:45:00', 2, true, 0),
+    (3600, '2024-2-15T12:00:00', 3, false, 0),
+    (3600, '2024-2-27T09:00:00', 3, false, 0),
+    (3600, '2024-2-28T10:00:00', 4, false, 0);
 
 INSERT INTO role (name)
 VALUES ('ROLE_CUSTOMER'),
@@ -105,7 +105,7 @@ VALUES
     ('2024-01-24T17:00:00', 3, 5, 1, 0, 1, 2),
     ('2024-01-25T17:00:00', 3, 5, 1, 0, 1, 2),
     ('2023-12-17T12:00:00', 5, 5, 1, 0, 1, 2),
-    ('2024-02-22T10:30:00', 1, 4, 1, 0, 3, 2);
+    ('2024-02-22T10:30:00', 1, 4, 1, 0, 1, 2);
 
 INSERT INTO reservation_equipment (reservation_id, equipment_id, quantity)
 VALUES

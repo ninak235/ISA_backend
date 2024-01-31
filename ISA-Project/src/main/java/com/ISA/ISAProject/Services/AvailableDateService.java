@@ -180,7 +180,7 @@ public class AvailableDateService {
             if (getAvailableCompanyAdmin(dateTime, company.getId()) != null){
 
                 CompanyAdmin availableCompanyAdmin = getAvailableCompanyAdmin(dateTime, company.getId());
-                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, 3);
+                AvailableDate availableDate = new AvailableDate(availableCompanyAdmin, dateTime, 3600);
                 newDates.add(availableDate);
             }
         }
@@ -252,14 +252,15 @@ public class AvailableDateService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public AvailableDateDto createAvailableDate(AvailableDateDto availableDateDto) {
-        try{
+        Optional<AvailableDate> duplicateDate = availableDateRepository.findAvailableDateByAdmin_IdAndStartTime(availableDateDto.getAdminId(), availableDateDto.getStartTime());
+        if (!duplicateDate.isPresent()){
             AvailableDate availableDate = availableDateRepository.save(availableDateMapper.mapDtoToEntity((availableDateDto)));
             return new AvailableDateDto(availableDate);
-        }
-        catch(OptimisticLockException e ){
-            throw new RuntimeException("Conflict occurred while creating a new available date.", e);
-        }
 
+        }else{
+            AvailableDate existingAvailableDate = duplicateDate.get(); // Extract AvailableDate from Optional
+            return new AvailableDateDto(existingAvailableDate);
+        }
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

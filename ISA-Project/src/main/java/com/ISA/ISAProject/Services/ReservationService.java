@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 //import javax.transaction.Transactional;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.OptimisticLockException;
 import java.time.LocalDate;
@@ -250,46 +251,42 @@ public class ReservationService {
 
     @Transactional
     public ReservationCancelationDTO pickUpReservation(ReservationDto reservationDto){
+        try{
+            Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
+            reservation.setStatus(ReservationStatus.PickedUp);
+            updateReservation(reservation);
 
-        Reservation reservation = reservationMapper.mapDtoToEntity(reservationDto);
-        reservation.setStatus(ReservationStatus.PickedUp);
-        updateReservation(reservation);
+            Integer companyAdminId = reservation.getCompanyAdmin().getId();
+            CompanyAdmin companyAdmin = companyAdminService.getById(companyAdminId);
+            Integer companyId = companyAdmin.getCompanyId();
+            Company company = companyService.getById(companyId);
 
-        CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
-        Company company = companyAdmin.getCompany();
+            for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
+                String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
+                Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
+                CompanyEquipment companyEquipment = companyEquipmentRepository.findByCompanyAndEquipment(company, equipment);
 
-        for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
-            String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
-            Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
-            CompanyEquipment companyEquipment = companyEquipmentRepository.findByCompanyAndEquipment(company, equipment);
+                if(companyEquipment != null){
+                    Integer currentQuantity = companyEquipment.getQuantity();
+                    Integer newQuantity = currentQuantity - reservationDto.getReservationOfEquipments().get(i).getQuantity();
+                    if(newQuantity >= 0){
+                        companyEquipment.setQuantity(newQuantity);
+                        companyEquipmentRepository.save(companyEquipment);
+                    }else{
+                        // Rollback the transaction as newQuantity is negative
+                        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                        throw new IllegalArgumentException("New quantity cannot be negative.");
+                    }
+                }
+            }
 
-            if(companyEquipment != null){
-                Integer currentQuantity = companyEquipment.getQuantity();
-                Integer newQuantity = currentQuantity - reservationDto.getReservationOfEquipments().get(i).getQuantity();
-                System.out.println("NEW*************" + newQuantity);
+            Customer customer = customerService.getById(reservationDto.getCustomerId());
 
-                companyEquipmentRepository.updateQuantity(company, equipment, newQuantity);
-
-                System.out.println("UPDATE" + newQuantity);
-            };
+            ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
+            return cancelationDTO;
         }
-
-
-
-        Customer customer = customerService.getById(reservationDto.getCustomerId());
-
-    /*
-        List<AvailableDate> availableDates = availableDateRepository.findAvailableDateByAdmin_Id(reservation.getCompanyAdmin().getId());
-        AvailableDate canceledDate = availableDates.stream()
-                .filter(availableDate -> availableDate.getStartTime().isEqual(reservation.getDateTime()) )
-                .findFirst()
-                .orElse(null);
-
-        canceledDate.setTaken(false);
-        availableDateRepository.save(canceledDate);
-        */
-
-        ReservationCancelationDTO cancelationDTO = new ReservationCancelationDTO(reservation.getId(), customer.getPenaltyPoints());
-        return cancelationDTO;
+        catch(OptimisticLockException e){
+            throw new RuntimeException("Conflict occurred while trying to pick up a reservation.", e);
+        }
     }
 }
