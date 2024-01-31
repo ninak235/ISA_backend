@@ -43,9 +43,12 @@ public class Equipment implements Serializable {
     @Column(name="price", nullable = false)
     private Float price;
 
-
+    /*
     @ManyToMany(mappedBy = "reservationEquipments")
-    private Set<Reservation> equipmentReservations = new HashSet<>();
+    private Set<Reservation> equipmentReservations = new HashSet<>();*/
+
+    @OneToMany(mappedBy = "equipment")
+    Set<ReservationEquipment> reservationOfEquipments;
 
 
     public Set<ContractEquipment> getContractsOfEquipment() {
@@ -67,6 +70,7 @@ public class Equipment implements Serializable {
     Set<ContractEquipment> contractsOfEquipment;
 
     public Equipment(){
+        this.reservationOfEquipments = new HashSet<>();
     }
 
     public Integer getId() {
@@ -126,6 +130,18 @@ public class Equipment implements Serializable {
         this.price = price;
     }
 
+    public Set<CompanyEquipment> getCompanyEquipmentSet() {
+        return companyEquipmentSet;
+    }
+
+    public Set<ReservationEquipment> getReservationOfEquipments() {
+        return reservationOfEquipments;
+    }
+
+    public void setReservationOfEquipments(Set<ReservationEquipment> reservationOfEquipments) {
+        this.reservationOfEquipments = reservationOfEquipments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -165,12 +181,12 @@ public class Equipment implements Serializable {
     public void setCompanyEquipmentSet(Set<CompanyEquipment> companyEquipmentSet) {
         this.companyEquipmentSet = companyEquipmentSet;
     }
-
+/*
     public Set<Reservation> getEquipmentReservations() {
         return equipmentReservations;
     }
 
     public void setEquipmentReservations(Set<Reservation> equipmentReservations) {
         this.equipmentReservations = equipmentReservations;
-    }
+    }*/
 }

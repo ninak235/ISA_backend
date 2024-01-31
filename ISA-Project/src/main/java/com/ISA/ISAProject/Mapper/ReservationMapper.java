@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,18 +33,17 @@ public class ReservationMapper {
 
 
     public List<ReservationDto> mapReservationsToDto(List<Reservation> reservations) {
-        return reservations.stream()
-                .map(this::mapReservationToDto)
-                .collect(Collectors.toList());
+        List<ReservationDto> reservationDtos = new ArrayList<>();
+        for (Reservation res: reservations) {
+            ReservationDto resDto = new ReservationDto(res);
+            reservationDtos.add(resDto);
+        }
+        return  reservationDtos;
     }
 
     public Reservation mapDtoToEntity(ReservationDto reservationDto) {
         Reservation reservation = modelMapper.map(reservationDto, Reservation.class);
-        Set<Equipment> reservationEquipments = reservationDto.getReservationEquipments().stream()
-                .map(equipmentDto -> modelMapper.map(equipmentDto, Equipment.class))
-                .collect(Collectors.toSet());
 
-        reservation.setReservationEquipments(reservationEquipments);
         return reservation;
     }
 

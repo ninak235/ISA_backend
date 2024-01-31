@@ -35,13 +35,17 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "companyAdminId", nullable = true)
     private CompanyAdmin companyAdmin;
 
+    /*
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "reservation_equipment",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "equipment_id")
     )
-    private Set<Equipment> reservationEquipments = new HashSet<>();
+    private Set<Equipment> reservationEquipments = new HashSet<>();*/
+
+    @OneToMany(mappedBy = "reservation")
+    Set<ReservationEquipment> reservationOfEquipments;
 
 
 
@@ -53,6 +57,7 @@ public class Reservation implements Serializable {
         this.status = ReservationStatus.Pending;
         this.customer = customer;
         this.companyAdmin = companyAdmin;
+        this.reservationOfEquipments = new HashSet<>();
         //this.companyEquipments = new HashSet<>();//companyEquipments;
     }
 
@@ -64,14 +69,22 @@ public class Reservation implements Serializable {
         this.status = reservation.getStatus();
         this.customer = reservation.getCustomer();
         this.companyAdmin = reservation.getCompanyAdmin();
-        this.reservationEquipments = reservation.getReservationEquipments();
+        this.reservationOfEquipments = reservation.reservationOfEquipments;
+        //this.reservationEquipments = reservation.getReservationEquipments();
     }
 
 
+    public Set<ReservationEquipment> getReservationOfEquipments() {
+        return reservationOfEquipments;
+    }
+
+    public void setReservationOfEquipments(Set<ReservationEquipment> reservationOfEquipments) {
+        this.reservationOfEquipments = reservationOfEquipments;
+    }
 
 
     public Reservation() {
-        reservationEquipments = new HashSet<>();
+        //reservationEquipments = new HashSet<>();
     }
 
     public Integer getId() {
@@ -129,12 +142,12 @@ public class Reservation implements Serializable {
     public void setCompanyAdmin(CompanyAdmin companyAdmin) {
         this.companyAdmin = companyAdmin;
     }
-
+/*
     public Set<Equipment> getReservationEquipments() {
         return reservationEquipments;
     }
 
     public void setReservationEquipments(Set<Equipment> equipments) {
         this.reservationEquipments = equipments;
-    }
+    }*/
 }

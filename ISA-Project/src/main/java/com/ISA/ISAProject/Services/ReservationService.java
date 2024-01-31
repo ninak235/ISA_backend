@@ -32,12 +32,16 @@ public class ReservationService {
     private CompanyAdminService companyAdminService;
     @Autowired
     private CompanyEquipmentRepository companyEquipmentRepository;
+    @Autowired
+    private EquipmentRepository _equipmentRepository;
+    @Autowired
+    private ReservationEquipmentRepository _resEqRepository;
 
 
     @Transactional
     public List<ReservationDto> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
-        return reservationMapper.mapReservationsToDto(reservations);
+        return  reservationMapper.mapReservationsToDto(reservations);
     }
 
     @Transactional
@@ -125,7 +129,8 @@ public class ReservationService {
             List<Reservation> reservations = reservationRepository.findByCompanyAdminId(companyAdmin.getId());
 
             for (Reservation reservation : reservations) {
-                if (reservation.getReservationEquipments().contains(equipment)) {
+                for(ReservationEquipment reservationEquipment: reservation.getReservationOfEquipments())
+                if (Objects.equals(reservationEquipment.getEquipment().getName(), equipment.getName())) {
                     // Equipment is reserved by this admin
                     return true;
                 }
@@ -147,8 +152,20 @@ public class ReservationService {
         reservation.setCompanyAdmin(companyAdmin);
         reservation.setCustomer(customer);
 
-        //Reservation reservation1 = new Reservation(reservation);
+        //Reservation reservation2 = new Reservation(reservationDto.getId(), reservationDto.getDateTime(), reservationDto.getDuration(), reservationDto.getGrade(), customer, companyAdmin);
         Reservation reservation1 = reservationRepository.save(reservation);
+
+        for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
+            String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
+            Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
+            if (equipment != null) {
+                ReservationEquipment resEq = new ReservationEquipment(reservationDto.getReservationOfEquipments().get(i).getQuantity());
+                resEq.setReservation(reservation1);
+                resEq.setEquipment(equipment);
+                _resEqRepository.save(resEq);
+            }
+        }
+
         return new ReservationDto(reservation1);
     }
 
@@ -223,16 +240,17 @@ public class ReservationService {
 
         CompanyAdmin companyAdmin = reservation.getCompanyAdmin();
         Company company = companyAdmin.getCompany();
-        Set<Equipment> equipmentList = reservation.getReservationEquipments();
 
-        for (Equipment e : equipmentList) {
-            Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, e);
+        for (int i = 0; i < reservationDto.getReservationOfEquipments().size(); i++) {
+            String eqName = reservationDto.getReservationOfEquipments().get(i).getEquipmentName();
+            Equipment equipment = _equipmentRepository.findEquipmentByName(eqName);
+            Optional<CompanyEquipment> companyEquipmentOptional = companyEquipmentRepository.findByCompanyAndEquipment(company, equipment);
 
             companyEquipmentOptional.ifPresent(companyEquipment -> {
                 Integer currentQuantity = companyEquipment.getQuantity();
                 Integer newQuantity = currentQuantity - 1;
 
-                companyEquipmentRepository.updateQuantity(company, e, newQuantity);
+                companyEquipmentRepository.updateQuantity(company, equipment, newQuantity);
 
                 System.out.println("UPDATE" + newQuantity);
             });
