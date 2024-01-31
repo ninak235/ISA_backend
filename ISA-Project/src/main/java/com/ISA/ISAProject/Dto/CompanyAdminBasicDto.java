@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Dto;
 
+import com.ISA.ISAProject.Model.CompanyAdmin;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +19,9 @@ public class CompanyAdminBasicDto {
     public CompanyAdminBasicDto(User user) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+    }
+
+    public CompanyAdminBasicDto(CompanyAdmin companyAdmin) {
     }
 
     public String getFirstName() {

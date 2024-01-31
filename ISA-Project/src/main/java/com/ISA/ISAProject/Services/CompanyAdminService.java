@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.Services;
 
+import com.ISA.ISAProject.Dto.CompanyAdminBasicDto;
 import com.ISA.ISAProject.Dto.CompanyAdminDto;
 import com.ISA.ISAProject.Dto.CustomerDto;
 import com.ISA.ISAProject.Dto.UserDto;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.ISA.ISAProject.Mapper.UserMapper;
@@ -58,8 +60,21 @@ public class CompanyAdminService {
     @Transactional
     public List<CompanyAdmin> getAllCompanyAdmins() {
         List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
-        //return _companyAdminMapper.mapCompanyAdminsToDto(companyAdmins);
+
         return companyAdmins;
+    }
+
+    @Transactional
+    public List<CompanyAdminDto> getCompanyAdmins() {
+        List<CompanyAdmin> companyAdmins = _companyAdminRepository.findAll();
+        List<CompanyAdminDto> companyAdminDtos = new ArrayList<>();
+        for (CompanyAdmin ca: companyAdmins){
+            User user = _userRepository.findByUserName(ca.getUser().getUsername());
+            CompanyAdminDto caDto = new CompanyAdminDto(user, ca.getCompanyId());
+            companyAdminDtos.add(caDto);
+        }
+
+        return companyAdminDtos;
     }
 
     @Transactional

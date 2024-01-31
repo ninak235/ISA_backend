@@ -1,5 +1,6 @@
 package com.ISA.ISAProject.MQ;
 
+import com.ISA.ISAProject.Dto.ContractDto;
 import com.ISA.ISAProject.Dto.LocationDto;
 import com.ISA.ISAProject.Dto.LocationSimulatorDto;
 import com.ISA.ISAProject.Model.Location;

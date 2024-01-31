@@ -10,7 +10,7 @@ VALUES
 INSERT INTO Company (name, location_id, start_working_time, end_working_time, description, grade, deleted)
 VALUES
     ('Company1', 3, '09:00:00', '17:30:00',  'Description1', 'A', false),
-    ('Company2', 4, '09:00:00', '17:30:00', 'Description2', 'B', false),
+    ('Company2', 1, '09:00:00', '17:30:00', 'Description2', 'B', false),
     ('Company3', 5, '09:00:00', '17:30:00', 'Description3', 'C', false);
 
 INSERT INTO users (city, country, number, email, first_name,user_name,is_enabled, last_name, password, deleted,last_password_reset_date)

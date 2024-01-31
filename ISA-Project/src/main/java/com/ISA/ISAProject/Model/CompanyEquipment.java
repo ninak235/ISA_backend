@@ -3,12 +3,13 @@ package com.ISA.ISAProject.Model;
 import io.swagger.models.auth.In;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class CompanyEquipment {
+public class CompanyEquipment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

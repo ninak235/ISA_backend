@@ -1,9 +1,10 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "Complaints")
-public class Complaint {
+public class Complaint implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

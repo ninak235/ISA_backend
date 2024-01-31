@@ -4,13 +4,14 @@ import com.ISA.ISAProject.Enum.TypeOfEquipment;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Where(clause = "deleted = false")
 @Entity(name = "Equipment")
-public class Equipment {
+public class Equipment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,12 +43,28 @@ public class Equipment {
     @Column(name="price", nullable = false)
     private Float price;
 
+
     @ManyToMany(mappedBy = "reservationEquipments")
     private Set<Reservation> equipmentReservations = new HashSet<>();
 
-    public Set<CompanyEquipment> getCompanyEquipmentSet() {
-        return companyEquipmentSet;
+
+    public Set<ContractEquipment> getContractsOfEquipment() {
+        return contractsOfEquipment;
     }
+
+    public void setContractsOfEquipment(Set<ContractEquipment> contractsOfEquipment) {
+        this.contractsOfEquipment = contractsOfEquipment;
+    }
+
+    /* dobar primer alternative
+    @ManyToMany
+    @JoinTable(name="contract_equipment", joinColumns=@JoinColumn(name="equipment_id"),
+                inverseJoinColumns = @JoinColumn(name="contract_id"))
+    Set<Contract> contractsOfEquipment;*/
+
+
+    @OneToMany(mappedBy = "equipment")
+    Set<ContractEquipment> contractsOfEquipment;
 
     public Equipment(){
     }

@@ -57,6 +57,7 @@ public class CompanyAdminDto {
 
     }
 
+
     public String getFirstName() {
         return firstName;
     }
