@@ -29,7 +29,7 @@ public class Contract implements Serializable {
     @ManyToMany(mappedBy = "contractsOfEquipment")
     private Set<Equipment> contractsOfEquipment;*/
 
-    @OneToMany(mappedBy = "contract")
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
     Set<ContractEquipment> contractsOfEquipment;
 
     public Contract(){

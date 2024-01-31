@@ -24,6 +24,8 @@ public class ReservationDto {
 
     private Integer grade;
 
+    private Float price;
+
     private ReservationStatus status;
 
     private Integer customerId;
@@ -56,6 +58,7 @@ public class ReservationDto {
         this.status = reservation.getStatus();
         this.customerId = reservation.getCustomer().getId();
         this.companyAdminId = reservation.getCompanyAdmin().getId();
+        this.price = reservation.getPrice();
 
         Customer customer = reservation.getCustomer();
         if (customer != null) {
@@ -71,6 +74,14 @@ public class ReservationDto {
         }
         this.reservationOfEquipments = resEquipmentDtoSet;
 
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public Integer getId() {

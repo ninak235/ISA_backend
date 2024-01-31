@@ -4,7 +4,6 @@ import com.ISA.ISAProject.Enum.ReservationStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +25,9 @@ public class Reservation implements Serializable {
 
     @Column(name="status")
     private ReservationStatus status;
+
+    @Column(name="price")
+    private Float price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId", nullable = true)
@@ -50,11 +52,12 @@ public class Reservation implements Serializable {
     @Version
     private Integer version;
 
-    public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
+    public Reservation(Integer id, LocalDateTime dateTime, Integer duration, Integer grade, Float price, Customer customer, CompanyAdmin companyAdmin){//companyEquipments) {
         this.id = id;
         this.dateTime = dateTime;
         this.duration = duration;
         this.grade = grade;
+        this.price = price;
         this.status = ReservationStatus.Pending;
         this.customer = customer;
         this.companyAdmin = companyAdmin;
@@ -72,8 +75,16 @@ public class Reservation implements Serializable {
         this.companyAdmin = reservation.getCompanyAdmin();
         this.reservationOfEquipments = reservation.reservationOfEquipments;
         //this.reservationEquipments = reservation.getReservationEquipments();
+        this.price = reservation.getPrice();
     }
 
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
 
     public Set<ReservationEquipment> getReservationOfEquipments() {
         return reservationOfEquipments;
