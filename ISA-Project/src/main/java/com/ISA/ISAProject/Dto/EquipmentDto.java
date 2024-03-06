@@ -1,19 +1,34 @@
 package com.ISA.ISAProject.Dto;
 
-import com.ISA.ISAProject.Enum.EquipmentStatus;
+import com.ISA.ISAProject.Enum.TypeOfEquipment;
+import com.ISA.ISAProject.Model.Company;
 import com.ISA.ISAProject.Model.Equipment;
+import org.hibernate.Hibernate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EquipmentDto {
     private Integer id;
     private String name;
     private String description;
-    private EquipmentStatus status;
+    private TypeOfEquipment typeOfEquipment;
+    private String grade;
+    private Float price;
+
+
+    public EquipmentDto(){}
 
     public EquipmentDto(Equipment equipment){
         this.id = equipment.getId();
         this.name = equipment.getName();
         this.description = equipment.getDescription();
-        this.status = equipment.getStatus();
+        this.typeOfEquipment = equipment.getTypeOfEquipment();
+        this.grade = equipment.getGrade();
+        this.price = equipment.getPrice();
+
     }
 
     public Integer getId() {
@@ -40,11 +55,19 @@ public class EquipmentDto {
         this.description = description;
     }
 
-    public EquipmentStatus getStatus() {
-        return status;
+    public TypeOfEquipment getTypeOfEquipment(){ return typeOfEquipment; }
+
+    public void setTypeOfEquipment(TypeOfEquipment typeOfEquipment) {
+        this.typeOfEquipment = typeOfEquipment;
     }
 
-    public void setStatus(EquipmentStatus status) {
-        this.status = status;
+    public String getGrade(){ return grade; }
+    public void setGrade(String grade){ this.grade = grade; }
+
+    public Float getPrice(){ return price; }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
+
 }

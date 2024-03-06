@@ -1,14 +1,17 @@
 package com.ISA.ISAProject.Model;
 
-import com.ISA.ISAProject.Enum.EquipmentStatus;
+import com.ISA.ISAProject.Enum.TypeOfEquipment;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Where(clause = "deleted = false")
 @Entity(name = "Equipment")
-public class Equipment {
+public class Equipment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,19 +22,55 @@ public class Equipment {
 
     @Column(name = "Description", nullable = false)
     private String description;
+    @OneToMany(mappedBy = "equipment", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CompanyEquipment> companyEquipmentSet = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "Status",nullable = false)
-    private EquipmentStatus status;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CompanyId")
-    private Company company;
+    /*
+    @OneToMany(mappedBy = "equipment")
+    private List<Reservation> reservations;
+    */
 
     @Column(name = "deleted")
     private boolean deleted;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "equipmentType",nullable = false)
+    private TypeOfEquipment typeOfEquipment;
+
+    @Column(name="grade", nullable = false)
+    private String grade;
+
+    @Column(name="price", nullable = false)
+    private Float price;
+
+    /*
+    @ManyToMany(mappedBy = "reservationEquipments")
+    private Set<Reservation> equipmentReservations = new HashSet<>();*/
+
+    @OneToMany(mappedBy = "equipment")
+    Set<ReservationEquipment> reservationOfEquipments;
+
+
+    public Set<ContractEquipment> getContractsOfEquipment() {
+        return contractsOfEquipment;
+    }
+
+    public void setContractsOfEquipment(Set<ContractEquipment> contractsOfEquipment) {
+        this.contractsOfEquipment = contractsOfEquipment;
+    }
+
+    /* dobar primer alternative
+    @ManyToMany
+    @JoinTable(name="contract_equipment", joinColumns=@JoinColumn(name="equipment_id"),
+                inverseJoinColumns = @JoinColumn(name="contract_id"))
+    Set<Contract> contractsOfEquipment;*/
+
+
+    @OneToMany(mappedBy = "equipment")
+    Set<ContractEquipment> contractsOfEquipment;
+
     public Equipment(){
+        this.reservationOfEquipments = new HashSet<>();
     }
 
     public Integer getId() {
@@ -58,21 +97,6 @@ public class Equipment {
         this.description = description;
     }
 
-    public EquipmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EquipmentStatus status) {
-        this.status = status;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
 
     public boolean isDeleted() {
         return deleted;
@@ -80,6 +104,42 @@ public class Equipment {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public TypeOfEquipment getTypeOfEquipment() {
+        return typeOfEquipment;
+    }
+
+    public void setTypeOfEquipment(TypeOfEquipment typeOfEquipment) {
+        this.typeOfEquipment = typeOfEquipment;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
+    public Set<CompanyEquipment> getCompanyEquipmentSet() {
+        return companyEquipmentSet;
+    }
+
+    public Set<ReservationEquipment> getReservationOfEquipments() {
+        return reservationOfEquipments;
+    }
+
+    public void setReservationOfEquipments(Set<ReservationEquipment> reservationOfEquipments) {
+        this.reservationOfEquipments = reservationOfEquipments;
     }
 
     @Override
@@ -101,8 +161,32 @@ public class Equipment {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", status=" + status +
-                ", company=" + company +
+                ", deleted=" + deleted +
+                ", typeOfEquipment=" + typeOfEquipment +
+                ", grade='" + grade + '\'' +
+                ", price=" + price +
                 '}';
     }
+
+    @Transient
+    public Set<Company> getCompanyList() {
+        Set<Company> companyList = new HashSet<>();
+        for (CompanyEquipment companyEquipment : companyEquipmentSet) {
+            companyList.add(companyEquipment.getCompany());
+        }
+        return companyList;
+    }
+
+
+    public void setCompanyEquipmentSet(Set<CompanyEquipment> companyEquipmentSet) {
+        this.companyEquipmentSet = companyEquipmentSet;
+    }
+/*
+    public Set<Reservation> getEquipmentReservations() {
+        return equipmentReservations;
+    }
+
+    public void setEquipmentReservations(Set<Reservation> equipmentReservations) {
+        this.equipmentReservations = equipmentReservations;
+    }*/
 }

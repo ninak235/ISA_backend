@@ -1,19 +1,26 @@
 package com.ISA.ISAProject.Dto;
 
+import com.ISA.ISAProject.Model.Reservation;
 import com.ISA.ISAProject.Model.User;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class CustomerDto {
     @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
+
+    @NotEmpty
+    private String userName;
     @Email
     @NotEmpty
     private String email;
-    @NotEmpty
+    @Size(min = 8)
     private String password;
     @NotEmpty
     private String country;
@@ -26,20 +33,29 @@ public class CustomerDto {
     @NotEmpty
     private String companyInfo;
 
+    private long penaltyPoints;
+
+    private Integer loyalityProgramId;
+
+    private Set<Reservation> reservationSet;
+
     public CustomerDto(){
 
     }
 
-    public CustomerDto(User user, String occupation, String companyInfo) {
+    public CustomerDto(User user, String occupation, String companyInfo, long penaltyPoints, Integer loyalityProgramId) {
         this.firstName = user.getFirstName();
         this.email = user.getEmail();
+        this.userName = user.getUsername();
         this.lastName = user.getLastName();
         this.password = user.getPassword();
-        this.country = user.getPassword();
+        this.country = user.getCountry();
         this.city = user.getCity();
         this.number = user.getNumber();
         this.occupation = occupation;
         this.companyInfo = companyInfo;
+        this.penaltyPoints = penaltyPoints;
+        this.loyalityProgramId = loyalityProgramId;
     }
 
     public String getFirstName() {
@@ -112,5 +128,29 @@ public class CustomerDto {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public long getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(Integer penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
+    }
+
+    public Integer getLoyalityProgramId() {
+        return loyalityProgramId;
+    }
+
+    public void setLoyalityProgramId(Integer loyalityProgramId) {
+        this.loyalityProgramId = loyalityProgramId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

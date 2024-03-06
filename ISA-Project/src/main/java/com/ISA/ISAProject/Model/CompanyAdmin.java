@@ -1,10 +1,13 @@
 package com.ISA.ISAProject.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "CompanyAdmins")
-public class CompanyAdmin {
+public class CompanyAdmin implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +19,33 @@ public class CompanyAdmin {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CompanyId")
+    @JoinColumn(name = "CompanyId", nullable = true)
     private Company company;
 
+    @Column(name = "UserName", unique = true)
+    private String userName;
+
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Reservation> reservationSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "companyAdmin",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<Complaint> complaintSet = new HashSet<>();
+
+    /*
+    @OneToMany(mappedBy = "admin")
+    private Set<Reservation> reservationsSet = new HashSet<>();; // Use Set if uniqueness matters, and order doesn't
+    */
 
     public CompanyAdmin() {
+        //this.company = new Company();
+        this.complaintSet = new HashSet<>();
     }
+
+    /*
+    public CompanyAdmin(User user) {
+        this.user = user;
+        this.id = user.getId();
+    }*/
 
     public Integer getId() {
         return id;
@@ -42,9 +66,18 @@ public class CompanyAdmin {
     public Company getCompany() {
         return company;
     }
+    public Integer getCompanyId() { return company.getId(); }
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Set<Complaint> getComplaintSet() {
+        return complaintSet;
+    }
+
+    public void setComplaintSet(Set<Complaint> complaintSet) {
+        this.complaintSet = complaintSet;
     }
 
     @Override
@@ -60,12 +93,4 @@ public class CompanyAdmin {
         return Objects.hash(id, user);
     }
 
-    @Override
-    public String toString() {
-        return "CompanyAdmin{" +
-                "id=" + id +
-                ", user=" + user +
-                ", company=" + company +
-                '}';
-    }
 }

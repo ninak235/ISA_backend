@@ -1,25 +1,52 @@
 package com.ISA.ISAProject.Dto;
 
 import com.ISA.ISAProject.Model.Company;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.ISA.ISAProject.Model.Location;
+
+import java.time.LocalTime;
+
 
 public class CompanyDto {
+    private Integer id;
     private String name;
-    private String adress;
+    private LocationDto locationDto;
     private String description;
     private String grade;
-    private List<EquipmentDto> equipmentSet;
 
-    public CompanyDto(Company company){
+    //private List<EquipmentDto> equipmentSet;
+
+    // Add default constructor
+    public CompanyDto() {
+    }
+
+    public CompanyDto(Company company) {
+        this.id = company.getId();
         this.name = company.getName();
-        this.adress = company.getAdress();
+        Location location = company.getLocation();
+
+        if (location != null) {
+            LocationDto locationDto = new LocationDto();
+            locationDto.setId(location.getId());
+            locationDto.setAddress(location.getAddress());
+            locationDto.setCity(location.getCity());
+            locationDto.setCountry(location.getCountry());
+            locationDto.setLatitude(location.getLatitude());
+            locationDto.setLongitude(location.getLongitude());
+
+            this.locationDto = locationDto;
+        }
+
         this.description = company.getDescription();
-        this.grade = company.getAdress();
+        this.grade = company.getGrade();
+
+
+
+    /*    Hibernate.initialize(company.getEquipment());
+
         this.equipmentSet = new ArrayList<>(company.getEquipment().stream()
                 .map(EquipmentDto::new)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()));*/
+
     }
 
     public String getName() {
@@ -30,12 +57,12 @@ public class CompanyDto {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public LocationDto getLocationDto() {
+        return locationDto;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setLocationDto(LocationDto locationDto) {
+        this.locationDto = locationDto;
     }
 
     public String getDescription() {
@@ -54,11 +81,22 @@ public class CompanyDto {
         this.grade = grade;
     }
 
-    public List<EquipmentDto> getEquipmentSet() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
+
+    /*  public List<EquipmentDto> getEquipmentSet() {
         return equipmentSet;
     }
 
     public void setEquipmentSet(List<EquipmentDto> equipmentSet) {
         this.equipmentSet = equipmentSet;
-    }
+    }*/
+
 }
